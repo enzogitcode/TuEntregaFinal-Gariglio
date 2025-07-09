@@ -8,6 +8,10 @@ class PaperListView(ListView):
     model = Paper
     template_name = 'AppBlog/papers/papers_list.html'
 
+class PaperDetailView(DetailView):
+    model = Paper
+    template_name = 'AppBlog/papers/paper_detail.html'
+
 class PaperCreateView(CreateView):
     model = Paper
     fields = [

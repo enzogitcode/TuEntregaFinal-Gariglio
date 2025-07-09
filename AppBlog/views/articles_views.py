@@ -8,6 +8,10 @@ class ArticleListView(ListView):
     model = Article
     template_name = 'AppBlog/articles/articles_list.html'
 
+class ArticleDetailView(DetailView):
+    model = Article
+    template_name = 'AppBlog/articles/article_detail.html'
+
 class ArticleCreateView(CreateView):
     model = Article
     fields = [
@@ -39,4 +43,4 @@ class ArticleUpdateView(UpdateView):
 class ArticleDeleteView(DeleteView):
     model = Article
     template_name = 'AppBlog/articles/articles_delete_form.html'
-    success_url = reverse_lazy('app_home')
+    success_url = reverse_lazy('home')

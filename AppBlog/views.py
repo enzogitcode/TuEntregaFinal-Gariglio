@@ -1,10 +1,7 @@
-# from django.shortcuts import render
+from django.shortcuts import render
 
-# # Create your views here.
-# # Modelos basados en vistas
-
-# def home(request):
-#     return render(request, 'AppBlog/home.html')
+def home(request):
+    return render(request, 'AppBlog/home.html')
 
 # class Student:
 #     def __init__(self, name, age, email):

@@ -34,6 +34,7 @@ class Article(models.Model):
     text_article = models.TextField()
     def __str__(self):
         return f"Se creó el artículo {self.title} con el autor {self.author_name} y el correo {self.author_email}"
+    
 class Paper(models.Model):
     author_name = models.CharField(max_length=100)
     author_last_name = models.CharField(max_length=100)
@@ -44,6 +45,6 @@ class Paper(models.Model):
     text_paper = models.TextField()
     date_of_publication = models.DateField(auto_now_add=True)
     def __str__(self):
-        return f"Se creó el artículo {self.title} con el autor {self.autor_name} y el correo {self.autor_email}"
+        return f"Se creó el artículo {self.title} con el autor {self.author_name} y el correo {self.autor_email}"
     
     

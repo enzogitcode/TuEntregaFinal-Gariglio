@@ -3,10 +3,6 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from ..models import Student
 
-
-def student():
-    pass
-
 class StudentListView(ListView):
     model= Student
     template_name= 'AppBlog/students/students_list.html'
@@ -27,4 +23,6 @@ class StudentDeleteView(DeleteView):
     model= Student
     template_name= 'AppBlog/students/students_delete_form.html'
     success_url= 'app/home.html'
+
+
     

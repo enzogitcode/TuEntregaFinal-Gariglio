@@ -1,0 +1,25 @@
+{% extends 'AppBlog/base.html' %} 
+{% load static %} 
+
+{% block title %} Home Estudiantes{% endblock %} 
+
+{% block content %}
+<h1>Bienvenidos</h1>
+<div class="options d-flex justify-content-center align-items-center gap-2 flex-wrap">
+    <div class="option1 d-flex justify-content-center align-items-center gap-2">
+        <a href="{% url 'students_list' %}" class="btn btn-primary">
+            Ver Lista de Estudiantes
+        </a>
+    </div>
+    <div class="option1 d-flex justify-content-center align-items-center gap-2">
+        <a href="" class="btn btn-primary">
+            Buscar Estudiante
+        </a>
+    </div>
+    <div class="option3">
+        <a href="" class="btn btn-secondary">
+        Formulario para agregar un nuevo estudiante
+        </a>
+    </div>
+</div>
+{% endblock %}

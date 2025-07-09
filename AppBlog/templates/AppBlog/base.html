@@ -1,7 +1,7 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link
@@ -20,7 +20,7 @@
 </head>
 <body>
 
-<header>
+<header class="{% block header_extra_class %} {% endblock %} ">
   <nav class="navbar navbar-expand-lg border-bottom shadow-sm px-3 py-2">
     <div class="container-fluid flex-column flex-lg-row align-items-start align-items-lg-center">
 
@@ -59,16 +59,16 @@
       <div class="collapse navbar-collapse justify-content-lg-end w-100" id="menuNav">
         <ul class="navbar-nav text-center text-lg-end">
           <li class="nav-item">
-            <a class="nav-link fw-semibold" href="{% url 'teachers_list' %}" >Profesores</a>
+            <a class="nav-link fw-semibold" href="{% url 'teachers_home' %}" >Profesores</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-semibold" href="">Estudiantes</a>
+            <a class="nav-link fw-semibold" href="{% url 'students_home' %}" >Estudiantes</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-semibold" href="">Papers</a>
+            <a class="nav-link fw-semibold" href="{% url 'papers_home' %}" >Papers</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-semibold" href="">Artículos</a>
+            <a class="nav-link fw-semibold" href="{% url 'articles_home' %}" >Artículos</a>
           </li>
         </ul>
       </div>
@@ -78,12 +78,12 @@
 </header>
 
 
-    <main>
+    <main class="align-items-center pt-2 pb-2 pl-1 pr-1 {% block main_extra_class %} d-flex flex-column {% endblock %}">
         {% block content %}
         {% endblock %}
     </main>
 
-<footer class="pt-4 mt-5">
+<footer class="pt-4 mt-5 {% block footer_extra_class %} {% endblock %}">
   <div class="container">
     <div class="row text-center text-md-start align-items-center">
       

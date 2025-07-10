@@ -3,21 +3,23 @@
 
 {% block title %} Home Estudiantes{% endblock %} 
 
+{% block main_extra_class %} main_students_home d-flex flex-column {% endblock %}
 {% block content %}
-<h1>Bienvenidos</h1>
-<div class="options d-flex justify-content-center align-items-center gap-2 flex-wrap">
-    <div class="option1 d-flex justify-content-center align-items-center gap-2">
-        <a href="{% url 'students_list' %}" class="btn btn-primary">
+<div class="options d-flex justify-content-center gap-2 flex-wrap text-wrap flex-column mt-2">
+    <h1 class="text-center">Bienvenidos</h1>
+    <strong class="text-center">Home Estudiantes</strong>
+    <div class="option1 d-flex justify-content-center align-items-center gap-2 flex-wrap flex-grow-1">
+        <a href="{% url 'students_list' %}" class="btn btn-primary text-wrap">
             Ver Lista de Estudiantes
         </a>
     </div>
-    <div class="option1 d-flex justify-content-center align-items-center gap-2">
+    <div class="option1 d-flex justify-content-center align-items-center gap-2 flex-grow-1">
         <a href="" class="btn btn-primary">
             Buscar Estudiante
         </a>
     </div>
-    <div class="option3">
-        <a href="" class="btn btn-secondary">
+    <div class="option3 flex-grow-1 text-wrap">
+        <a href="" class="btn btn-secondary text-wrap text-center">
         Formulario para agregar un nuevo estudiante
         </a>
     </div>

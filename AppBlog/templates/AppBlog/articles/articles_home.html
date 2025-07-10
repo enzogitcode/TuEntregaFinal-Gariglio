@@ -2,11 +2,13 @@
 
 {% block title %} Artículos informativos {% endblock %}
 
+{% block main_extra_class %} d-flex flex-column gap-4 main_articles_home {% endblock %}
+
 {% block content %}
 
 <h1>Artículos informativos</h1>
 
-<div class="options d-flex justify-content-center align-items-center gap-2 flex-wrap">
+<div class="options d-flex flex-column justify-content-evenly align-items-center gap-2 pb-2 flex-wrap">
     <div class="option1 d-flex justify-content-center align-items-center gap-2">
         <a href="{% url 'articles_list' %}" class="btn btn-primary">
             Ver Lista de Artículos

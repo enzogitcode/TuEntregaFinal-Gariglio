@@ -59,16 +59,16 @@
       <div class="collapse navbar-collapse justify-content-lg-end w-100" id="menuNav">
         <ul class="navbar-nav text-center text-lg-end">
           <li class="nav-item">
-            <a class="nav-link fw-semibold" href="{% url 'teachers_home' %}" >Profesores</a>
+            <a class="nav-link fw-semibold underlineLink" href="{% url 'teachers_home' %}" >Profesores</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-semibold" href="{% url 'students_home' %}" >Estudiantes</a>
+            <a class="nav-link fw-semibold underlineLink" href="{% url 'students_home' %}" >Estudiantes</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-semibold" href="{% url 'papers_home' %}" >Papers</a>
+            <a class="nav-link fw-semibold underlineLink" href="{% url 'papers_home' %}" >Papers</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-semibold" href="{% url 'articles_home' %}" >Artículos</a>
+            <a class="nav-link fw-semibold underlineLink" href="{% url 'articles_home' %}" >Artículos</a>
           </li>
         </ul>
       </div>
@@ -77,8 +77,7 @@
   </nav>
 </header>
 
-
-    <main class="justify-content-center align-items-center pt-2 pb-2 pl-1 pr-1 {% block main_extra_class %} d-flex flex-column {% endblock %}">
+    <main class="justify-content-center align-items-center {% block main_extra_class %} d-flex flex-column {% endblock %}">
         {% block content %}
         {% endblock %}
     </main>
@@ -97,23 +96,25 @@
       <div class="col-md-4 mb-4 mb-md-0 text-center">
         <h5 class="mb-3">Contáctenos</h5>
         <div class="d-flex justify-content-center gap-3">
-          <a href="https://facebook.com" class="text-white fs-2">
+          <a href="https://facebook.com" class="text-white fs-2" target="_blank">
             <i class="bi bi-facebook"></i>
           </a>
-          <a href="https://instagram.com" class="text-white fs-2">
+          <a href="https://instagram.com" class="text-white fs-2" target="_blank">
             <i class="bi bi-instagram"></i>
           </a>
-          <a href="https://wa.me/tu-numero" class="text-white fs-2">
+          <a href="https://wa.me/tu-numero" class="text-white fs-2" target="_blank">
             <i class="bi bi-whatsapp"></i>
           </a>
         </div>
       </div>
 
-      <!-- Área 3: Acerca de nosotros -->
+      <!-- Área 3: Solo “Acerca” -->
       <div class="col-md-4 text-md-end text-center">
         <h5 class="mb-3">Información</h5>
-        <a href="/contacto" class="text-white text-decoration-none d-block mb-1">Contáctanos</a>
-        <a href="/acerca" class="text-white text-decoration-none d-block">Acerca de</a>
+        <h6>
+
+          <a href="{% url 'about' %}" class="nav-link fw-semibold text-white">About</a>
+        </h6>
       </div>
     </div>
 
@@ -123,9 +124,6 @@
     </div>
   </div>
 </footer>
-
-
-
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

@@ -3,6 +3,10 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from ..models import Student
 from django.urls import reverse_lazy
+from django.shortcuts import render
+
+def StudentsHome(request):
+    return render(request, 'AppBlog/students/students_home.html')
 
 class StudentListView(ListView):
     model = Student
@@ -22,9 +26,9 @@ class StudentUpdateView(UpdateView):
     model = Student
     fields = ['name']
     template_name = 'AppBlog/students/students_update_form.html'
-    success_url = reverse_lazy('students_list')  # O 'student_detail' si tenés esa vista
+    success_url = reverse_lazy('students_list')  
 
 class StudentDeleteView(DeleteView):
     model = Student
     template_name = 'AppBlog/students/students_delete_form.html'
-    success_url = reverse_lazy('home')  # Asumiendo que 'home' es tu vista de inicio
+    success_url = reverse_lazy('home')

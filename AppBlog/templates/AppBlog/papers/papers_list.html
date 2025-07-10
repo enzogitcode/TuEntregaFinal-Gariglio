@@ -1,0 +1,31 @@
+{% extends "AppBlog/base.html" %}
+{% load static %}
+
+{% block title %}Lista de Papers{% endblock %}
+
+{% block content %}
+<h1>Lista completa de papers</h1>
+
+{% if object_list %}
+  <div class="rounded text-center">
+    <ul class="list-group gap-3 rounded">
+      {% for paper in object_list %}
+      <li class="list-group-item">
+        <p><strong>Título:</strong> {{ paper.title }}</p>
+        <p><strong>Autor:</strong> {{ paper.author_name }} {{ paper.author_last_name }}</p>
+        <p><strong>E-mail:</strong> {{ paper.author_email }}</p>
+        <p><strong>Palabras clave:</strong> {{ paper.subject }}</p>
+        <p><strong>Resumen:</strong> {{ paper.abstract }}</p>
+        <p><strong>Fecha de publicación:</strong> {{ paper.date_of_publication }}</p>
+        <details>
+          <summary class="text-primary">Ver texto completo</summary>
+          <p class="small mt-2">{{ paper.text_paper }}</p>
+        </details>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% else %}
+  <p class="text-muted">No hay papers registrados.</p>
+{% endif %}
+{% endblock %}

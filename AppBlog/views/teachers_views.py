@@ -4,6 +4,11 @@ from django.views.generic.detail import DetailView
 from ..models import Teacher
 from django.urls import reverse_lazy
 
+from django.shortcuts import render
+
+def TeachersHome(request):
+    return render(request, 'AppBlog/teachers/teachers_home.html')
+
 class TeacherListView(ListView):
     model = Teacher
     template_name = 'AppBlog/teachers/teachers_list.html'
@@ -22,10 +27,10 @@ class TeacherUpdateView(UpdateView):
     model = Teacher
     fields = ['name', 'last_name', 'age', 'course', 'college', 'email']
     template_name = 'AppBlog/teachers/teachers_update_form.html'
-    success_url = reverse_lazy('teachers_list')  # O 'teacher_detail' si tenés esa vista
+    success_url = reverse_lazy('teachers_list')
 
 class TeacherDeleteView(DeleteView):
     model = Teacher
     template_name = 'AppBlog/teachers/teachers_delete_form.html'
-    success_url = reverse_lazy('home')  # Asumiendo que 'home' es tu vista de inicio
+    success_url = reverse_lazy('home')  
 

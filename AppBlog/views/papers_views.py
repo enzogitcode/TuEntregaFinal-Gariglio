@@ -3,6 +3,10 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from ..models import Paper
 from django.urls import reverse_lazy
+from django.shortcuts import render
+
+def PapersHome(request):
+    return render(request, 'AppBlog/papers/papers_home.html')
 
 class PaperListView(ListView):
     model = Paper

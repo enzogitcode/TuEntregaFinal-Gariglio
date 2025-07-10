@@ -9,14 +9,11 @@ body {
     min-height: 100dvh;
 }
 header {
-background-color: aliceblue;    
+background-color: #f0f8ff;    
 }
 main {
-    background-image: url('../imgs/vista-superior-libreta-con-lapices-sobre-fondo-azul.jpg');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-color: rgb(255, 255, 255);
 }
 footer {
-    background-color: saddlebrown;
+    background-color: #bd5b15;
 }

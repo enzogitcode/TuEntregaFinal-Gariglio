@@ -1,6 +1,28 @@
-{% extends 'AppBlog/base.html' %}
-{% block title %} Home Papers {% endblock %}
-{% block main_extra_class %} d-flex flex-column mainPapers{% endblock %}
+{% extends "AppBlog/base.html" %}
+{% load static %}
+
+{% block title %}
+    Home - Papers
+{% endblock %}
+
 {% block content %}
-<p>Home Papers</p>
+    <h1>Papers</h1>
+    <div class="options d-flex justify-content-center align-items-center gap-2 flex-wrap">
+        <div class="option1 d-flex justify-content-center align-items-center gap-2">
+            <a href="{% url 'papers_list' %}" class="btn btn-primary">
+                Ver Lista de Papers
+            </a>
+        </div>
+        <div class="option1 d-flex justify-content-center align-items-center gap-2">
+            <a href="" class="btn btn-primary">
+                Buscar Paper
+            </a>
+        </div>
+        <div class="option3">
+            <a href="" class="btn btn-secondary">
+                Formulario para agregar un nuevo paper
+            </a>
+        </div>
+    </div>
+    
 {% endblock %}

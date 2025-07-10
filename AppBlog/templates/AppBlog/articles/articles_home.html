@@ -1,0 +1,28 @@
+{% extends 'AppBlog/base.html' %}
+
+{% block title %} Artículos informativos {% endblock %}
+
+{% block content %}
+
+<h1>Artículos informativos</h1>
+
+<div class="options d-flex justify-content-center align-items-center gap-2 flex-wrap">
+    <div class="option1 d-flex justify-content-center align-items-center gap-2">
+        <a href="{% url 'articles_list' %}" class="btn btn-primary">
+            Ver Lista de Artículos
+        </a>
+    </div>
+    <div class="option1 d-flex justify-content-center align-items-center gap-2">
+        <a href="" class="btn btn-primary">
+            Buscar Artículo
+        </a>
+    </div>
+    <div class="option3">
+        <a href="" class="btn btn-secondary">
+            Formulario para agregar un nuevo artículo
+        </a>
+    </div>
+</div>
+
+{% endblock %}
+

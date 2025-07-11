@@ -3,9 +3,11 @@
 
 {% block title %} Home Profesores{% endblock %} 
 
+{% block main_extra_class %} main_students_home d-flex flex-column {% endblock %}
+
 {% block content %}
 <h1>Bienvenidos</h1>
-<div class="options d-flex flex-wrap justify-content-center align-items-center gap-2">
+<div class="options d-flex justify-content-center gap-2 flex-wrap text-wrap flex-column mt-2">
     <div class="option1 d-flex justify-content-center align-items-center gap-2">
         <a href="{% url 'teachers_list' %}" class="btn btn-primary">
             Ver Lista de Profesores

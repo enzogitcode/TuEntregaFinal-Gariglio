@@ -1,5 +1,33 @@
 {% extends 'AppBlog/base.html' %}
 
-{% block title %} Lista de profesores {% endblock %} 
+{% block title %} Profesores {% endblock %}
 
-{% block content %} <p>Profesores</p> {% endblock %}
+{% block content %}
+<h1>Lista de Profesores</h1>
+
+{% if object_list %}
+<div class="bg-light rounded">
+    {% for teacher in object_list %}
+
+    <div class="card text-center">
+  <div class="card-header">
+    Profesor
+  </div>
+  <div class="card-body">
+    <h5 class="card-title underline">{{teacher.name}} {{teacher.last_name}}</h5>
+    
+    <a href="#" class="btn btn-info">Ver Detalles</a>
+    <a href="#" class="btn btn-danger">Eliminar</a>
+    <a href="#" class="btn btn-primary">Editar</a>
+  </div>
+  
+</div>
+
+{% endfor %}
+    
+</div>
+
+{% else %}
+    <p>No hay profesores registrados.</p>
+{% endif %}
+{% endblock %}

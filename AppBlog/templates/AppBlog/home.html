@@ -2,13 +2,14 @@
 {% load static %}
 
 {% block title %} Home {% endblock %}
+{% block aos_header %} fade-down {% endblock %}
+{% block aos_footer %} fade-up {% endblock %}
 
 {% block main_extra_class %} d-flex flex-column {% endblock %}
 
-
 {% block content %}
-<h1>Bievenidos a CienciAR</h1>
 
+<h1 class="text-center">Bievenidos a CienciAR</h1>
 <div id="carouselExampleCaptions" class="carousel slide rounded-pill">
   <div class="carousel-indicators">
     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>

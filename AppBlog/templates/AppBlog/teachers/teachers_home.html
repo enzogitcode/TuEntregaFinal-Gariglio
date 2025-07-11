@@ -1,6 +1,25 @@
-{% extends 'AppBlog/base.html' %}
-{% block title %} Home Profesores {% endblock %}
+{% extends 'AppBlog/base.html' %} 
+{% load static %} 
 
-{% block content %} 
-<p>Home Profesores</p>
+{% block title %} Home Profesores{% endblock %} 
+
+{% block content %}
+<h1>Bienvenidos</h1>
+<div class="options d-flex flex-wrap justify-content-center align-items-center gap-2">
+    <div class="option1 d-flex justify-content-center align-items-center gap-2">
+        <a href="{% url 'teachers_list' %}" class="btn btn-primary">
+            Ver Lista de Profesores
+        </a>
+    </div>
+    <div class="option1 d-flex justify-content-center align-items-center gap-2">
+        <a href="{% url 'teachers_search' %}" class="btn btn-primary">
+            Buscar Profesor
+        </a>
+    </div>
+    <div class="option3">
+        <a href="{% url 'create_teacher_form' %}" class="btn btn-secondary">
+        Formulario para agregar un nuevo profesor
+        </a>
+    </div>
+</div>
 {% endblock %}

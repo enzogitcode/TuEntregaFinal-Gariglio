@@ -4,7 +4,6 @@ from django.views.generic.detail import DetailView
 from ..models import Teacher
 from django.urls import reverse_lazy
 
-
 from django.shortcuts import render
 
 def teachers_home(request):
@@ -44,6 +43,7 @@ class TeacherListView(ListView):
     model = Teacher
     template_name = 'AppBlog/teachers/teachers_list.html'
     context_object_name= 'teachers'
+    ordering= ['last_name']
     
 class TeacherDetailView(DetailView):
     model = Teacher

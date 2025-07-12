@@ -7,11 +7,11 @@ from .views.articles_views import (
 )
 from .views.papers_views import (
     PaperListView, PaperCreateView, PaperUpdateView, PaperDeleteView, PaperDetailView,
-    PapersHome
+    PapersHome, papers_search, papers_results
 )
 from .views.students_views import (
     StudentListView, StudentCreateView, StudentUpdateView, StudentDeleteView, StudentDetailView,
-    StudentsHome
+    StudentsHome, students_search, students_results
 )
 from .views.teachers_views import (
     TeacherListView, TeacherCreateView, TeacherUpdateView, TeacherDeleteView, TeacherDetailView,
@@ -30,10 +30,12 @@ urlpatterns = [
 
     # Students
 path('students_home/', StudentsHome, name='students_home'),
+path('students_search/', students_search, name='students_search'),
+    path('students_results/', students_results, name='students_results'),
     path('students_list/', StudentListView.as_view(), name='students_list'),
-    path('students/create/', StudentCreateView.as_view(), name='student_create'),
-    path('students/update/<int:pk>/', StudentUpdateView.as_view(), name='student_update'),
-    path('students/delete/<int:pk>/', StudentDeleteView.as_view(), name='student_delete'),
+    path('students/create/', StudentCreateView.as_view(), name='create_student_form'),
+    path('students/update/<int:pk>/', StudentUpdateView.as_view(), name='student_update_form'),
+    path('students/delete/<int:pk>/', StudentDeleteView.as_view(), name='student_delete_form'),
     path('students/<int:pk>/', StudentDetailView.as_view(), name='student_detail'),
 
     # Teachers
@@ -49,17 +51,19 @@ path('students_home/', StudentsHome, name='students_home'),
     # Articles
     path('articles_home/', ArticlesHome, name='articles_home'),
     path('articles_list/', ArticleListView.as_view(), name='articles_list'),
-    path('articles/create/', ArticleCreateView.as_view(), name='article_create'),
+    path('articles/create/', ArticleCreateView.as_view(), name='article_create_form'),
     path('articles/update/<int:pk>/', ArticleUpdateView.as_view(), name='article_update_form'),
-    path('articles/delete/<int:pk>/', ArticleDeleteView.as_view(), name='article_delete'),
+    path('articles/delete/<int:pk>/', ArticleDeleteView.as_view(), name='article_delete_form'),
     path('articles/<int:pk>/', ArticleDetailView.as_view(), name='article_detail'),
 
     # Papers
     path('papers_home/', PapersHome, name='papers_home'),
+    path('papers_search/', papers_search, name='papers_search'),
+    path('papers_results/', papers_results, name='papers_results'),
     path('papers_list/', PaperListView.as_view(), name='papers_list'),
-    path('papers/create/', PaperCreateView.as_view(), name='paper_create'),
-    path('papers/update/<int:pk>/', PaperUpdateView.as_view(), name='paper_update'),
-    path('papers/delete/<int:pk>/', PaperDeleteView.as_view(), name='paper_delete'),
+    path('papers/create/', PaperCreateView.as_view(), name='create_paper_form'),
+    path('papers/update/<int:pk>/', PaperUpdateView.as_view(), name='paper_update_form'),
+    path('papers/delete/<int:pk>/', PaperDeleteView.as_view(), name='paper_delete_form'),
     path('papers/<int:pk>/', PaperDetailView.as_view(), name='paper_detail'),
 ]
 

@@ -8,6 +8,25 @@ from django.shortcuts import render
 def PapersHome(request):
     return render(request, 'AppBlog/papers/papers_home.html')
 
+def papers_search(request):
+    return render(request, 'AppBlog/papers/papers_search.html')
+
+def papers_results(request):
+    keyword = request.GET.get('keyword', '').strip()
+    filtro = request.GET.get('filtro', '')
+
+    if keyword and filtro in ['author_name', 'author_last_name', 'title', 'subject', 'abstract']:
+        filtro_kwargs = {f"{filtro}__icontains": keyword}
+        papers = Paper.objects.filter(**filtro_kwargs)
+    else:
+        papers = Paper.objects.none()
+
+    return render(request, 'AppBlog/papers_results.html', {
+        'papers': papers,
+        'keyword': keyword,
+        'filtro': filtro
+    })
+
 class PaperListView(ListView):
     model = Paper
     template_name = 'AppBlog/papers/papers_list.html'

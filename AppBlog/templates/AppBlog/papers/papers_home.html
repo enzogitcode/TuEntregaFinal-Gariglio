@@ -1,28 +1,28 @@
-{% extends "AppBlog/base.html" %}
-{% load static %}
+{% extends 'AppBlog/base.html' %} 
+{% load static %} 
 
-{% block title %}
-    Home - Papers
-{% endblock %}
+{% block title %} Home Papers{% endblock %} 
+
+{% block main_extra_class %} d-flex flex-column {% endblock %}
 
 {% block content %}
-    <h1>Papers</h1>
-    <div class="options d-flex justify-content-center align-items-center gap-2 flex-wrap">
-        <div class="option1 d-flex justify-content-center align-items-center gap-2">
-            <a href="{% url 'papers_list' %}" class="btn btn-primary">
-                Ver Lista de Papers
-            </a>
-        </div>
-        <div class="option1 d-flex justify-content-center align-items-center gap-2">
-            <a href="" class="btn btn-primary">
-                Buscar Paper
-            </a>
-        </div>
-        <div class="option3">
-            <a href="" class="btn btn-secondary">
-                Formulario para agregar un nuevo paper
-            </a>
-        </div>
+<div class="options d-flex justify-content-center gap-2 flex-wrap text-wrap flex-column mt-2">
+    <h1 class="text-center">Bienvenidos</h1>
+    <strong class="text-center">Home Papers</strong>
+    <div class="option1 d-flex justify-content-center align-items-center gap-2 flex-wrap flex-grow-1">
+        <a href="{% url 'papers_list' %}" class="btn btn-primary text-wrap">
+            Ver Lista de Papers
+        </a>
     </div>
-    
+    <div class="option1 d-flex justify-content-center align-items-center gap-2 flex-grow-1">
+        <a href="{% url 'papers_search' %}" class="btn btn-primary">
+            Buscar Paper
+        </a>
+    </div>
+    <div class="option3 flex-grow-1 text-wrap">
+        <a href="{% url 'create_paper_form' %}" class="btn btn-secondary text-wrap text-center">
+        Formulario para agregar un nuevo paper
+        </a>
+    </div>
+</div>
 {% endblock %}

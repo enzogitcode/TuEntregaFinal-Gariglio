@@ -17,10 +17,9 @@
         <p><strong>Palabras clave:</strong> {{ paper.subject }}</p>
         <p><strong>Resumen:</strong> {{ paper.abstract }}</p>
         <p><strong>Fecha de publicación:</strong> {{ paper.date_of_publication }}</p>
-        <details>
-          <summary class="text-primary">Ver texto completo</summary>
-          <p class="small mt-2">{{ paper.text_paper }}</p>
-        </details>
+        <div>
+          <a class="btn btn-primary" href="{% url 'paper_detail' paper.id %}">Ver Paper completo</a>
+        </div>
       </li>
       {% endfor %}
     </ul>

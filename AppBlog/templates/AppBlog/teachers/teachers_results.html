@@ -1,28 +1,27 @@
-{% extends 'AppBlog/base.html' %} {% block title %} Profesores {% endblock %} {%
-block content %}
-<h1>Lista de Profesores</h1>
+{% extends 'AppBlog/base.html' %} 
+{% block title %} Resultados de la búsqueda {% endblock %} 
+
+{% block content %}
+
+<h2 class="mb-3 text-center">Resultados de la búsqueda</h2>
 
 {% if teachers %}
 <div class="bg-light rounded">
-  {% for teacher in object_list %}
-
+  {% for teacher in teachers %}
   <div class="card text-center">
     <div class="card-header">Profesor</div>
     <div class="card-body">
       <h5 class="card-title underline">
         {{teacher.name}} {{teacher.last_name}}
       </h5>
-
       <a href="{% url 'teacher_detail' teacher.id %}" class="btn btn-info"
         >Ver Detalles</a
       >
     </div>
   </div>
-
-  {% endfor %}
+  {% endfor %} {% else %}
+  <p class="empty_database text-center">
+    No se encontraron profesores que coincidan con la búsqueda.
+  </p>
 </div>
-
-{% else %}
-<p class="empty_database">No hay profesores registrados.</p>
-
 {% endif %} {% endblock %}

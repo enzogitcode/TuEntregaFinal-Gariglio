@@ -1,7 +1,28 @@
-{% extends 'AppBlog/base.html' %}
+{% extends 'AppBlog/base.html' %} {% block title %} Profesores {% endblock %} {%
+block content %}
+<h1>Lista de Profesores</h1>
 
-{% block title %} Lista de Estudiantes {% endblock %}
+{% if students %}
+<div class="bg-light rounded">
+  {% for student in object_list %}
 
-{% block content %}
+  <div class="card text-center">
+    <div class="card-header">Profesor</div>
+    <div class="card-body">
+      <h5 class="card-title underline">
+        {{student.name}} {{student.last_name}}
+      </h5>
 
-{% endblock %}
+      <a href="{% url 'student_detail' student.id %}" class="btn btn-info"
+        >Ver Detalles</a
+      >
+    </div>
+  </div>
+
+  {% endfor %}
+</div>
+
+{% else %}
+<p class="empty_database">No hay estudiantes registrados.</p>
+
+{% endif %} {% endblock %}

@@ -2,10 +2,10 @@
 
 {% load static %}
 
-{% block title %}Teachers Form{% endblock %}
+{% block title %} Formulario de Estudiantes{% endblock %}
 
 {% block content %}
-<h2>Formulario para agregar un nuevo profesor</h2>
+<h2>Formulario para agregar un nuevo estudiante</h2>
 <form method="post" class="need-validation" novalidate>
   {% csrf_token %}
     {% if form.errors %}

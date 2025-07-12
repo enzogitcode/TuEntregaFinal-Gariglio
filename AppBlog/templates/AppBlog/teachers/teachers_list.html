@@ -1,28 +1,33 @@
-{% extends 'AppBlog/base.html' %} {% block title %} Profesores {% endblock %} {%
-block content %}
+{% extends 'AppBlog/base.html' %}
+
+{% block title %} Profesores {% endblock %}
+
+{% block content %}
 <h1>Lista de Profesores</h1>
 
 {% if teachers %}
 <div class="bg-light rounded">
-  {% for teacher in object_list %}
+    {% for teacher in object_list %}
 
-  <div class="card text-center">
-    <div class="card-header">Profesor</div>
-    <div class="card-body">
-      <h5 class="card-title underline">
-        {{teacher.name}} {{teacher.last_name}}
-      </h5>
-
-      <a href="{% url 'teacher_detail' teacher.id %}" class="btn btn-info"
-        >Ver Detalles</a
-      >
-    </div>
+    <div class="card text-center">
+  <div class="card-header">
+    Profesor
   </div>
+  <div class="card-body">
+    <h5 class="card-title underline">{{teacher.name}} {{teacher.last_name}}</h5>
+    
+    <a href="{% url 'teacher_detail' teacher.id %}" class="btn btn-info">Ver Detalles</a>
+    
+  </div>
+  
+</div>
 
-  {% endfor %}
+{% endfor %}
+    
 </div>
 
 {% else %}
-<p class="empty_database">No hay profesores registrados.</p>
+    <p class="empty_database">No hay profesores registrados.</p>
 
-{% endif %} {% endblock %}
+{% endif %}
+{% endblock %}

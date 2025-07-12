@@ -1,13 +1,16 @@
-{% extends 'AppBlog/base.html' %} {% block title %} Profesores {% endblock %} {%
-block content %}
-<h1>Lista de Profesores</h1>
+{% extends 'AppBlog/base.html' %} {% block title %} Profesores {% endblock %} 
+
+{% block main_extra_class %} d-flex flex-column {% endblock %}
+
+{% block content %}
+<h1 class="text-center">Lista Completa de Estudiantes</h1>
 
 {% if students %}
-<div class="bg-light rounded">
-  {% for student in object_list %}
+<div class="bg-light rounded gap-3 d-flex flex-wrap">
+  {% for student in students %}
 
   <div class="card text-center">
-    <div class="card-header">Profesor</div>
+    <div class="card-header">Estudiante</div>
     <div class="card-body">
       <h5 class="card-title underline">
         {{student.name}} {{student.last_name}}
@@ -24,5 +27,6 @@ block content %}
 
 {% else %}
 <p class="empty_database">No hay estudiantes registrados.</p>
+{% endif %} 
 
-{% endif %} {% endblock %}
+{% endblock %}

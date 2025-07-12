@@ -3,8 +3,8 @@
 {% block title %} Buscador {% endblock %}
 
 {% block content %} 
-<h1>Buscar un docente</h1>
-    <h3>Utiliza el formulario a continuación para buscar profesores por nombre, curso o universidad.</h3>
+<h1>Buscar un Estudiante </h1>
+    <h3>Utiliza el formulario a continuación para buscar estudiantes por nombre, carrera o universidad.</h3>
     <form action="{% url 'students_results' %}" method="get" class="mb-4 d-flex flex-column text-center">
       {% csrf_token %}
 
@@ -19,7 +19,7 @@
            <option value="name" {% if filtro == 'name' %}selected{% endif %}>Nombre</option>
            <option value="last_name" {% if filtro == 'last_name' %}selected{% endif %}>Apellido</option>
            <option value="email" {% if filtro == 'email' %}selected{% endif %}>E-mail</option>
-           <option value="course" {% if filtro == 'career' %}selected{% endif %}>Curso</option>
+           <option value="career" {% if filtro == 'career' %}selected{% endif %}>Carrera</option>
            <option value="college" {% if filtro == 'college' %}selected{% endif %}>Institución</option>
           </select>
         </div>

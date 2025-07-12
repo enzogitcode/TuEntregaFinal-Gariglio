@@ -17,3 +17,44 @@ main {
 footer {
     background-color: #bd5b15;
 }
+
+#menuNav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 2rem;
+}
+
+.underlineLink {
+  position: relative;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 4px 0;
+  transition: color 0.3s ease;
+}
+
+.underlineLink:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #007bff;
+  transition: width 0.4s ease, left 0.4s ease;
+}
+
+.underlineLink:hover::after {
+  width: 100%;
+  left: 0;
+}
+.main_articles_home {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size:auto;
+}
+.empty_database {
+  font-size: 1.4em;
+  font-weight: bolder;
+}

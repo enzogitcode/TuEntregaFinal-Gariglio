@@ -8,10 +8,10 @@ class Student(models.Model):
     age = models.PositiveIntegerField()
     college = models.CharField(max_length=100)
     career= models.CharField(max_length=100)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
 
     def __str__(self):
-        return f"Se creó el estudiante {self.name} {self.last_name} con el correo {self.email}"
+        return f"{self.name} {self.last_name}, correo electrónico: {self.email}"
 
 class Teacher(models.Model):
     name = models.CharField(max_length=100)
@@ -19,9 +19,9 @@ class Teacher(models.Model):
     age = models.PositiveIntegerField()
     course = models.CharField(max_length=100)
     college = models.CharField(max_length=100)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     def __str__(self):
-        return f"Se creó el profesor {self.name} {self.last_name} con el correo {self.email}"
+        return f" Docente: {self.name} {self.last_name}, correo electrónico: {self.email}"
     
 class Article(models.Model):
     author_name = models.CharField(max_length=100)

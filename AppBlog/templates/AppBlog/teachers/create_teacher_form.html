@@ -1,11 +1,12 @@
 {% extends 'AppBlog/base.html' %} 
+
 {% load static %}
 
 {% block title %}Teachers Form{% endblock %}
 
 {% block content %}
 <h2>Formulario para agregar un nuevo profesor</h2>
-<form method="post">
+<form method="post" class="need-validation" novalidate>
   {% csrf_token %}
     {% if form.errors %}
     <div class="alert alert-danger">

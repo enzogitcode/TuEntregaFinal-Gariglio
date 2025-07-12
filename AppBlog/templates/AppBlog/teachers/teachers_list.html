@@ -16,9 +16,9 @@
   <div class="card-body">
     <h5 class="card-title underline">{{teacher.name}} {{teacher.last_name}}</h5>
     
-    <a href="#" class="btn btn-info">Ver Detalles</a>
-    <a href="#" class="btn btn-danger">Eliminar</a>
-    <a href="#" class="btn btn-primary">Editar</a>
+    <a href="{% url 'teacher_detail' teacher.id %}" class="btn btn-info">Ver Detalles</a>
+    <a href="{% url 'teacher_delete_form' teacher.id %}" class="btn btn-danger">Eliminar</a>
+    
   </div>
   
 </div>
@@ -28,6 +28,7 @@
 </div>
 
 {% else %}
-    <p>No hay profesores registrados.</p>
+    <p class="empty_database">No hay profesores registrados.</p>
+
 {% endif %}
 {% endblock %}

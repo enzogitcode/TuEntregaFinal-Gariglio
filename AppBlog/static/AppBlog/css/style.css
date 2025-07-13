@@ -70,3 +70,18 @@ footer {
   justify-content: center;
   width: 100dvw;
 }
+.paperEconomyHeader nav ul {
+  background-color: #010100;
+  
+}
+.paperEconomyHeader nav ul li {
+  background-color: #cdcd0f;
+  
+}
+.paperEconomyMain {
+  background-image: url('../imgs/ilustracion-dinero-aislada_23-2151568546.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.5); /* superposición si querés */
+}

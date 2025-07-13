@@ -27,7 +27,7 @@ class Article(models.Model):
     author_name = models.CharField(max_length=100)
     author_last_name = models.CharField(max_length=100)
     author_email = models.EmailField()
-    subject = models.CharField(default=list, blank=True)
+    subject = models.CharField(max_length=200)
     date_of_publication = models.DateField(auto_now_add=True)
     title = models.CharField(max_length=200)
     resume = models.CharField(max_length=500)

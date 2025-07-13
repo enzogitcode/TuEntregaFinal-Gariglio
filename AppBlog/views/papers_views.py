@@ -35,7 +35,6 @@ class PaperListView(ListView):
 class PaperDetailView(DetailView):
     model = Paper
     template_name = 'AppBlog/papers/paper_detail.html'
-    context_object_name= 'papers'
 
 class PaperCreateView(CreateView):
     model = Paper
@@ -71,7 +70,7 @@ class PaperUpdateView(UpdateView):
         'title': 'título',
         'abstract': 'abstract',
         'text_paper': 'texto completo'}
-    template_name = 'AppBlog/papers/papers_update_form.html'
+    template_name = 'AppBlog/papers/paper_update_form.html'
     success_url = reverse_lazy('papers_list')
     context_object_name= 'papers'
     

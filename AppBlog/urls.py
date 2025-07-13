@@ -3,7 +3,7 @@ from .views import views
 
 from .views.articles_views import (
     ArticleListView, ArticleCreateView, ArticleUpdateView, ArticleDeleteView, ArticleDetailView,
-    ArticlesHome
+    ArticlesHome, articles_results, articles_search, 
 )
 from .views.papers_views import (
     PaperListView, PaperCreateView, PaperUpdateView, PaperDeleteView, PaperDetailView,
@@ -50,8 +50,10 @@ path('students_search/', students_search, name='students_search'),
 
     # Articles
     path('articles_home/', ArticlesHome, name='articles_home'),
+    path('articles_search/', articles_search, name='articles_search'),
+    path('articles_results/', articles_results, name='articles_results'),
     path('articles_list/', ArticleListView.as_view(), name='articles_list'),
-    path('articles/create/', ArticleCreateView.as_view(), name='article_create_form'),
+    path('articles/create/', ArticleCreateView.as_view(), name='create_article_form'),
     path('articles/update/<int:pk>/', ArticleUpdateView.as_view(), name='article_update_form'),
     path('articles/delete/<int:pk>/', ArticleDeleteView.as_view(), name='article_delete_form'),
     path('articles/<int:pk>/', ArticleDetailView.as_view(), name='article_detail'),

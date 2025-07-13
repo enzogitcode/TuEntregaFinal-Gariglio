@@ -8,6 +8,25 @@ from django.shortcuts import render
 def ArticlesHome(request):
     return render(request, 'AppBlog/articles/articles_home.html')
 
+def articles_search(request):
+    return render(request, 'AppBlog/articles/articles_search.html')
+
+def articles_results(request):
+    keyword = request.GET.get('keyword', '').strip()
+    filtro = request.GET.get('filtro', '')
+
+    if keyword and filtro in ['author_name', 'author_last_name', 'title', 'subject', 'resume']:
+        filtro_kwargs = {f"{filtro}__icontains": keyword}
+        articles = Article.objects.filter(**filtro_kwargs)
+    else:
+        articles = Article.objects.none()
+
+    return render(request, 'AppBlog/articles/articles_results.html', {
+        'articles': articles,
+        'keyword': keyword,
+        'filtro': filtro
+    })
+
 class ArticleListView(ListView):
     model = Article
     template_name = 'AppBlog/articles/articles_list.html'
@@ -41,10 +60,12 @@ class ArticleUpdateView(UpdateView):
         'resume',
         'text_article'
     ]
-    template_name = 'AppBlog/articles/articles_update_form.html'
-    success_url = reverse_lazy('article_detail')
+    template_name = 'AppBlog/articles/article_update_form.html'
+    success_url = reverse_lazy('articles_list')
+    context_object_name= 'article'
 
 class ArticleDeleteView(DeleteView):
     model = Article
-    template_name = 'AppBlog/articles/articles_delete_form.html'
-    success_url = reverse_lazy('home')
+    template_name = 'AppBlog/articles/article_delete_form.html'
+    success_url = reverse_lazy('articles_list')
+    context_object_name= 'article'

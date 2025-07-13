@@ -1,12 +1,12 @@
 {% extends "AppBlog/base.html" %} 
 {% load static %} 
-{% if paper %} 
-{% block title %} Editar Papers {% endblock %} 
+{% if object %} 
+{% block title %} Editar Articles {% endblock %} 
 {% block extra_main_classes %} no-flex-column {% endblock %} 
 {% block content %}
-<h1 class="text-center">Editar Paper</h1>
+<h1 class="text-center">Editar Article</h1>
 <div
-  class="papers_form_container p-2 text-center align-items-center justify-content-center gap-4"
+  class="articles_form_container p-2 text-center align-items-center justify-content-center gap-4"
 >
   {% load static %}
   <form method="post" class="need-validation" novalidate>
@@ -22,12 +22,12 @@
 
     <!-- Área completa -->
     <div class="texto d-flex flex-column mb-2">
-      <h3>Datos del Paper</h3>
+      <h3>Datos del Article</h3>
 
       <label for="subject">Materia</label> {{ form.subject }}
       <label for="title">Título</label> {{ form.title }}
-      <label for="abstract">Abstract</label> {{ form.abstract }}
-      <label for="text_paper">Texto Completo</label> {{ form.text_paper }}
+      <label for="resume">Resumen</label> {{ form.resume }}
+      <label for="text_article">Texto Completo</label> {{ form.text_article }}
     </div>
   </div>
 <div class="buttons_div align-items-center justify-content-center">
@@ -35,16 +35,19 @@
   <button type="submit" class="btn btn-primary mt-3 text-center">Enviar</button>
 </div>
 </form>
-  {% endblock %} {% block extra_content %} {% if form.errors %}
-  <div class="alert alert-danger mt-3">
-    <strong>Errores en el formulario:</strong>
-    <ul>
-      {% for field in form %} {% for error in field.errors %}
-      <li>{{ error }}</li>
-      {% endfor %} {% endfor %} {% for error in form.non_field_errors %}
-      <li>{{ error }}</li>
-      {% endfor %}
-    </ul>
-  </div>
+{% endblock %} 
+{% block extra_content %} {% if form.errors %}
+<div class="alert alert-danger mt-3">
+  <strong>Errores en el formulario:</strong>
+  <ul>
+    {% for field in form %} {% for error in field.errors %}
+    <li>{{ error }}</li>
+    {% endfor %} {% endfor %} {% for error in form.non_field_errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+  </ul>
 </div>
-{% endif %} {% endblock %} {% endif %}
+</div>
+{% endif %} 
+{% endblock %} 
+{% endif %}

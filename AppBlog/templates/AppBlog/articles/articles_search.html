@@ -3,10 +3,10 @@
 {% block title %} Buscador {% endblock %}
 
 {% block content %} 
-<h1>Buscar un Paper</h1>
-<h3>Utiliza el formulario a continuación para buscar papers por título, autor, área temática, etc.</h3>
+<h1>Buscar un Artículo</h1>
+<h3>Utiliza el formulario a continuación para buscar artículos por título, autor, área temática, etc.</h3>
 
-<form action="{% url 'papers_results' %}" method="get" class="mb-4 d-flex flex-column text-center">
+<form action="{% url 'articles_results' %}" method="get" class="mb-4 d-flex flex-column text-center">
   {% csrf_token %}
 
   <!-- Campo de texto para la búsqueda -->
@@ -19,6 +19,7 @@
       <option value="author_name" {% if filtro == 'author_name' %}selected{% endif %}>Nombre del autor</option>
       <option value="author_last_name" {% if filtro == 'author_last_name' %}selected{% endif %}>Apellido del autor</option>
       <option value="subject" {% if filtro == 'subject' %}selected{% endif %}>Área temática</option>
+      <option value="resume" {% if filtro == 'resume' %}selected{% endif %}>Palabras claves</option>
     </select>
 </div>
 

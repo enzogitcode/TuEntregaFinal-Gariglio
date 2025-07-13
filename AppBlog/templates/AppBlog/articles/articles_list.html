@@ -1,0 +1,30 @@
+{% extends "AppBlog/base.html" %}
+{% load static %}
+
+{% block title %}Lista de Artículos{% endblock %}
+
+{% block content %}
+<h1>Lista completa de artículos</h1>
+
+{% if object_list %}
+  <div class="rounded text-center">
+    <ul class="list-group gap-3 rounded">
+      {% for article in object_list %}
+      <li class="list-group-item">
+        <p><strong>Título:</strong> {{ article.title }}</p>
+        <p><strong>Autor:</strong> {{ article.author_name }} {{ article.author_last_name }}</p>
+        <p><strong>E-mail:</strong> {{ article.author_email }}</p>
+        <p><strong>Palabras clave:</strong> {{ article.subject }}</p>
+        <p><strong>Resumen:</strong> {{ article.resume }}</p>
+        <p><strong>Fecha de publicación:</strong> {{ article.date_of_publication }}</p>
+        <div>
+          <a class="btn btn-primary" href="{% url 'article_detail' article.id %}">Ver Artículo completo</a>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% else %}
+  <p class="text-muted">No hay artículos registrados.</p>
+{% endif %}
+{% endblock %}

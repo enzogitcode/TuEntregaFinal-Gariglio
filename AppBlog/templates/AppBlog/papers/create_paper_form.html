@@ -1,11 +1,11 @@
 {% extends "AppBlog/base.html" %} 
-{% block title %}Formularios Papers {% endblock %} 
 {% load static %}
+{% block title %}Formularios Papers {% endblock %} 
 {% block extra_main_classes %} no-flex-column {% endblock %} 
 {% block content %}
 <h1 class="text-center">Formulario de Papers</h1>
 <div class="papers_form_container p-2 text-center align-items-center justify-content-center gap-4">
-{% load static %}
+
 <form method="post" class="need-validation" novalidate>
   {% csrf_token %}
   <div class="form-grid">

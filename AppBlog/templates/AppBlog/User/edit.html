@@ -1,0 +1,7 @@
+<h2>Editar Perfil</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-success">Guardar cambios</button>
+</form>
+<a href="{% url 'logout' %}" class="btn btn-secondary mt-3">Cerrar sesión</a>

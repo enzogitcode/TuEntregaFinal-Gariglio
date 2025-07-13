@@ -17,7 +17,8 @@ from .views.teachers_views import (
     TeacherListView, TeacherCreateView, TeacherUpdateView, TeacherDeleteView, TeacherDetailView,
     teachers_home, teachers_search, teachers_results
 )
-from .views.user_views import editProfile
+
+from .views.user_views import RegisterView, EditUserView, CustomLoginView, CustomLogoutView, LoginView, LogoutView
 
 urlpatterns = [
     
@@ -25,7 +26,12 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     
     # User
-    path('update_profile', editProfile, name='edit_profile'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('edit/', EditUserView.as_view(), name='edit_user'),
+    path('login/', LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
+    path('login/', CustomLoginView.as_view(), name='login'),
+    path('logout/', CustomLogoutView.as_view(), name='logout'),
 
 
     # Students

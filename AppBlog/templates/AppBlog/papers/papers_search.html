@@ -1,0 +1,33 @@
+{% extends 'AppBlog/base.html' %}
+
+{% block title %} Buscador {% endblock %}
+
+{% block content %} 
+<h1>Buscar un Paper</h1>
+<h3>Utiliza el formulario a continuación para buscar papers por título, autor, área temática, etc.</h3>
+
+<form action="{% url 'papers_results' %}" method="get" class="mb-4 d-flex flex-column text-center">
+  {% csrf_token %}
+
+  <!-- Campo de texto para la búsqueda -->
+  <input name="keyword" type="text" placeholder="Buscar..." class="form-control mb-3" value="{{ keyword }}" >
+
+  <!-- Dropdown para elegir el criterio de búsqueda -->
+  <div>
+    <h4>Filtros</h4>
+    <select name="filtro" class="form-select mb-3">
+      <option value="name" {% if filtro == 'author_name' %}selected{% endif %}>Nombre del autor</option>
+      <option value="last_name" {% if filtro == 'author_last_name' %}selected{% endif %}>Apellido del autor</option>
+      <option value="subject" {% if filtro == 'subject' %}selected{% endif %}>Área temática</option>
+    </select>
+</div>
+<div>
+    <h4>O Buscar por fecha</h4>
+      <option value="date_of_publication" {% if filtro == 'date_of_publication' %}selected{% endif %}>Fecha</option>
+        <input name="keyword" type="date" placeholder="Buscar..." class="form-control mb-3" value="{{ keyword }}" >
+
+  </div>
+
+  <button type="submit" class="btn btn-primary text-center">Buscar</button>
+</form>
+{% endblock %}

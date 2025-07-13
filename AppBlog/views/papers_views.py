@@ -21,7 +21,7 @@ def papers_results(request):
     else:
         papers = Paper.objects.none()
 
-    return render(request, 'AppBlog/papers_results.html', {
+    return render(request, 'AppBlog/papers/papers_results.html', {
         'papers': papers,
         'keyword': keyword,
         'filtro': filtro
@@ -30,10 +30,12 @@ def papers_results(request):
 class PaperListView(ListView):
     model = Paper
     template_name = 'AppBlog/papers/papers_list.html'
+    context_object_name= 'papers'
 
 class PaperDetailView(DetailView):
     model = Paper
     template_name = 'AppBlog/papers/paper_detail.html'
+    context_object_name= 'papers'
 
 class PaperCreateView(CreateView):
     model = Paper
@@ -48,6 +50,7 @@ class PaperCreateView(CreateView):
     ]
     template_name = 'AppBlog/papers/create_paper_form.html'
     success_url = reverse_lazy('papers_list')
+    context_object_name= 'papers'
 
 class PaperUpdateView(UpdateView):
     model = Paper
@@ -60,10 +63,21 @@ class PaperUpdateView(UpdateView):
         'abstract',
         'text_paper'
     ]
+    labels= {
+        'author_name': 'nombre del autor',
+        'author_last_name': 'apellido del autor',
+        'author_email': 'email',
+        'subject': 'materia',
+        'title': 'título',
+        'abstract': 'abstract',
+        'text_paper': 'texto completo'}
     template_name = 'AppBlog/papers/papers_update_form.html'
-    success_url = reverse_lazy('paper_detail')
+    success_url = reverse_lazy('papers_list')
+    context_object_name= 'papers'
+    
 
 class PaperDeleteView(DeleteView):
     model = Paper
     template_name = 'AppBlog/papers/papers_delete_form.html'
-    success_url = reverse_lazy('app_home')
+    success_url = reverse_lazy('papers_list')
+    context_object_name='papers'

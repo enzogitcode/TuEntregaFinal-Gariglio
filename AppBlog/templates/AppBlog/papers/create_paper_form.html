@@ -12,19 +12,19 @@
 
     <div class="autor mb-2">
       <h3>Datos del Autor</h3>
-      {{ form.author_name.label_tag }} {{ form.author_name }}
-      {{ form.author_last_name.label_tag }} {{ form.author_last_name }}
-      {{ form.author_email.label_tag }} {{ form.author_email }}
+      <label for="author_name">Nombre del Autor</label> {{ form.author_name }}
+      <label for="author_last_name">Apellido del autor</label> {{ form.author_last_name }}
+      <label for="author_email">E-mail de autor</label> {{ form.author_email }}
     </div>
 
     <!-- Área completa -->
     <div class="texto d-flex flex-column mb-2">
       <h3>Datos del Paper</h3>
 
-      {{ form.subject.label_tag }} {{ form.subject }}
-      {{ form.title.label_tag }} {{ form.title }}
-      {{ form.abstract.label_tag }} {{ form.abstract }}
-      {{ form.text_paper.label_tag }} {{ form.text_paper }}
+      <label for="subject">Materia</label> {{ form.subject }}
+      <label for="title">Título</label> {{ form.title }}
+      <label for="abstract">Abstract</label> {{ form.abstract }}
+      <label for="text_paper">Texto Completo</label> {{ form.text_paper }}
     </div>
   </div>
 <div class="buttons_div align-items-center justify-content-center">

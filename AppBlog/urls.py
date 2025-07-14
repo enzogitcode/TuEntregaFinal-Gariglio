@@ -18,7 +18,7 @@ from .views.teachers_views import (
     teachers_home, teachers_search, teachers_results
 )
 
-from .views.user_views import RegisterView, EditUserView, CustomLoginView, CustomLogoutView, LoginView, LogoutView
+from .views.user_views import RegisterView, EditUserView, CustomLoginView, LoginView, LogoutView
 
 urlpatterns = [
     
@@ -28,12 +28,10 @@ urlpatterns = [
     # User
     path('register/', RegisterView.as_view(), name='register'),
     path('edit/', EditUserView.as_view(), name='edit_user'),
-    path('login/', LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
-    path('login/', CustomLoginView.as_view(), name='login'),
-    path('logout/', CustomLogoutView.as_view(), name='logout'),
-
-
+    path('login/', LoginView.as_view(template_name='AppBlog/user/login.html'), name='login'),
+        path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
+    #path('logout/', LogoutView.as_view(template_name='AppBlog/user/logout.html'), name='logout'),
+    
     # Students
 path('students_home/', StudentsHome, name='students_home'),
 path('students_search/', students_search, name='students_search'),

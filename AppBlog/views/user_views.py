@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserChangeForm
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.views import LoginView, LogoutView
 
+
 class RegisterView(CreateView):
     form_class = UserCreationForm
     template_name = 'AppBlog/user/register.html'
@@ -22,5 +23,5 @@ class EditUserView(LoginRequiredMixin, UpdateView):
 class CustomLoginView(LoginView):
     template_name = 'AppBlog/user/login.html'
 
-class CustomLogoutView(LogoutView):
+class Logout(LogoutView):
     next_page = 'login'

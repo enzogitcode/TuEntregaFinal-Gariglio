@@ -1,10 +1,8 @@
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
-from ..models import Student, Teacher
-from ..forms import TeacherRegisterForm, StudentRegisterForm, BasicUserRegisterForm
+from ..forms import BasicUserRegisterForm
 from django.shortcuts import render
 
 def register_choose_your_role(request):

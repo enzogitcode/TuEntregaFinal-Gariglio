@@ -3,28 +3,25 @@
 {% block title %} Buscador {% endblock %}
 
 {% block content %} 
-<h1>Buscar un docente</h1>
-    <h3>Utiliza el formulario a continuación para buscar profesores por nombre, curso o universidad.</h3>
-    <form action="{% url 'teachers_results' %}" method="get" class="mb-4 d-flex flex-column text-center">
-      {% csrf_token %}
+<h2>Buscar docentes</h2>
+<form method="get">
+    {{ form.as_p }}
+    <button type="submit">Buscar</button>
+</form>
 
-      <!-- Campo de texto para la búsqueda -->
-      <input name="keyword" type="text" placeholder="Buscar..." class="form-control mb-3" value="{{ keyword }}" >
+<hr>
 
-      <!-- Dropdown para elegir el criterio de búsqueda -->
-       <div>
+<h3>Resultados:</h3>
+<ul>
+  {% for teacher in teachers %}
+    <li>
+      {{ teacher.user.first_name }} {{ teacher.user.last_name }} – {{ teacher.course }} ({{ teacher.college }})
+      <a href="{% url 'teacher_detail' teacher.pk %}">Ver detalle</a>
+    </li>
+  {% empty %}
+    <li>No se encontraron docentes.</li>
+  {% endfor %}
+</ul>
 
-         <h4>Filtros</h4>
-         <select name="filtro" class="form-select mb-3">
-           <option value="name" {% if filtro == 'name' %}selected{% endif %}>Nombre</option>
-           <option value="last_name" {% if filtro == 'last_name' %}selected{% endif %}>Apellido</option>
-           <option value="email" {% if filtro == 'email' %}selected{% endif %}>E-mail</option>
-           <option value="course" {% if filtro == 'course' %}selected{% endif %}>Curso</option>
-           <option value="college" {% if filtro == 'college' %}selected{% endif %}>Institución</option>
-          </select>
-        </div>
-
-      <button type="submit" class="btn btn-primary text-center">Buscar</button>
-    </form>
 
 {% endblock %}

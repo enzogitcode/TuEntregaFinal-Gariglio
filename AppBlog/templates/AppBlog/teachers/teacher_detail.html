@@ -5,34 +5,22 @@
 
 {% block main_extra_class %} d-flex flex-column pt-2 {% endblock %}
 
-{% block title %} Profesor {{teacher.name}} {{teacher.last_name}} {% endblock %}
+{% block title %} Profesor {{teacher.user.first_name}} {{teacher.user.last_name}} {% endblock %}
 
 {% block content %} 
 
-<h1 class="p-2" data-aos="fade-down">Datos del Docente</h1>
+<h2>Detalle del docente</h2>
 
-<div class="card mb-3" style="max-width: 540px;" data-aos="fade-up">
-  <div class="row g-0">
-    <div class="col-md-4">
-      <img src="..." class="img-fluid rounded-start" alt="...">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-        <h4 class="card-title"> Docente </h4>
-        <h5 class="card-title">{{teacher.user.name}} {{teacher.user.last_name}} </h5>
-        <h6 class="card-title"> Correo Electrónico: {{teacher.user.email}} </h5>
-        <p class="card-text">Curso: {{teacher.course}}</p>
-        <p class="card-text">Universidad: {{teacher.college}}</p>
-        <p class="card-text"><small class="text-body-secondary">Edad {{teacher.age}} años</small></p>
-      </div>
-    </div>
-    <div class="text-center gap-2 m-2 justify-content-center">
-        <a href="{% url 'teacher_delete_form' teacher.id %}" class="btn btn-danger rounded-pill">Eliminar</a>
-        <a href="{% url 'teacher_update_form' teacher.id %}" class="btn btn-info rounded-pill">Editar</a>
-      </div>
-  </div>
-</div>
-    <a href="{% url 'teachers_home' %}" class="btn btn-primary m-2">Volver</a>
+<p><strong>Nombre:</strong> {{ teacher.user.first_name }}</p>
+<p><strong>Apellido:</strong> {{ teacher.user.last_name }}</p>
+<p><strong>Email:</strong> {{ teacher.user.email }}</p>
+<p><strong>Curso:</strong> {{ teacher.course }}</p>
+<p><strong>Colegio:</strong> {{ teacher.college }}</p>
+<p><strong>Edad:</strong> {{ teacher.age }}</p>
+
+<a href="{% url 'teacher_self_edit' %}">Editar mi perfil</a>
+
+
 
 {% endblock %}
 

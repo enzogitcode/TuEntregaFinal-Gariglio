@@ -1,12 +1,19 @@
-from django.views.generic import ListView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic.detail import DetailView
-from ..models import Teacher
+from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
-from django.views.generic.edit import UpdateView
+from django.contrib.auth.models import User
 from AppBlog.models import Teacher
-from AppBlog.forms import TeacherSelfEditForm, TeacherRegisterForm
-from django.shortcuts import render
+from AppBlog.forms import TeacherRegisterForm
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from AppBlog.forms import TeacherSelfEditForm
+from django.views.generic import ListView
+from django.views.generic.edit import DeleteView
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.db.models import Q
+from AppBlog.forms import TeacherSearchForm
+
+# registrarse como profesor/docente
 
 class TeacherRegisterView(CreateView):
     form_class = TeacherRegisterForm
@@ -21,109 +28,73 @@ class TeacherRegisterView(CreateView):
             college=form.cleaned_data['college'],
             age=form.cleaned_data['age']
         )
-        print(form.cleaned_data['age'])
         return super().form_valid(form)
 
-class TeacherSelfEditForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=100)
-    last_name = forms.CharField(max_length=100)
-    email = forms.EmailField()
+# editar
 
-    class Meta:
-        model = Teacher
-        fields = ['course', 'college', 'age']
+class TeacherSelfUpdateView(LoginRequiredMixin, UpdateView):
+    model = Teacher
+    form_class = TeacherSelfEditForm
+    template_name = 'AppBlog/teachers/update_self.html'
+    success_url = reverse_lazy('teachers_list')
 
-    def __init__(self, *args, **kwargs):
-        self.user_instance = kwargs.pop('user_instance', None)
-        super().__init__(*args, **kwargs)
+    def get_object(self):
+        return Teacher.objects.get(user=self.request.user)
 
-        if self.user_instance:
-            self.fields['first_name'].initial = self.user_instance.first_name
-            self.fields['last_name'].initial = self.user_instance.last_name
-            self.fields['email'].initial = self.user_instance.email
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user_instance'] = self.request.user
+        return kwargs
 
-    def save(self, commit=True):
-        teacher = super().save(commit=False)
-
-        if self.user_instance:
-            self.user_instance.first_name = self.cleaned_data['first_name']
-            self.user_instance.last_name = self.cleaned_data['last_name']
-            self.user_instance.email = self.cleaned_data['email']
-            if commit:
-                self.user_instance.save()
-
-        if commit:
-            teacher.save()
-
-        return teacher
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def teachers_home(request):
-    return render(request, 'AppBlog/teachers/teachers_home.html')
-
-def teachers_search(request):
-    return render(request, 'AppBlog/teachers/teachers_search.html')
-
-def teachers_results(request):
-    keyword = request.GET.get('keyword') 
-    filtro = request.GET.get('filtro')   
-
-    teachers = Teacher.objects.all()
-
-    if keyword and filtro:
-        if filtro == 'name':
-            teachers = teachers.filter(name__icontains=keyword)
-        elif filtro == 'last_name':
-            teachers = teachers.filter(last_name__icontains=keyword)
-        elif filtro == 'course':
-            teachers = teachers.filter(course__icontains=keyword)
-        elif filtro == 'college':
-            teachers = teachers.filter(college__icontains=keyword)
-        elif filtro == 'email':
-            teachers = teachers.filter(email__icontains=keyword)
-        elif filtro == 'age':
-            teachers = teachers.filter(age__icontains=keyword)
-
-    context = {
-        'teachers': teachers,
-        'keyword': keyword,
-        'filtro': filtro,
-    }
-    return render(request, 'AppBlog/teachers/teachers_results.html', context)
+# listar todos los profesores
 
 class TeacherListView(ListView):
     model = Teacher
-    template_name = 'AppBlog/teachers/teachers_list.html'
-    context_object_name= 'teachers'
-    
+    template_name = 'AppBlog/teachers/teacher_list.html'
+    context_object_name = 'teachers'
+
+# detalles de un profesor en particular
+
 class TeacherDetailView(DetailView):
     model = Teacher
     template_name = 'AppBlog/teachers/teacher_detail.html'
-    
-class TeacherDeleteView(DeleteView):
+    context_object_name = 'teacher'
+
+
+# Vista para que el SUPERUSUARIO pueda eliminar un docente en particular
+
+class TeacherDeleteView(UserPassesTestMixin, DeleteView):
     model = Teacher
-    template_name = 'AppBlog/teachers/teacher_delete_form.html'
-    success_url = reverse_lazy('teachers_list')  
-    context_object_name= 'teachers'
+    template_name = 'AppBlog/teachers/confirm_delete.html'
+    success_url = reverse_lazy('teachers_list')
+    context_object_name = 'teacher'
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
 
 class TeacherSearchView(ListView):
     model = Teacher
-    template_name = 'AppBlog/teachers/results_template.html'
+    template_name = 'AppBlog/teachers/teacher_search.html'
     context_object_name = 'teachers'
 
-        
-    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        name = self.request.GET.get('name', '')
+        last_name = self.request.GET.get('last_name', '')
+        college = self.request.GET.get('college', '')
+        course = self.request.GET.get('course', '')
+
+        if name or last_name or college or course:
+            queryset = queryset.filter(
+                Q(user__first_name__icontains=name) &
+                Q(user__last_name__icontains=last_name) &
+                Q(college__icontains=college) &
+                Q(course__icontains=course)
+            )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = TeacherSearchForm(self.request.GET)
+        return context

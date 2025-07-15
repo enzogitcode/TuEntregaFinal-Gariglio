@@ -4,30 +4,12 @@
 
 {% block content %}
 <h1>Lista de Profesores</h1>
+<ul>
+  {% for teacher in teachers %}
+    <li>{{ teacher.user.get_full_name }} – {{ teacher.course }} ({{ teacher.college }})</li>
+  {% empty %}
+    <li>No hay docentes registrados.</li>
+  {% endfor %}
+</ul>
 
-{% if object_list %}
-<div class="bg-light rounded">
-    {% for teacher in object_list %}
-
-    <div class="card text-center">
-  <div class="card-header">
-    Profesor
-  </div>
-  <div class="card-body">
-    <h5 class="card-title underline">{{teacher.user.first_name}} {{teacher.user.last_name}}</h5>
-    
-    <a href="{% url 'teacher_detail' teacher.id %}" class="btn btn-info">Ver Detalles</a>
-    
-  </div>
-  
-</div>
-
-{% endfor %}
-    
-</div>
-
-{% else %}
-    <p class="empty_database">No hay profesores registrados.</p>
-
-{% endif %}
 {% endblock %}

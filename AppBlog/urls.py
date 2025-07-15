@@ -14,8 +14,10 @@ from .views.students_views import (
     StudentsHome, students_search, students_results, StudentRegisterView
 )
 from .views.teachers_views import (
-    TeacherListView, TeacherUpdateView, TeacherDeleteView, TeacherDetailView,
-    teachers_home, teachers_search, teachers_results
+    TeacherListView, TeacherDeleteView, TeacherDetailView,
+TeacherSelfUpdateView, TeacherRegisterView,
+TeacherSearchView,
+    teachers_home
 )
 
 from .views.user_views import (
@@ -48,12 +50,11 @@ path('students_search/', students_search, name='students_search'),
     # Teachers
     path('teachers_home/', teachers_home, name='teachers_home'),
     path('register/teacher/', TeacherRegisterView.as_view(), name='register_teacher'),
-    path('teachers_search/', teachers_search, name='teachers_search'),
-    path('teachers_results/', teachers_results, name='teachers_results'),
+    path('teachers/update/<int:pk>/', TeacherSelfUpdateView.as_view(), name='teacher_update_form'),
     path('teachers/', TeacherListView.as_view(), name='teachers_list'),
-    path('teachers/update/<int:pk>/', TeacherUpdateView.as_view(), name='teacher_update_form'),
-    path('teachers/delete/<int:pk>/', TeacherDeleteView.as_view(), name='teacher_delete_form'),
     path('teachers/<int:pk>/', TeacherDetailView.as_view(), name='teacher_detail'),
+    path('teachers_search/', TeacherSearchView.as_view(), name='teachers_search'),
+    path('teachers/delete/<int:pk>/', TeacherDeleteView.as_view(), name='teacher_delete_form'),
 
     # Articles
     path('articles_home/', ArticlesHome, name='articles_home'),

@@ -88,10 +88,14 @@
 
 {% if user.is_authenticated %}
   
-          <li class="nav-item">
-            Bievenido {{ user.role }}
-          </li>
-          {% endif %}
+          {% if user.teacher %}
+  <p>Rol: Docente</p>
+{% elif user.student %}
+  <p>Rol: Estudiante</p>
+{% else %}
+  <p>Rol: Usuario común</p>
+{% endif %}
+{% endif %}
 
         </ul>
       </div>

@@ -18,7 +18,7 @@
 <p><strong>Colegio:</strong> {{ teacher.college }}</p>
 <p><strong>Edad:</strong> {{ teacher.age }}</p>
 
-<a href="{% url 'teacher_self_edit' %}">Editar mi perfil</a>
+<a href="{% url 'teacher_update_form' teacher.id %}">Editar mi perfil</a>
 
 
 

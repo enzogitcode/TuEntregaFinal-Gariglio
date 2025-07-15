@@ -39,7 +39,7 @@ class TeacherRegisterView(CreateView):
 class TeacherSelfUpdateView(LoginRequiredMixin, UpdateView):
     model = Teacher
     form_class = TeacherSelfEditForm
-    template_name = 'AppBlog/teachers/update_self.html'
+    template_name = 'AppBlog/teachers/teacher_update_form.html'
     success_url = reverse_lazy('teachers_list')
 
     def get_object(self):

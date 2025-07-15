@@ -86,16 +86,15 @@
   <a href="{% url 'login' %}" class="btn btn-primary">Iniciar sesión</a>
 {% endif %}
 
-{% if user.is_authenticated %}
-  
-          {% if user.teacher %}
+
+            {% if user.teacher %}
   <p>Rol: Docente</p>
 {% elif user.student %}
   <p>Rol: Estudiante</p>
 {% else %}
   <p>Rol: Usuario común</p>
 {% endif %}
-{% endif %}
+          </li>
 
         </ul>
       </div>

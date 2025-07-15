@@ -46,7 +46,7 @@ path('students_home/', students_home, name='students_home'),
     path('students/', StudentListView.as_view(), name='students_list'),
     path('students/<int:pk>/', StudentDetailView.as_view(), name='student_detail'),
     path('students/delete/<int:pk>/', StudentDeleteView.as_view(), name='student_delete'),
-    path('students_search/', StudentSearchView.as_view(), name='student_search'),
+    path('students_search/', StudentSearchView.as_view(), name='students_search'),
 
     # Teachers
     path('teachers_home/', teachers_home, name='teachers_home'),

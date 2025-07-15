@@ -3,9 +3,7 @@
 {% block main_extra_class %} d-flex flex-column {% endblock %}
 
 {% block content %}
-<h1 class="text-center">Lista Completa de Estudiantes</h1>
 
-{% if object_list %}
 <h2>Lista de estudiantes</h2>
 <ul>
   {% for student in students %}
@@ -17,6 +15,5 @@
     <li>No hay estudiantes registrados.</li>
   {% endfor %}
 </ul>
-
 
 {% endblock %}

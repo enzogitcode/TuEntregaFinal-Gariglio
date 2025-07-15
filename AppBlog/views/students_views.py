@@ -6,7 +6,7 @@ from AppBlog.forms import StudentRegisterForm
 from django.shortcuts import render
 
 def students_home(request):
-    return render ('AppBlog/students/student_home.html')
+    return render (request, 'AppBlog/students/students_home.html')
 
 #1. Registro de estudiante
 class StudentRegisterView(CreateView):
@@ -49,7 +49,7 @@ from AppBlog.models import Student
 
 class StudentListView(ListView):
     model = Student
-    template_name = 'AppBlog/students/student_list.html'
+    template_name = 'AppBlog/students/students_list.html'
     context_object_name = 'students'
 
 from django.views.generic.detail import DetailView
@@ -77,7 +77,7 @@ from AppBlog.forms import StudentSearchForm
 
 class StudentSearchView(ListView):
     model = Student
-    template_name = 'AppBlog/students/student_search.html'
+    template_name = 'AppBlog/students/students_search.html'
     context_object_name = 'students'
 
     def get_queryset(self):

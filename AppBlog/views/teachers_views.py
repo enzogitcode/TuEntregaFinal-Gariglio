@@ -15,7 +15,7 @@ from AppBlog.forms import TeacherSearchForm
 from django.shortcuts import render
 
 def teachers_home(request):
-    return render ('AppBlog/teachers/teachers_home.html')
+    return render (request, 'AppBlog/teachers/teachers_home.html')
 
 # registrarse como profesor/docente
 
@@ -54,7 +54,7 @@ class TeacherSelfUpdateView(LoginRequiredMixin, UpdateView):
 
 class TeacherListView(ListView):
     model = Teacher
-    template_name = 'AppBlog/teachers/teacher_list.html'
+    template_name = 'AppBlog/teachers/teachers_list.html'
     context_object_name = 'teachers'
 
 # detalles de un profesor en particular
@@ -79,7 +79,7 @@ class TeacherDeleteView(UserPassesTestMixin, DeleteView):
 
 class TeacherSearchView(ListView):
     model = Teacher
-    template_name = 'AppBlog/teachers/teacher_search.html'
+    template_name = 'AppBlog/teachers/teachers_search.html'
     context_object_name = 'teachers'
 
     def get_queryset(self):

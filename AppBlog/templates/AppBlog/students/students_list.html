@@ -5,15 +5,15 @@
 {% block content %}
 <h1 class="text-center">Lista Completa de Estudiantes</h1>
 
-{% if students %}
+{% if object_list %}
 <div class="bg-light rounded gap-3 d-flex flex-wrap">
-  {% for student in students %}
+  {% for student in object_list %}
 
   <div class="card text-center">
     <div class="card-header">Estudiante</div>
     <div class="card-body">
       <h5 class="card-title underline">
-        {{student.name}} {{student.last_name}}
+        {{student.user.name}} {{student.user.last_name}}
       </h5>
 
       <a href="{% url 'student_detail' student.id %}" class="btn btn-info"

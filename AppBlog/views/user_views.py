@@ -10,34 +10,6 @@ from django.shortcuts import render
 def register_choose_your_role(request):
     return render(request, 'AppBlog/user/register_choose_your_role.html')
 
-class TeacherRegisterView(CreateView):
-    form_class = TeacherRegisterForm
-    template_name = 'AppBlog/user/register_teacher.html'
-    success_url = reverse_lazy('login')
-
-    def form_valid(self, form):
-        user = form.save()
-        Teacher.objects.create(
-            user=user,
-            course=form.cleaned_data['course'],
-            college=form.cleaned_data['college']
-        )
-        return super().form_valid(form)
-
-class StudentRegisterView(CreateView):
-    form_class = StudentRegisterForm
-    template_name = 'AppBlog/user/register_student.html'
-    success_url = reverse_lazy('login')
-
-    def form_valid(self, form):
-        user = form.save()
-        Student.objects.create(
-            user=user,
-            career=form.cleaned_data['career'],
-            college=form.cleaned_data['college']
-        )
-        return super().form_valid(form)
-
 class UserRegisterView(CreateView):
     form_class = BasicUserRegisterForm
     template_name = 'AppBlog/user/register_user.html'

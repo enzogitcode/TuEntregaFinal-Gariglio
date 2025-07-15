@@ -4,6 +4,7 @@ from django.views.generic.detail import DetailView
 from ..models import Student
 from django.urls import reverse_lazy
 from django.shortcuts import render
+from ..forms import StudentRegisterForm
 
 def StudentsHome(request):
     return render(request, 'AppBlog/students/students_home.html')
@@ -49,13 +50,19 @@ class StudentDetailView(DetailView):
     model = Student
     template_name = 'AppBlog/students/student_detail.html'
 
-class StudentCreateView(CreateView):
-    model = Student
-    fields = ['name', 'last_name', 'age', 'career', 'college', 'email']
-    template_name = 'AppBlog/students/create_student_form.html'
-    success_url = reverse_lazy('students_list')
-    def test_func(self):
-        return self.request.user.is_superuser
+class StudentRegisterView(CreateView):
+    form_class = StudentRegisterForm
+    template_name = 'AppBlog/user/register_student.html'
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        user = form.save()
+        Student.objects.create(
+            user=user,
+            career=form.cleaned_data['career'],
+            college=form.cleaned_data['college']
+        )
+        return super().form_valid(form)
 
 class StudentUpdateView(UpdateView):
     model = Student

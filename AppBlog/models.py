@@ -7,6 +7,7 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     course = models.CharField(max_length=100)
     college = models.CharField(max_length=100)
+    age= models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.get_full_name()} - Docente"
@@ -15,6 +16,7 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     career = models.CharField(max_length=100)
     college = models.CharField(max_length=100)
+    age = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.get_full_name()} - Estudiante"

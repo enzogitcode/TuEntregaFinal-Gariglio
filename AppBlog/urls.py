@@ -10,16 +10,16 @@ from .views.papers_views import (
     PapersHome, papers_search, papers_results
 )
 from .views.students_views import (
-    StudentListView, StudentCreateView, StudentUpdateView, StudentDeleteView, StudentDetailView,
-    StudentsHome, students_search, students_results
+    StudentListView, StudentUpdateView, StudentDeleteView, StudentDetailView,
+    StudentsHome, students_search, students_results, StudentRegisterView
 )
 from .views.teachers_views import (
-    TeacherListView, TeacherCreateView, TeacherUpdateView, TeacherDeleteView, TeacherDetailView,
+    TeacherListView, TeacherUpdateView, TeacherDeleteView, TeacherDetailView,
     teachers_home, teachers_search, teachers_results
 )
 
 from .views.user_views import (
-    TeacherRegisterView, StudentRegisterView, UserRegisterView, 
+    TeacherRegisterView, UserRegisterView, 
     LoginView, LogoutView,
     register_choose_your_role
     )
@@ -31,28 +31,26 @@ urlpatterns = [
     
     # User
     path('register/choose_your_role', register_choose_your_role,  name= 'register_choose_your_role'),
-    path('register/teacher/', TeacherRegisterView.as_view(), name='register_teacher'),
-    path('register/student/', StudentRegisterView.as_view(), name='register_student'),
     path('register/user/', UserRegisterView.as_view(), name='register_user'),
     path('login/', LoginView.as_view(template_name='AppBlog/user/login.html'), name='login'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     
     # Students
 path('students_home/', StudentsHome, name='students_home'),
+    path('register/student/', StudentRegisterView.as_view(), name='register_student'),
 path('students_search/', students_search, name='students_search'),
     path('students_results/', students_results, name='students_results'),
     path('students_list/', StudentListView.as_view(), name='students_list'),
-    path('students/create/', StudentCreateView.as_view(), name='create_student_form'),
     path('students/update/<int:pk>/', StudentUpdateView.as_view(), name='student_update_form'),
     path('students/delete/<int:pk>/', StudentDeleteView.as_view(), name='student_delete_form'),
     path('students/<int:pk>/', StudentDetailView.as_view(), name='student_detail'),
 
     # Teachers
     path('teachers_home/', teachers_home, name='teachers_home'),
+    path('register/teacher/', TeacherRegisterView.as_view(), name='register_teacher'),
     path('teachers_search/', teachers_search, name='teachers_search'),
     path('teachers_results/', teachers_results, name='teachers_results'),
     path('teachers/', TeacherListView.as_view(), name='teachers_list'),
-    path('teachers/create_teacher_form/', TeacherCreateView.as_view(), name='create_teacher_form'),
     path('teachers/update/<int:pk>/', TeacherUpdateView.as_view(), name='teacher_update_form'),
     path('teachers/delete/<int:pk>/', TeacherDeleteView.as_view(), name='teacher_delete_form'),
     path('teachers/<int:pk>/', TeacherDetailView.as_view(), name='teacher_detail'),

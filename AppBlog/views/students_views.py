@@ -38,3 +38,23 @@ class StudentSelfUpdateView(LoginRequiredMixin, UpdateView):
         kwargs = super().get_form_kwargs()
         kwargs['user_instance'] = self.request.user
         return kwargs
+
+from django.views.generic.detail import DetailView
+from AppBlog.models import Student
+
+class StudentDetailView(DetailView):
+    model = Student
+    template_name = 'AppBlog/students/student_detail.html'
+    context_object_name = 'student'
+
+from django.views.generic.edit import DeleteView
+from django.contrib.auth.mixins import UserPassesTestMixin
+
+class StudentDeleteView(UserPassesTestMixin, DeleteView):
+    model = Student
+    template_name = 'AppBlog/students/confirm_delete.html'
+    success_url = reverse_lazy('students_list')
+    context_object_name = 'student'
+
+    def test_func(self):
+        return self.request.user.is_superuser

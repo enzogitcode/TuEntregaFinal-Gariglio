@@ -77,5 +77,3 @@ path('students_home/', students_home, name='students_home'),
     path('papers/delete/<int:pk>/', PaperDeleteView.as_view(), name='paper_delete_form'),
     path('papers/<int:pk>/', PaperDetailView.as_view(), name='paper_detail'),
 ]
-
-

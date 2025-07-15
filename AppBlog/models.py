@@ -45,6 +45,11 @@ class Paper(models.Model):
     def __str__(self):
         return f"Se creó el paper {self.title} con el autor {self.author_name} y el correo {self.author_email}"
     
+class Avatar(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to='avatares', null=True, blank =True)
+    def __str__(self):
+        return f"{self.user} - {self.imagen}"
 
 
 class Profile(models.Model):

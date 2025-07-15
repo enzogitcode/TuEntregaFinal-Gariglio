@@ -1,10 +1,10 @@
 {% extends 'AppBlog/base.html' %}
 {% load static %}
 
-{% block title %}Registro como Docente{% endblock %}
+{% block title %}Registro como Estudiante{% endblock %}
 
 {% block content %}
-<h2>Formulario para crear usuario docente</h2>
+<h2>Registro como Estudiante</h2>
 <form method="post" class="needs-validation" novalidate>
   {% csrf_token %}
 
@@ -23,7 +23,7 @@
 
   <div class="d-flex justify-content-between mt-3">
     <button type="reset" class="btn btn-outline-danger">Restablecer</button>
-    <button type="submit" class="btn btn-primary">Registrarse</button>
+    <button type="submit" class="btn btn-success">Registrarse</button>
   </div>
 </form>
 {% endblock %}

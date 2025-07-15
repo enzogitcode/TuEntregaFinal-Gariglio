@@ -7,3 +7,4 @@ def about(request):
     return render(request, 'AppBlog/about.html')
 
 
+

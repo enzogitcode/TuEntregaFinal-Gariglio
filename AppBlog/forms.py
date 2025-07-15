@@ -50,7 +50,7 @@ class TeacherSelfEditForm(forms.ModelForm):
 class TeacherSearchForm(forms.Form):
     name = forms.CharField(label='Nombre', required=False)
     last_name = forms.CharField(label='Apellido', required=False)
-    college = forms.CharField(label='Colegio', required=False)
+    college = forms.CharField(label='Institución', required=False)
     course = forms.CharField(label='Curso', required=False)
 
 
@@ -103,3 +103,16 @@ class StudentSelfEditForm(forms.ModelForm):
         if commit:
             student.save()
         return student
+
+class StudentSearchForm(forms.Form):
+    name = forms.CharField(label='Nombre', required=False)
+    last_name = forms.CharField(label='Apellido', required=False)
+    college = forms.CharField(label='Institución', required=False)
+    career = forms.CharField(label='Carrera', required=False)
+
+
+## usuarios comunesclass BasicUserRegisterForm(UserCreationForm):
+class BasicUserRegisterForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name']

@@ -3,7 +3,12 @@ from django.urls import reverse_lazy
 from django.contrib.auth.models import User
 from AppBlog.models import Student
 from AppBlog.forms import StudentRegisterForm
+from django.shortcuts import render
 
+def students_home(request):
+    return render ('AppBlog/students/student_home.html')
+
+#1. Registro de estudiante
 class StudentRegisterView(CreateView):
     form_class = StudentRegisterForm
     template_name = 'AppBlog/user/register_student.html'
@@ -19,7 +24,7 @@ class StudentRegisterView(CreateView):
         )
         return super().form_valid(form)
     
-
+#2. Edición de perfil propio
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from AppBlog.models import Student
@@ -38,6 +43,14 @@ class StudentSelfUpdateView(LoginRequiredMixin, UpdateView):
         kwargs = super().get_form_kwargs()
         kwargs['user_instance'] = self.request.user
         return kwargs
+
+from django.views.generic import ListView
+from AppBlog.models import Student
+
+class StudentListView(ListView):
+    model = Student
+    template_name = 'AppBlog/students/student_list.html'
+    context_object_name = 'students'
 
 from django.views.generic.detail import DetailView
 from AppBlog.models import Student
@@ -58,3 +71,35 @@ class StudentDeleteView(UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         return self.request.user.is_superuser
+
+from django.db.models import Q
+from AppBlog.forms import StudentSearchForm
+
+class StudentSearchView(ListView):
+    model = Student
+    template_name = 'AppBlog/students/student_search.html'
+    context_object_name = 'students'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        name = self.request.GET.get('name', '')
+        last_name = self.request.GET.get('last_name', '')
+        college = self.request.GET.get('college', '')
+        career = self.request.GET.get('career', '')
+
+        filters = Q()
+        if name:
+            filters &= Q(user__first_name__icontains=name)
+        if last_name:
+            filters &= Q(user__last_name__icontains=last_name)
+        if college:
+            filters &= Q(college__icontains=college)
+        if career:
+            filters &= Q(career__icontains=career)
+
+        return queryset.filter(filters)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = StudentSearchForm(self.request.GET)
+        return context

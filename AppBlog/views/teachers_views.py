@@ -12,6 +12,10 @@ from django.views.generic.edit import DeleteView
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Q
 from AppBlog.forms import TeacherSearchForm
+from django.shortcuts import render
+
+def teachers_home(request):
+    return render ('AppBlog/teachers/teachers_home.html')
 
 # registrarse como profesor/docente
 

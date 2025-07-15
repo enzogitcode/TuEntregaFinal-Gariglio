@@ -4,29 +4,19 @@
 {% block title %} Eliminar Estudiante {% endblock %}
 
 {% block content %}
-<div class="container mt-5 mb-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
+<h2>¿Estás seguro de que querés eliminar este estudiante?</h2>
 
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    <h4 class="card-title mb-4 text-danger">⚠️ Confirmar Eliminación</h4>
+<p><strong>Nombre:</strong> {{ student.user.first_name }}</p>
+<p><strong>Apellido:</strong> {{ student.user.last_name }}</p>
+<p><strong>Email:</strong> {{ student.user.email }}</p>
+<p><strong>Carrera:</strong> {{ student.career }}</p>
+<p><strong>Institución:</strong> {{ student.college }}</p>
+<p><strong>Edad:</strong> {{ student.age }}</p>
 
-                    <p class="mb-4">
-                        ¿Estás seguro que deseas borrar el estudiante <strong>"{{ object.name }} {{object.last_name}}"</strong>?
-                    </p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Sí, eliminar</button>
+    <a href="{% url 'students_list' %}">Cancelar</a>
+</form>
 
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="d-flex justify-content-center gap-3">
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
-                            <a href="{% url 'students_list' %}" class="btn btn-secondary">Cancelar</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
 {% endblock %}

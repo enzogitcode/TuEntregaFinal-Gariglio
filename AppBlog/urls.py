@@ -10,8 +10,10 @@ from .views.papers_views import (
     PapersHome, papers_search, papers_results
 )
 from .views.students_views import (
-    StudentListView, StudentUpdateView, StudentDeleteView, StudentDetailView,
-    StudentsHome, students_search, students_results, StudentRegisterView
+    StudentListView, StudentDeleteView, StudentDetailView, StudentRegisterView,
+    StudentRegisterView, StudentSelfUpdateView, StudentListView,
+    StudentDetailView, StudentDeleteView, StudentSearchView,
+    students_home
 )
 from .views.teachers_views import (
     TeacherListView, TeacherDeleteView, TeacherDetailView,
@@ -21,7 +23,7 @@ TeacherSearchView,
 )
 
 from .views.user_views import (
-    TeacherRegisterView, UserRegisterView, 
+    UserRegisterView, 
     LoginView, LogoutView,
     register_choose_your_role
     )
@@ -38,14 +40,13 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
     
     # Students
-path('students_home/', StudentsHome, name='students_home'),
+path('students_home/', students_home, name='students_home'),
     path('register/student/', StudentRegisterView.as_view(), name='register_student'),
-path('students_search/', students_search, name='students_search'),
-    path('students_results/', students_results, name='students_results'),
-    path('students_list/', StudentListView.as_view(), name='students_list'),
-    path('students/update/<int:pk>/', StudentUpdateView.as_view(), name='student_update_form'),
-    path('students/delete/<int:pk>/', StudentDeleteView.as_view(), name='student_delete_form'),
+    path('students/update/<int:pk>/', StudentSelfUpdateView.as_view(), name='student_self_edit'),
+    path('students/', StudentListView.as_view(), name='students_list'),
     path('students/<int:pk>/', StudentDetailView.as_view(), name='student_detail'),
+    path('students/delete/<int:pk>/', StudentDeleteView.as_view(), name='student_delete'),
+    path('students_search/', StudentSearchView.as_view(), name='student_search'),
 
     # Teachers
     path('teachers_home/', teachers_home, name='teachers_home'),

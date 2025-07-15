@@ -6,27 +6,17 @@
 <h1 class="text-center">Lista Completa de Estudiantes</h1>
 
 {% if object_list %}
-<div class="bg-light rounded gap-3 d-flex flex-wrap">
-  {% for student in object_list %}
-
-  <div class="card text-center">
-    <div class="card-header">Estudiante</div>
-    <div class="card-body">
-      <h5 class="card-title underline">
-        {{student.user.name}} {{student.user.last_name}}
-      </h5>
-
-      <a href="{% url 'student_detail' student.id %}" class="btn btn-info"
-        >Ver Detalles</a
-      >
-    </div>
-  </div>
-
+<h2>Lista de estudiantes</h2>
+<ul>
+  {% for student in students %}
+    <li>
+      {{ student.user.first_name }} {{ student.user.last_name }} – {{ student.career }} ({{ student.college }})
+      <a href="{% url 'student_detail' student.pk %}">Ver detalle</a>
+    </li>
+  {% empty %}
+    <li>No hay estudiantes registrados.</li>
   {% endfor %}
-</div>
+</ul>
 
-{% else %}
-<p class="empty_database">No hay estudiantes registrados.</p>
-{% endif %} 
 
 {% endblock %}

@@ -25,6 +25,7 @@ TeacherSearchView,
 from .views.user_views import (
     UserRegisterView, 
     LoginView, LogoutView,
+    home_user,
     register_choose_your_role
     )
 
@@ -32,6 +33,7 @@ urlpatterns = [
     
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
+    path('home_user', home_user, name='home_user'),
     
     # User
     path('register/choose_your_role', register_choose_your_role,  name= 'register_choose_your_role'),

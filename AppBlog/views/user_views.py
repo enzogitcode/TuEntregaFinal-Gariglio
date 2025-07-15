@@ -1,36 +1,54 @@
-from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.forms import UserChangeForm
-from django.views.generic.edit import UpdateView
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
-from django import forms
+from django.contrib.auth.models import User
+from ..models import Student, Teacher
+from ..forms import TeacherRegisterForm, StudentRegisterForm, BasicUserRegisterForm
+from django.shortcuts import render
 
-class RegisterView(CreateView):
-    form_class = UserCreationForm
-    template_name = 'AppBlog/user/register.html'
+def register_choose_your_role(request):
+    return render(request, 'AppBlog/user/register_choose_your_role.html')
+
+class TeacherRegisterView(CreateView):
+    form_class = TeacherRegisterForm
+    template_name = 'AppBlog/user/register_teacher.html'
     success_url = reverse_lazy('login')
 
-class UserEditForm(UserCreationForm):
-    email= forms.EmailField(label='Modificar el e-mail')
-    password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Repetir la contraseña', widget=forms.PasswordInput)
-    last_name = forms.CharField()
-    first_name = forms.CharField()
-    class Meta:
-        #model = User
-        fields = ['email', 'password1', 'password2', 'last_name', 'first_name']
+    def form_valid(self, form):
+        user = form.save()
+        Teacher.objects.create(
+            user=user,
+            course=form.cleaned_data['course'],
+            college=form.cleaned_data['college']
+        )
+        return super().form_valid(form)
 
-class EditUserView(LoginRequiredMixin, UpdateView):
-    form_class = UserChangeForm
-    template_name = 'AppBlog/user/edit.html'
-    success_url = reverse_lazy('profile')
+class StudentRegisterView(CreateView):
+    form_class = StudentRegisterForm
+    template_name = 'AppBlog/user/register_student.html'
+    success_url = reverse_lazy('login')
 
-    def get_object(self):
-        return self.request.user
+    def form_valid(self, form):
+        user = form.save()
+        Student.objects.create(
+            user=user,
+            career=form.cleaned_data['career'],
+            college=form.cleaned_data['college']
+        )
+        return super().form_valid(form)
+
+class UserRegisterView(CreateView):
+    form_class = BasicUserRegisterForm
+    template_name = 'AppBlog/user/register_user.html'
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
 
 class CustomLoginView(LoginView):
+    redirect_authenticated_user = True
     template_name = 'AppBlog/user/login.html'
 
 class Logout(LogoutView):

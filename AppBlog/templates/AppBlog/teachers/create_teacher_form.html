@@ -1,100 +1,28 @@
-{% extends 'AppBlog/base.html' %} 
-
+{% extends 'AppBlog/base.html' %}
 {% load static %}
 
-{% block title %} Formulario para Profesores{% endblock %}
+{% block title %}Registro de Docente{% endblock %}
 
 {% block content %}
-<h2>Formulario para agregar un nuevo profesor</h2>
-<form method="post" class="need-validation" novalidate>
+<h2>Registro como Docente</h2>
+
+<form method="post">
   {% csrf_token %}
-    {% if form.errors %}
+  {% if form.errors %}
     <div class="alert alert-danger">
       {{ form.errors }}
     </div>
   {% endif %}
-  <div class="form-floating mb-3">
-    <input
-      type="text"
-      class="form-control"
-      id="id_name"
-      name="name"
-      placeholder="Nombre"
-      value="{{ form.name.value|default_if_none:'' }}"
-      required
-    />
-    <label for="id_name">Nombre</label>
-  </div>
 
-  <div class="form-floating mb-3">
-    <input
-      type="text"
-      class="form-control"
-      id="id_last_name"
-      name="last_name"
-      placeholder="Apellido"
-      value="{{ form.last_name.value|default_if_none:'' }}"
-      required
-    />
-    <label for="id_last_name">Apellido</label>
-  </div>
+  {{ form.username.label }} {{ form.username }}
+  {{ form.first_name.label }} {{ form.first_name }}
+  {{ form.last_name.label }} {{ form.last_name }}
+  {{ form.email.label }} {{ form.email }}
+  {{ form.password1.label }} {{ form.password1 }}
+  {{ form.password2.label }} {{ form.password2 }}
+  {{ form.course.label }} {{ form.course }}
+  {{ form.college.label }} {{ form.college }}
 
-  <div class="form-floating mb-3">
-    <input
-      type="number"
-      class="form-control"
-      id="id_age"
-      name="age"
-      min="0"
-      max="120"
-      placeholder="Edad"
-      value="{{ form.age.value|default_if_none:'' }}"
-      required
-    />
-    <label for="id_age">Edad</label>
-  </div>
-
-  <div class="form-floating mb-3">
-    <input
-      type="email"
-      class="form-control"
-      id="id_email"
-      name="email"
-      placeholder="Correo"
-      value="{{ form.email.value|default_if_none:'' }}"
-      required
-    />
-    <label for="id_email">Email</label>
-  </div>
-
-  <div class="form-floating mb-3">
-    <input
-      type="text"
-      class="form-control"
-      id="id_course"
-      name="course"
-      placeholder="Curso"
-      value="{{ form.course.value|default_if_none:'' }}"
-      required
-    />
-    <label for="id_course">Curso</label>
-  </div>
-
-  <div class="form-floating mb-3">
-    <input
-      type="text"
-      class="form-control"
-      id="id_college"
-      name="college"
-      placeholder="Institución"
-      value="{{ form.college.value|default_if_none:'' }}"
-      required
-    />
-    <label for="id_college">Institución</label>
-
-  <div class="d-grid mt-2 gap-2 d-md-block align-center">
-    <button class="btn btn-danger" type="reset">Restablecer</button>
-    <button class="btn btn-primary" type="submit">Enviar</button>
-  </div>
+  <button type="submit" class="btn btn-primary mt-3">Registrarse</button>
 </form>
 {% endblock %}

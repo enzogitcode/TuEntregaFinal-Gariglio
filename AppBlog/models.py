@@ -1,27 +1,23 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
-class Student(models.Model):
-    name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    age = models.PositiveIntegerField()
-    college = models.CharField(max_length=100)
-    career= models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-
-    def __str__(self):
-        return f"{self.name} {self.last_name}, correo electrónico: {self.email}"
-
 class Teacher(models.Model):
-    name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    age = models.PositiveIntegerField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     course = models.CharField(max_length=100)
     college = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
+
     def __str__(self):
-        return f" Docente: {self.name} {self.last_name}, correo electrónico: {self.email}"
+        return f"{self.user.get_full_name()} - Docente"
+
+class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    career = models.CharField(max_length=100)
+    college = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.user.get_full_name()} - Estudiante"
     
 class Article(models.Model):
     author_name = models.CharField(max_length=100)
@@ -45,6 +41,19 @@ class Paper(models.Model):
     text_paper = models.TextField()
     date_of_publication = models.DateField(auto_now_add=True)
     def __str__(self):
-        return f"Se creó el artículo {self.title} con el autor {self.author_name} y el correo {self.autor_email}"
+        return f"Se creó el paper {self.title} con el autor {self.author_name} y el correo {self.author_email}"
     
-    
+
+
+class Profile(models.Model):
+    ROLE_CHOICES = [
+        ('teacher', 'Teacher'),
+        ('student', 'Student'),
+        ('user', 'User'),
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.role}"

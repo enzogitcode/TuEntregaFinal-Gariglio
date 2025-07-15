@@ -54,6 +54,8 @@ class StudentCreateView(CreateView):
     fields = ['name', 'last_name', 'age', 'career', 'college', 'email']
     template_name = 'AppBlog/students/create_student_form.html'
     success_url = reverse_lazy('students_list')
+    def test_func(self):
+        return self.request.user.is_superuser
 
 class StudentUpdateView(UpdateView):
     model = Student

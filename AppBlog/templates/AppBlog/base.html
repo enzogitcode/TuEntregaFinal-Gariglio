@@ -27,7 +27,7 @@
 <body>
 
 <header class="{% block header_extra_class %} {% endblock %} ">
-  <nav class="navbar navbar-expand-lg border-bottom shadow-sm px-3 py-2">
+  <nav class="navbar navbar-expand-lg border-bottom shadow-sm px-3 py-2 flex-wrap">
     <div class="container-fluid flex-column flex-lg-row align-items-start align-items-lg-center">
 
       <!-- Logo + Marca -->
@@ -82,14 +82,14 @@
 <button class="btn btn-danger" type="submit">Logout</button>
           </form>
 {% else %}
-  <a href="{% url 'register' %}" class="btn btn-primary">Registrarse</a>
+  <a href="{% url 'register_choose_your_role' %}" class="btn btn-primary">Registrarse</a>
   <a href="{% url 'login' %}" class="btn btn-primary">Iniciar sesión</a>
 {% endif %}
 
 {% if user.is_authenticated %}
-  <a href="{% url 'edit_user' %}" class="btn btn-outline-info">Editar perfil</a>
+  
           <li class="nav-item">
-            Bievenido {{ user }}
+            Bievenido {{ user.role }}
           </li>
           {% endif %}
 
@@ -101,6 +101,9 @@
 </header>
 
     <main data-aos="fade-in" class="justify-content-center align-items-center {% block main_extra_class %} d-flex flex-column {% endblock %}">
+      {% if user %}
+      {{user}}
+      {% endif %}
         {% block content %}
         {% endblock %}
     </main>

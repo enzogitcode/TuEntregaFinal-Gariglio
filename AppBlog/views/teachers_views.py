@@ -55,6 +55,9 @@ class TeacherCreateView(CreateView):
     template_name = 'AppBlog/teachers/create_teacher_form.html'
     success_url = reverse_lazy('teachers_list')
     context_object_name= 'teachers'
+    
+    def test_func(self):
+        return self.request.user.is_superuser
 
 class TeacherUpdateView(UpdateView):
     model = Teacher
@@ -62,7 +65,7 @@ class TeacherUpdateView(UpdateView):
     template_name = 'AppBlog/teachers/teacher_update_form.html'
     success_url = reverse_lazy('teachers_list')
     context_object_name= 'teachers'
-
+    
 class TeacherDeleteView(DeleteView):
     model = Teacher
     template_name = 'AppBlog/teachers/teacher_delete_form.html'

@@ -81,6 +81,8 @@
                 {% csrf_token %}
 <button class="btn btn-danger" type="submit">Logout</button>
           </form>
+          <img src="{{url}}" alt="avatar">
+          <p>Hola {{user.username}}</p>
 {% else %}
   <a href="{% url 'register_choose_your_role' %}" class="btn btn-primary">Registrarse</a>
   <a href="{% url 'login' %}" class="btn btn-primary">Iniciar sesión</a>

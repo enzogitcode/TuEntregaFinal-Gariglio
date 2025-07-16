@@ -7,7 +7,8 @@ from .views.articles_views import (
 )
 from .views.papers_views import (
     PaperListView, PaperCreateView, PaperUpdateView, PaperDeleteView, PaperDetailView,
-    PapersHome, papers_search, papers_results
+    PaperSearchView,
+    PapersHome, 
 )
 from .views.students_views import (
     StudentListView, StudentDeleteView, StudentDetailView, StudentRegisterView,
@@ -71,8 +72,7 @@ path('students_home/', students_home, name='students_home'),
 
     # Papers
     path('papers_home/', PapersHome, name='papers_home'),
-    path('papers_search/', papers_search, name='papers_search'),
-    path('papers_results/', papers_results, name='papers_results'),
+    path('papers_search/', PaperSearchView.as_view(), name='papers_search'),
     path('papers_list/', PaperListView.as_view(), name='papers_list'),
     path('papers/create/', PaperCreateView.as_view(), name='create_paper_form'),
     path('papers/update/<int:pk>/', PaperUpdateView.as_view(), name='paper_update_form'),

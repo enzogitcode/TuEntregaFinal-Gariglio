@@ -33,17 +33,18 @@ class Article(models.Model):
     def __str__(self):
         return f"Se creó el artículo {self.title} con el autor {self.author_name} y el correo {self.author_email}"
     
+
 class Paper(models.Model):
-    author_name = models.CharField(max_length=100)
-    author_last_name = models.CharField(max_length=100)
-    author_email = models.EmailField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     subject = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     abstract = models.CharField(max_length=500)
     text_paper = models.TextField()
     date_of_publication = models.DateField(auto_now_add=True)
+
     def __str__(self):
-        return f"Se creó el paper {self.title} con el autor {self.author_name} y el correo {self.author_email}"
+        return f"Paper '{self.title}' creado por {self.author.get_full_name()} ({self.author.email})"
+
     
 class Avatar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -64,3 +65,5 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.role}"
+    
+

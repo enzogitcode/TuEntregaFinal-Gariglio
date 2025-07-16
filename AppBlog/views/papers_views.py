@@ -1,6 +1,10 @@
+from AppBlog.models import Paper
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic.edit import UpdateView
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from ..models import Paper
 from django.urls import reverse_lazy
 from django.shortcuts import render
@@ -8,75 +12,78 @@ from django.shortcuts import render
 def PapersHome(request):
     return render(request, 'AppBlog/papers/papers_home.html')
 
-def papers_search(request):
-    return render(request, 'AppBlog/papers/papers_search.html')
+from django.views.generic import ListView
+from AppBlog.models import Paper
 
-def papers_results(request):
-    keyword = request.GET.get('keyword', '').strip()
-    filtro = request.GET.get('filtro', '')
+from django.views.generic import ListView
+from django.db.models import Q
+from AppBlog.models import Paper
 
-    if keyword and filtro in ['author_name', 'author_last_name', 'title', 'subject', 'abstract']:
-        filtro_kwargs = {f"{filtro}__icontains": keyword}
-        papers = Paper.objects.filter(**filtro_kwargs)
-    else:
-        papers = Paper.objects.none()
+class PaperSearchView(ListView):
+    model = Paper
+    template_name = 'AppBlog/papers/papers_search.html'
+    context_object_name = 'papers'
 
-    return render(request, 'AppBlog/papers/papers_results.html', {
-        'papers': papers,
-        'keyword': keyword,
-        'filtro': filtro
-    })
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Paper.objects.filter(
+                Q(title__icontains=query) |
+                Q(abstract__icontains=query) |
+                Q(subject__icontains=query) |
+                Q(author__first_name__icontains=query) |
+                Q(author__last_name__icontains=query) |
+                Q(author__email__icontains=query) |
+                Q(date_of_publication__icontains=query)
+            ).distinct()
+        return Paper.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q', '')
+        return context
 
 class PaperListView(ListView):
     model = Paper
     template_name = 'AppBlog/papers/papers_list.html'
     context_object_name= 'papers'
+    ordering = ['-date_of_publication']
 
 class PaperDetailView(DetailView):
     model = Paper
     template_name = 'AppBlog/papers/paper_detail.html'
+    context_object_name = 'paper'
 
-class PaperCreateView(CreateView):
+class PaperCreateView(LoginRequiredMixin, CreateView):
     model = Paper
-    fields = [
-        'author_name',
-        'author_last_name',
-        'author_email',
-        'subject',
-        'title',
-        'abstract',
-        'text_paper'
-    ]
-    template_name = 'AppBlog/papers/create_paper_form.html'
-    success_url = reverse_lazy('papers_list')
-    context_object_name= 'papers'
+    fields = ['subject', 'title', 'abstract', 'text_paper']
+    template_name = 'AppBlog/paper_create.html'
+    success_url = reverse_lazy('home_private')
 
-class PaperUpdateView(UpdateView):
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+class PaperUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Paper
-    fields = [
-        'author_name',
-        'author_last_name',
-        'author_email',
-        'subject',
-        'title',
-        'abstract',
-        'text_paper'
-    ]
-    labels= {
-        'author_name': 'nombre del autor',
-        'author_last_name': 'apellido del autor',
-        'author_email': 'email',
-        'subject': 'materia',
-        'title': 'título',
-        'abstract': 'abstract',
-        'text_paper': 'texto completo'}
+    fields = ['subject', 'title', 'abstract', 'text_paper']
     template_name = 'AppBlog/papers/paper_update_form.html'
     success_url = reverse_lazy('papers_list')
-    context_object_name= 'papers'
-    
+    context_object_name = 'papers'
 
-class PaperDeleteView(DeleteView):
+    def test_func(self):
+        paper = self.get_object()
+        # Permite si el usuario es el autor o es superusuario
+        return self.request.user == paper.author or self.request.user.is_superuser
+
+
+class PaperDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Paper
     template_name = 'AppBlog/papers/papers_delete_form.html'
     success_url = reverse_lazy('papers_list')
-    context_object_name='papers'
+    context_object_name = 'papers'
+
+    def test_func(self):
+        paper = self.get_object()
+        return self.request.user == paper.author or self.request.user.is_superuser
+

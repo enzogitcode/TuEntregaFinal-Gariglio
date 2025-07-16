@@ -1,31 +1,14 @@
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
-from ..models import Article
 from django.urls import reverse_lazy
 from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from AppBlog.models import Article
+from django.db.models import Q
 
-def ArticlesHome(request):
+def articles_home(request):
     return render(request, 'AppBlog/articles/articles_home.html')
-
-def articles_search(request):
-    return render(request, 'AppBlog/articles/articles_search.html')
-
-def articles_results(request):
-    keyword = request.GET.get('keyword', '').strip()
-    filtro = request.GET.get('filtro', '')
-
-    if keyword and filtro in ['author_name', 'author_last_name', 'title', 'subject', 'resume']:
-        filtro_kwargs = {f"{filtro}__icontains": keyword}
-        articles = Article.objects.filter(**filtro_kwargs)
-    else:
-        articles = Article.objects.none()
-
-    return render(request, 'AppBlog/articles/articles_results.html', {
-        'articles': articles,
-        'keyword': keyword,
-        'filtro': filtro
-    })
 
 class ArticleListView(ListView):
     model = Article
@@ -34,38 +17,60 @@ class ArticleListView(ListView):
 class ArticleDetailView(DetailView):
     model = Article
     template_name = 'AppBlog/articles/article_detail.html'
-
-class ArticleCreateView(CreateView):
-    model = Article
-    fields = [
-        'author_name',
-        'author_last_name',
-        'author_email',
-        'subject',
-        'title',
-        'resume',
-        'text_article'
-    ]
-    template_name = 'AppBlog/articles/create_article_form.html'
-    success_url = reverse_lazy('articles_list')
-
-class ArticleUpdateView(UpdateView):
-    model = Article
-    fields = [
-        'author_name',
-        'author_last_name',
-        'author_email',
-        'subject',
-        'title',
-        'resume',
-        'text_article'
-    ]
-    template_name = 'AppBlog/articles/article_update_form.html'
-    success_url = reverse_lazy('articles_list')
     context_object_name= 'article'
 
-class ArticleDeleteView(DeleteView):
+
+class ArticleCreateView(LoginRequiredMixin, CreateView):
+    model = Article
+    fields = ['subject', 'title', 'resume', 'text_article']
+    template_name = 'AppBlog/articles/article_create.html'
+    success_url = reverse_lazy('articles_list')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Article
+    fields = ['subject', 'title', 'resume', 'text_article']
+    template_name = 'AppBlog/articles/article_update_form.html'
+    success_url = reverse_lazy('articles_list')
+
+    def test_func(self):
+        article = self.get_object()
+        return self.request.user == article.author or self.request.user.is_superuser
+
+class ArticleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Article
     template_name = 'AppBlog/articles/article_delete_form.html'
     success_url = reverse_lazy('articles_list')
-    context_object_name= 'article'
+
+    def test_func(self):
+        article = self.get_object()
+        return self.request.user == article.author or self.request.user.is_superuser
+
+class ArticleSearchView(ListView):
+    model = Article
+    template_name = 'AppBlog/articles/articles_search.html'
+    context_object_name = 'articles'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Article.objects.filter(
+                Q(title__icontains=query) |
+                Q(resume__icontains=query) |
+                Q(subject__icontains=query) |
+                Q(author__first_name__icontains=query) |
+                Q(author__last_name__icontains=query) |
+                Q(author__email__icontains=query) |
+                Q(date_of_publication__icontains=query)
+            ).distinct()
+        return Article.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q', '')
+        return context
+

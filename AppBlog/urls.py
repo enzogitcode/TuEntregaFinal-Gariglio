@@ -2,13 +2,14 @@ from django.urls import path
 from .views import views
 
 from .views.articles_views import (
-    ArticleListView, ArticleCreateView, ArticleUpdateView, ArticleDeleteView, ArticleDetailView,
-    ArticlesHome, articles_results, articles_search, 
+     ArticleListView, ArticleCreateView, ArticleUpdateView,
+    ArticleDeleteView, ArticleDetailView, ArticleSearchView,
+    articles_home,  
 )
 from .views.papers_views import (
     PaperListView, PaperCreateView, PaperUpdateView, PaperDeleteView, PaperDetailView,
     PaperSearchView,
-    PapersHome, 
+    papers_home, 
 )
 from .views.students_views import (
     StudentListView, StudentDeleteView, StudentDetailView, StudentRegisterView,
@@ -61,9 +62,8 @@ path('students_home/', students_home, name='students_home'),
     path('teachers/delete/<int:pk>/', TeacherDeleteView.as_view(), name='teacher_delete_form'),
 
     # Articles
-    path('articles_home/', ArticlesHome, name='articles_home'),
-    path('articles_search/', articles_search, name='articles_search'),
-    path('articles_results/', articles_results, name='articles_results'),
+    path('articles_home/', articles_home, name='articles_home'),
+    path('articles_search/', ArticleSearchView.as_view() , name='articles_search'),
     path('articles_list/', ArticleListView.as_view(), name='articles_list'),
     path('articles/create/', ArticleCreateView.as_view(), name='create_article_form'),
     path('articles/update/<int:pk>/', ArticleUpdateView.as_view(), name='article_update_form'),
@@ -71,7 +71,7 @@ path('students_home/', students_home, name='students_home'),
     path('articles/<int:pk>/', ArticleDetailView.as_view(), name='article_detail'),
 
     # Papers
-    path('papers_home/', PapersHome, name='papers_home'),
+    path('papers_home/', papers_home, name='papers_home'),
     path('papers_search/', PaperSearchView.as_view(), name='papers_search'),
     path('papers_list/', PaperListView.as_view(), name='papers_list'),
     path('papers/create/', PaperCreateView.as_view(), name='create_paper_form'),

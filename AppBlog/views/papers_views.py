@@ -9,7 +9,7 @@ from ..models import Paper
 from django.urls import reverse_lazy
 from django.shortcuts import render
 
-def PapersHome(request):
+def papers_home(request):
     return render(request, 'AppBlog/papers/papers_home.html')
 
 from django.views.generic import ListView

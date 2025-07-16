@@ -3,26 +3,34 @@
 {% block title %} Buscador {% endblock %}
 
 {% block content %} 
-<h1>Buscar un Artículo</h1>
-<h3>Utiliza el formulario a continuación para buscar artículos por título, autor, área temática, etc.</h3>
+<h2>Buscar Artículos</h2>
 
-<form action="{% url 'articles_results' %}" method="get" class="mb-4 d-flex flex-column text-center">
-  {% csrf_token %}
-
-  <!-- Campo de texto para la búsqueda -->
-  <input name="keyword" type="text" placeholder="Buscar..." class="form-control mb-3" value="{{ keyword }}" >
-
-  <!-- Dropdown para elegir el criterio de búsqueda -->
-  <div>
-    <h4>Filtros</h4>
-    <select name="filtro" class="form-select mb-3">
-      <option value="author_name" {% if filtro == 'author_name' %}selected{% endif %}>Nombre del autor</option>
-      <option value="author_last_name" {% if filtro == 'author_last_name' %}selected{% endif %}>Apellido del autor</option>
-      <option value="subject" {% if filtro == 'subject' %}selected{% endif %}>Área temática</option>
-      <option value="resume" {% if filtro == 'resume' %}selected{% endif %}>Palabras claves</option>
-    </select>
-</div>
-
-  <button type="submit" class="btn btn-primary text-center">Buscar</button>
+<form method="get">
+  <input type="text" name="q" placeholder="Buscar por título, resumen, materia, autor o fecha" value="{{ query }}">
+  <button type="submit">Buscar</button>
 </form>
+
+<hr>
+
+{% if query %}
+  {% if articles %}
+    <ul>
+      {% for article in articles %}
+        <li>
+          <strong>{{ article.title }}</strong><br>
+          <em>Autor:</em> {{ article.author.get_full_name }}<br>
+          <em>Materia:</em> {{ article.subject }}<br>
+          <em>Resumen:</em> {{ article.resume|truncatewords:20 }}<br>
+          <em>Fecha:</em> {{ article.date_of_publication }}<br>
+          <a href="{% url 'article_detail' article.id %}">Ver detalles</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No se encontraron resultados para "{{ query }}".</p>
+  {% endif %}
+{% else %}
+  <p>Ingresá una palabra clave para buscar artículos publicados.</p>
+{% endif %}
+
 {% endblock %}

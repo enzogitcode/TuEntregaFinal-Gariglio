@@ -10,37 +10,13 @@
 {% block title %} Artículo: {{ article.title }} {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-  <h1 class="text-center mb-3" data-aos="fade-down">Detalles del Artículo</h1>
+<h2>{{ article.title }}</h2>
+<p><strong>Autor:</strong> {{ article.author.get_full_name }} ({{ article.author.email }})</p>
+<p><strong>Materia:</strong> {{ article.subject }}</p>
+<p><strong>Fecha de publicación:</strong> {{ article.date_of_publication }}</p>
+<p><strong>Resumen:</strong> {{ article.resume }}</p>
+<hr>
+<div>{{ article.text_article }}</div>
 
-  <div class="card shadow text-center" data-aos="fade-up">
-    {% if article.subject|lower in 'economía' %}
-    <div class="card-header bg-warning text-white">
-      Área: {{ article.subject }}
-    </div>
-    {% endif %}
-    <div class="card-body">
-      <h3 class="card-title">{{ article.title }}</h3>
-      <h5 class="card-subtitle mb-2 text-muted">Autor/a: {{ article.author_name }} {{ article.author_last_name }}</h5>
-      <p class="mt-3"><strong>Correo del autor:</strong> {{ article.author_email }}</p>
-      <p class="card-text"><strong>Resumen:</strong> {{ article.resume }}</p>
-      <hr>
-      <div class="card-text">
-        <strong>Contenido:</strong>
-        <p>{{ article.text_article }}</p>
-      </div>
-    </div>
-    <div class="card-footer text-muted">
-      Publicado el {{ article.date_of_publication }}
-    </div>
-  </div>
-
-  <div class="text-center m-2 gap-2">
-    <a href="{% url 'article_update_form' article.id %}" class="btn btn-outline-primary">Editar</a>
-    <a href="{% url 'article_delete_form' article.id %}" class="btn btn-outline-danger">Eliminar</a>
-    <a href="{% url 'articles_list' %}" class="btn btn-secondary">Volver al listado</a>
-  </div>
-</div>
-{% endblock %}
 
 {% endif %}

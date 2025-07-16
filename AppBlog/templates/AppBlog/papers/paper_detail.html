@@ -11,39 +11,14 @@
 
 
 {% block content %}
-<div class="container mt-4">
-  <h1 class="text-center mb-3" data-aos="fade-down">Detalles del Paper</h1>
+<h2>{{ paper.title }}</h2>
+<p><strong>Autor:</strong> {{ paper.author.get_full_name }} ({{ paper.author.email }})</p>
+<p><strong>Materia:</strong> {{ paper.subject }}</p>
+<p><strong>Fecha de publicación:</strong> {{ paper.date_of_publication }}</p>
+<p><strong>Resumen:</strong> {{ paper.abstract }}</p>
+<hr>
+<div>{{ paper.text_paper }}</div>
 
-  <div class="card shadow text-center" data-aos="fade-up">
-    {% if paper.subject|lower in 'economía' %}
-    <div class="card-header bg-warning text-white">
-      Área: {{ paper.subject }}
-    </div>
-    {% endif %} 
-    <div class="card-body">
-      <h3 class="card-title">{{ paper.title }}</h3>
-      <h5 class="card-subtitle mb-2 text-muted">Autor/a: {{ paper.author_name }} {{ paper.author_last_name }}</h5>
-      <p class="mt-3"><strong>Correo del autor:</strong> {{ paper.author_email }}</p>
-      <p class="card-text"><strong>Resumen:</strong> {{ paper.abstract }}</p>
-      <hr>
-      <div class="card-text">
-        <strong>Contenido:</strong>
-        <p>{{ paper.text_paper }}</p>
-      </div>
-      
-    </div>
-    <div class="card-footer text-muted">
-      Publicado el {{ paper.date_of_publication}}
-    </div>
-
-  </div>
-
-  <div class="text-center m-2  gap-2">
-    <a href="{% url 'paper_update_form' paper.id %}" class="btn btn-outline-primary">Editar</a>
-    <a href="{% url 'paper_delete_form' paper.id %}" class="btn btn-outline-danger">Eliminar</a>
-    <a href="{% url 'papers_list' %}" class="btn btn-secondary">Volver al listado</a>
-  </div>
-</div>
 {% endblock %}
 
 {% endif %}

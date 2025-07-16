@@ -45,7 +45,6 @@ class Paper(models.Model):
 
     def __str__(self):
         return f"Paper '{self.title}' creado por {self.author.get_full_name()} ({self.author.email})"
-
     
 class Avatar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

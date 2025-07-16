@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block title %}Registro como Estudiante{% endblock %}
+{% block main_extra_class %} d-flex flex-column {% endblock %}
 
 {% block content %}
 <h2>Registro como Estudiante</h2>
@@ -9,9 +10,9 @@
   {% csrf_token %}
 
   {% for field in form %}
-    <div class="form-floating mb-3">
-      {{ field }}
+    <div class="mb-3 justify-content-center d-flex flex-column text-center gap-2">
       <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
 
       {% if field.errors %}
         <div class="text-danger mt-1">
@@ -21,9 +22,9 @@
     </div>
   {% endfor %}
 
-  <div class="d-flex justify-content-between mt-3">
+  <div class="d-flex flex-wrap justify-content-around m-3">
     <button type="reset" class="btn btn-outline-danger">Restablecer</button>
-    <button type="submit" class="btn btn-success">Registrarse</button>
+    <button type="submit" class="btn btn-secondary">Registrarse</button>
   </div>
 </form>
 {% endblock %}

@@ -129,3 +129,7 @@ class UsersListView(ListView):
     model = CustomUser
     template_name= 'AppBlog/user/users_list.html'
     context_object_name= 'users'
+
+def user_list_view(request):
+    context = CustomUser.objects.all().order_by('username')
+    return (request, 'AppBlog/user/users')

@@ -1,42 +1,47 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
-# Perfil extendido para distinguir roles
-class Profile(models.Model):
+# Usuario base personalizado
+class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+
     ROLE_CHOICES = [
+        ('user', 'User'),
         ('teacher', 'Teacher'),
         ('student', 'Student'),
-        ('user', 'User'),
     ]
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
 
     def __str__(self):
-        return f"{self.user.username} - {self.role}"
+        return f"{self.username} ({self.role})"
 
-# Modelo Teacher con campos extra
+
+# Teacher con campos extra
 class Teacher(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    course = models.CharField(max_length=100)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=100)
     college = models.CharField(max_length=100)
-    age = models.IntegerField(null=True, blank=True)
+    age = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"{self.user.get_full_name()} - Docente"
+        return f"Teacher: {self.user.username}"
 
-# Modelo Student con campos extra
+
+# Student con campos extra
 class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     career = models.CharField(max_length=100)
     college = models.CharField(max_length=100)
-    age = models.IntegerField(null=True, blank=True)
+    age = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"{self.user.get_full_name()} - Estudiante"
+        return f"Student: {self.user.username}"
 
-# Modelo para artículos informativos
+
+# Artículos
 class Article(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     subject = models.CharField(max_length=200)
     date_of_publication = models.DateField(auto_now_add=True)
     title = models.CharField(max_length=200)
@@ -46,9 +51,10 @@ class Article(models.Model):
     def __str__(self):
         return f"Artículo '{self.title}' por {self.author.get_full_name()} ({self.author.email})"
 
-# Modelo para papers
+
+# Papers
 class Paper(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     subject = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
     abstract = models.CharField(max_length=500)
@@ -56,11 +62,10 @@ class Paper(models.Model):
     date_of_publication = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f"Paper '{self.title}' creado por {self.author.get_full_name()} ({self.author.email})"
-
+        return f"Paper '{self.title}' por {self.author.get_full_name()} ({self.author.email})"
 # Modelo para avatar de usuario
 class Avatar(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='avatar_imagenes')
     imagen = models.ImageField(upload_to='avatares', null=True, blank=True)
 
     def __str__(self):

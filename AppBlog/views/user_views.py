@@ -31,6 +31,17 @@ def home_user(request):
     avatares = Avatar.objects.filter(user=request.user.id)
     return render(request, 'AppBlog/home.html', {"url": avatares[0].imagen.url})
 
-@login_required
-def profile(request):
-    pass
+from django.views.generic.edit import UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from ..models import CustomUser
+from ..forms import AvatarUploadForm
+
+class AvatarUpdateView(LoginRequiredMixin, UpdateView):
+    model = CustomUser
+    form_class = AvatarUploadForm
+    template_name = 'AppBlog/user/avatar_edit.html'
+    success_url = reverse_lazy('home_user')
+
+    def get_object(self):
+        return self.request.user

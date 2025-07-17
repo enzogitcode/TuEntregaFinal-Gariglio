@@ -8,5 +8,7 @@ def home(request):
 def about(request):
     return render(request, 'AppBlog/about.html')
 
+def forbidden(request):
+    return render(request, 'AppBlog/forbidden.html')
 
 

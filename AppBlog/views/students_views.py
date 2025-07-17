@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.db.models import Q
 
 from AppBlog.models import Student
-from AppBlog.forms import StudentRegisterForm, StudentSelfEditForm, StudentSearchForm
+from AppBlog.forms import StudentRegisterForm, StudentSearchForm, StudentSelfEditForm
 
 def students_home(request):
     return render (request, 'AppBlog/students/students_home.html')

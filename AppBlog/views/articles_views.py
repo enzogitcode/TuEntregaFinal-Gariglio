@@ -1,10 +1,8 @@
-from django.views.generic import ListView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic.detail import DetailView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from AppBlog.models import Article, Profile
+from AppBlog.models import Article
 from django.db.models import Q
 
 def articles_home(request):
@@ -13,11 +11,12 @@ def articles_home(request):
 class ArticleListView(ListView):
     model = Article
     template_name = 'AppBlog/articles/articles_list.html'
+    context_object_name = 'articles'
 
 class ArticleDetailView(DetailView):
     model = Article
     template_name = 'AppBlog/articles/article_detail.html'
-    context_object_name= 'article'
+    context_object_name = 'article'
 
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
@@ -26,12 +25,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('articles_list')
 
     def dispatch(self, request, *args, **kwargs):
-        # Solo teachers y students pueden crear artículos
-        try:
-            profile = Profile.objects.get(user=request.user)
-            if profile.role not in ['teacher', 'student']:
-                return render(request, 'AppBlog/forbidden.html')
-        except Profile.DoesNotExist:
+        if not request.user.is_authenticated or request.user.role not in ['teacher', 'student']:
             return render(request, 'AppBlog/forbidden.html')
         return super().dispatch(request, *args, **kwargs)
 

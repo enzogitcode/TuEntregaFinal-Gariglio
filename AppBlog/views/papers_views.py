@@ -1,11 +1,9 @@
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic import ListView
-from django.views.generic.detail import DetailView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.shortcuts import render
-from AppBlog.models import Paper, Profile
+from AppBlog.models import Paper
 
 def papers_home(request):
     return render(request, 'AppBlog/papers/papers_home.html')
@@ -37,7 +35,7 @@ class PaperSearchView(ListView):
 class PaperListView(ListView):
     model = Paper
     template_name = 'AppBlog/papers/papers_list.html'
-    context_object_name= 'papers'
+    context_object_name = 'papers'
     ordering = ['-date_of_publication']
 
 class PaperDetailView(DetailView):
@@ -48,16 +46,11 @@ class PaperDetailView(DetailView):
 class PaperCreateView(LoginRequiredMixin, CreateView):
     model = Paper
     fields = ['subject', 'title', 'abstract', 'text_paper']
-    template_name = 'AppBlog/paper_create.html'
-    success_url = reverse_lazy('home_private')
+    template_name = 'AppBlog/papers/create_paper_form.html'
+    success_url = reverse_lazy('home')
 
     def dispatch(self, request, *args, **kwargs):
-        # Solo teachers y students pueden crear papers
-        try:
-            profile = Profile.objects.get(user=request.user)
-            if profile.role not in ['teacher', 'student']:
-                return render(request, 'AppBlog/forbidden.html')  # Crea este template para mostrar mensaje de acceso denegado
-        except Profile.DoesNotExist:
+        if not request.user.is_authenticated or request.user.role not in ['teacher', 'student']:
             return render(request, 'AppBlog/forbidden.html')
         return super().dispatch(request, *args, **kwargs)
 
@@ -70,20 +63,18 @@ class PaperUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ['subject', 'title', 'abstract', 'text_paper']
     template_name = 'AppBlog/papers/paper_update_form.html'
     success_url = reverse_lazy('papers_list')
-    context_object_name = 'papers'
+    context_object_name = 'paper'
 
     def test_func(self):
         paper = self.get_object()
-        # Solo el autor (teacher/student) o superusuario puede editar
         return self.request.user == paper.author or self.request.user.is_superuser
 
 class PaperDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Paper
     template_name = 'AppBlog/papers/papers_delete_form.html'
     success_url = reverse_lazy('papers_list')
-    context_object_name = 'papers'
+    context_object_name = 'paper'
 
     def test_func(self):
         paper = self.get_object()
-        # Solo el autor (teacher/student) o superusuario puede eliminar
         return self.request.user == paper.author or self.request.user.is_superuser

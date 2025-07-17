@@ -4,7 +4,7 @@ from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from AppBlog.models import Article
+from AppBlog.models import Article, Profile
 from django.db.models import Q
 
 def articles_home(request):
@@ -19,17 +19,25 @@ class ArticleDetailView(DetailView):
     template_name = 'AppBlog/articles/article_detail.html'
     context_object_name= 'article'
 
-
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     fields = ['subject', 'title', 'resume', 'text_article']
     template_name = 'AppBlog/articles/article_create.html'
     success_url = reverse_lazy('articles_list')
 
+    def dispatch(self, request, *args, **kwargs):
+        # Solo teachers y students pueden crear artículos
+        try:
+            profile = Profile.objects.get(user=request.user)
+            if profile.role not in ['teacher', 'student']:
+                return render(request, 'AppBlog/forbidden.html')
+        except Profile.DoesNotExist:
+            return render(request, 'AppBlog/forbidden.html')
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-
 
 class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Article
@@ -73,4 +81,3 @@ class ArticleSearchView(ListView):
         context = super().get_context_data(**kwargs)
         context['query'] = self.request.GET.get('q', '')
         return context
-

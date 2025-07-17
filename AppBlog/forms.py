@@ -1,9 +1,10 @@
 from django import forms
 from django.contrib.auth.models import User
-from AppBlog.models import Teacher
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
-from AppBlog.models import Student
+from AppBlog.models import Teacher, Student, Avatar
+
+# ----------- TEACHER FORMS -----------
 
 class TeacherRegisterForm(forms.ModelForm):
     password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput, required=True)
@@ -32,11 +33,25 @@ class TeacherRegisterForm(forms.ModelForm):
         if p1 and p2 and p1 != p2:
             raise ValidationError("Las contraseñas no coinciden.")
         return cleaned_data
-    
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        password = self.cleaned_data['password1']
+        user.set_password(password)
+        if commit:
+            user.save()
+            Teacher.objects.create(
+                user=user,
+                course=self.cleaned_data.get('course'),
+                college=self.cleaned_data.get('college'),
+                age=self.cleaned_data.get('age'),
+            )
+        return user
+
 class TeacherSelfEditForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=100)
-    last_name = forms.CharField(max_length=100)
-    email = forms.EmailField()
+    first_name = forms.CharField(max_length=100, required=True)
+    last_name = forms.CharField(max_length=100, required=True)
+    email = forms.EmailField(required=True)
 
     class Meta:
         model = Teacher
@@ -53,12 +68,14 @@ class TeacherSelfEditForm(forms.ModelForm):
 
     def save(self, commit=True):
         teacher = super().save(commit=False)
+
         if self.user_instance:
-            self.user_instance.first_name = self.cleaned_data['first_name']
-            self.user_instance.last_name = self.cleaned_data['last_name']
-            self.user_instance.email = self.cleaned_data['email']
+            self.user_instance.first_name = self.cleaned_data.get('first_name', self.user_instance.first_name)
+            self.user_instance.last_name = self.cleaned_data.get('last_name', self.user_instance.last_name)
+            self.user_instance.email = self.cleaned_data.get('email', self.user_instance.email)
             if commit:
                 self.user_instance.save()
+
         if commit:
             teacher.save()
         return teacher
@@ -69,11 +86,21 @@ class TeacherSearchForm(forms.Form):
     college = forms.CharField(label='Institución', required=False)
     course = forms.CharField(label='Curso', required=False)
 
-## Students Forms
+# ----------- STUDENT FORMS -----------
 
 class StudentRegisterForm(forms.ModelForm):
-    password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput, required=True)
-    password2 = forms.CharField(label='Confirmar contraseña', widget=forms.PasswordInput, required=True)
+    password1 = forms.CharField(
+        label='Contraseña',
+        widget=forms.PasswordInput,
+        help_text='Debe tener al menos 8 caracteres.',
+        required=True
+    )
+    password2 = forms.CharField(
+        label='Confirmar contraseña',
+        widget=forms.PasswordInput,
+        help_text='Debe coincidir con la contraseña anterior.',
+        required=True
+    )
     career = forms.CharField(label='Carrera', max_length=100, required=False)
     college = forms.CharField(label='Institución', max_length=100, required=True)
     age = forms.IntegerField(label='Edad', required=False)
@@ -83,7 +110,13 @@ class StudentRegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2', 'first_name', 'last_name']
+        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
+        labels = {
+            'username': 'Nombre de usuario',
+            'email': 'Correo electrónico',
+            'first_name': 'Nombre',
+            'last_name': 'Apellido',
+        }
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -93,12 +126,24 @@ class StudentRegisterForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        p1 = cleaned_data.get('password1')
-        p2 = cleaned_data.get('password2')
-        if p1 and p2 and p1 != p2:
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
+        if password1 and password2 and password1 != password2:
             raise ValidationError("Las contraseñas no coinciden.")
         return cleaned_data
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password1'])
+        if commit:
+            user.save()
+            Student.objects.create(
+                user=user,
+                career=self.cleaned_data.get('career'),
+                college=self.cleaned_data.get('college'),
+                age=self.cleaned_data.get('age'),
+            )
+        return user
 
 class StudentSelfEditForm(forms.ModelForm):
     first_name = forms.CharField(max_length=100, required=True, label="Nombre")
@@ -121,73 +166,17 @@ class StudentSelfEditForm(forms.ModelForm):
 
     def save(self, commit=True):
         student = super().save(commit=False)
+
         if self.user_instance:
             self.user_instance.first_name = self.cleaned_data['first_name']
             self.user_instance.last_name = self.cleaned_data['last_name']
             self.user_instance.email = self.cleaned_data['email']
             if commit:
                 self.user_instance.save()
+
         if commit:
             student.save()
-        return student
 
-    first_name = forms.CharField(max_length=100, required=True, label="Nombre")
-    last_name = forms.CharField(max_length=100, required=True, label="Apellido")
-    email = forms.EmailField(required=True, label="Correo electrónico")
-    college = forms.CharField(label="Institución", max_length=100, required=True)
-
-    class Meta:
-        model = Student
-        fields = ['career', 'college', 'age']
-
-    def __init__(self, *args, **kwargs):
-        self.user_instance = kwargs.pop('user_instance', None)
-        super().__init__(*args, **kwargs)
-
-        if self.user_instance:
-            self.fields['first_name'].initial = self.user_instance.first_name
-            self.fields['last_name'].initial = self.user_instance.last_name
-            self.fields['email'].initial = self.user_instance.email
-
-    def save(self, commit=True):
-        student = super().save(commit=False)
-        if self.user_instance:
-            self.user_instance.first_name = self.cleaned_data['first_name']
-            self.user_instance.last_name = self.cleaned_data['last_name']
-            self.user_instance.email = self.cleaned_data['email']
-            if commit:
-                self.user_instance.save()
-        if commit:
-            student.save()
-        return student
-
-    first_name = forms.CharField(max_length=100)
-    last_name = forms.CharField(max_length=100)
-    email = forms.EmailField()
-
-    class Meta:
-        model = Student
-        fields = ['career', 'college', 'age']
-
-    def __init__(self, *args, **kwargs):
-        self.user_instance = kwargs.pop('user_instance', None)
-        super().__init__(*args, **kwargs)
-
-        if self.user_instance:
-            self.fields['first_name'].initial = self.user_instance.first_name
-            self.fields['last_name'].initial = self.user_instance.last_name
-            self.fields['email'].initial = self.user_instance.email
-
-    def save(self, commit=True):
-        student = super().save(commit=False)
-        if self.user_instance:
-            self.user_instance.first_name = self.cleaned_data['first_name']
-            self.user_instance.last_name = self.cleaned_data['last_name']
-            self.user_instance.email = self.cleaned_data['email']
-            if commit:
-                self.user_instance.save()
-        if commit:
-            student.save()
         return student
 
 class StudentSearchForm(forms.Form):
@@ -196,7 +185,7 @@ class StudentSearchForm(forms.Form):
     college = forms.CharField(label='Institución', required=False)
     career = forms.CharField(label='Carrera', required=False)
 
-## usuarios comunesclass BasicUserRegisterForm(UserCreationForm):
+# ----------- BASIC USER FORMS -----------
 
 class BasicUserRegisterForm(forms.ModelForm):
     password1 = forms.CharField(
@@ -240,38 +229,16 @@ class BasicUserRegisterForm(forms.ModelForm):
             raise ValidationError("Las contraseñas no coinciden.")
         return cleaned_data
 
-    password1 = forms.CharField(
-        label='Contraseña',
-        widget=forms.PasswordInput,
-        help_text='Debe tener al menos 8 caracteres.'
-    )
-    password2 = forms.CharField(
-        label='Confirmar contraseña',
-        widget=forms.PasswordInput,
-        help_text='Debe coincidir con la contraseña anterior.'
-    )
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password1'])
+        if commit:
+            user.save()
+        return user
 
+# ----------- AVATAR FORM -----------
+
+class AvatarForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
-        labels = {
-            'username': 'Nombre de usuario',
-            'email': 'Correo electrónico',
-            'first_name': 'Nombre',
-            'last_name': 'Apellido',
-        }
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if User.objects.filter(email=email).exists():
-            raise ValidationError("Este correo ya está registrado.")
-        return email
-
-    def clean(self):
-        cleaned_data = super().clean()
-        password1 = cleaned_data.get('password1')
-        password2 = cleaned_data.get('password2')
-
-        if password1 and password2 and password1 != password2:
-            raise ValidationError("Las contraseñas no coinciden.")
-
+        model = Avatar
+        fields=['imagen']

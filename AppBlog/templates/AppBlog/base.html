@@ -95,10 +95,7 @@
   </nav>
 </header>
 
-    <main data-aos="fade-in" class="justify-content-center align-items-center {% block main_extra_class %} d-flex flex-column {% endblock %}">
-      {% if user %}
-      {{user}}
-      {% endif %}
+    <main data-aos="fade-in" class="justify-content-center align-items-center container {% block main_extra_class %} d-flex flex-column {% endblock %}">
         {% block content %}
         {% endblock %}
     </main>
@@ -134,7 +131,7 @@
         <h5 class="mb-3">Información</h5>
         <h6>
 
-          <a href="{% url 'about' %}" class="nav-link fw-semibold text-white">About</a>
+          <a href="{% url 'about' %}" class="nav-link fw-semibold text-white">About me</a>
         </h6>
       </div>
     </div>

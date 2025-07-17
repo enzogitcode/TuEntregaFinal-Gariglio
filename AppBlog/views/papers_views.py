@@ -1,23 +1,14 @@
-from AppBlog.models import Paper
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic.edit import UpdateView
-from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView
 from django.views.generic.detail import DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from ..models import Paper
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Q
 from django.shortcuts import render
+from AppBlog.models import Paper, Profile
 
 def papers_home(request):
     return render(request, 'AppBlog/papers/papers_home.html')
-
-from django.views.generic import ListView
-from AppBlog.models import Paper
-
-from django.views.generic import ListView
-from django.db.models import Q
-from AppBlog.models import Paper
 
 class PaperSearchView(ListView):
     model = Paper
@@ -60,6 +51,16 @@ class PaperCreateView(LoginRequiredMixin, CreateView):
     template_name = 'AppBlog/paper_create.html'
     success_url = reverse_lazy('home_private')
 
+    def dispatch(self, request, *args, **kwargs):
+        # Solo teachers y students pueden crear papers
+        try:
+            profile = Profile.objects.get(user=request.user)
+            if profile.role not in ['teacher', 'student']:
+                return render(request, 'AppBlog/forbidden.html')  # Crea este template para mostrar mensaje de acceso denegado
+        except Profile.DoesNotExist:
+            return render(request, 'AppBlog/forbidden.html')
+        return super().dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
@@ -73,9 +74,8 @@ class PaperUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         paper = self.get_object()
-        # Permite si el usuario es el autor o es superusuario
+        # Solo el autor (teacher/student) o superusuario puede editar
         return self.request.user == paper.author or self.request.user.is_superuser
-
 
 class PaperDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Paper
@@ -85,5 +85,5 @@ class PaperDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         paper = self.get_object()
+        # Solo el autor (teacher/student) o superusuario puede eliminar
         return self.request.user == paper.author or self.request.user.is_superuser
-

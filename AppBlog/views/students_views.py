@@ -1,9 +1,14 @@
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
-from AppBlog.models import Student
-from AppBlog.forms import StudentRegisterForm
 from django.shortcuts import render
+from django.db.models import Q
+
+from AppBlog.models import Student
+from AppBlog.forms import StudentRegisterForm, StudentSelfEditForm, StudentSearchForm
 
 def students_home(request):
     return render (request, 'AppBlog/students/students_home.html')
@@ -13,23 +18,8 @@ class StudentRegisterView(CreateView):
     form_class = StudentRegisterForm
     template_name = 'AppBlog/user/register_student.html'
     success_url = reverse_lazy('login')
-
-    def form_valid(self, form):
-        user = form.save()
-        Student.objects.create(
-            user=user,
-            career=form.cleaned_data['career'],
-            college=form.cleaned_data['college'],
-            age=form.cleaned_data['age']
-        )
-        return super().form_valid(form)
     
 #2. Edición de perfil propio
-from django.views.generic.edit import UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from AppBlog.models import Student
-from AppBlog.forms import StudentSelfEditForm
-
 class StudentSelfUpdateView(LoginRequiredMixin, UpdateView):
     model = Student
     form_class = StudentSelfEditForm
@@ -44,24 +34,15 @@ class StudentSelfUpdateView(LoginRequiredMixin, UpdateView):
         kwargs['user_instance'] = self.request.user
         return kwargs
 
-from django.views.generic import ListView
-from AppBlog.models import Student
-
 class StudentListView(ListView):
     model = Student
     template_name = 'AppBlog/students/students_list.html'
     context_object_name = 'students'
 
-from django.views.generic.detail import DetailView
-from AppBlog.models import Student
-
 class StudentDetailView(DetailView):
     model = Student
     template_name = 'AppBlog/students/student_detail.html'
     context_object_name = 'student'
-
-from django.views.generic.edit import DeleteView
-from django.contrib.auth.mixins import UserPassesTestMixin
 
 class StudentDeleteView(UserPassesTestMixin, DeleteView):
     model = Student
@@ -71,9 +52,6 @@ class StudentDeleteView(UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         return self.request.user.is_superuser
-
-from django.db.models import Q
-from AppBlog.forms import StudentSearchForm
 
 class StudentSearchView(ListView):
     model = Student
@@ -102,4 +80,3 @@ class StudentSearchView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = StudentSearchForm(self.request.GET)
-        return context

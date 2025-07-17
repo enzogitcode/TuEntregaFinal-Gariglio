@@ -1,35 +1,28 @@
-{% extends 'AppBlog/base.html' %} 
+{% extends 'AppBlog/base.html' %}
 {% load static %}
 
 {% block title %} Login de Usuarios {% endblock %}
 
-{% block main_extra_class %} d-flex flex-column text-center {% endblock %}
-
 {% block content %}
-<h1 class="text-center" >Iniciar sesión</h1>
-<div class="shadow-lg p-3 border-success">
-  {% if form.errors %}
-  <div class="alert alert-danger d-flex flex-wrap">
-    <strong>Hay errores en el formulario.
+<h2>Iniciar sesión</h2>
+
+{% if form.errors %}
+  <div>
+    <strong>Hay errores en el formulario.</strong>
   </div>
 {% endif %}
 {% if form.non_field_errors %}
-  <div class="alert alert-warning d-flex flex-wrap">
+  <div>
     {{ form.non_field_errors }}
   </div>
 {% endif %}
 
-  <form method="post" class="d-flex flex-column flex-wrap gap-3 mb-2 justify-content-evenly">
-    {% csrf_token %}
-    <table class="p-2">
-<label for="id_username" class="text-center fs-5">Nombre de usuario:</label>      
-<input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username" class=" fs-5 rounded p-1" >
-<label for="id_password" class="text-center fs-5">Contraseña:</label>
-      <input type="password" name="password" autocomplete="current-password" required="" id="id_password" class="fs-5 rounded p-1">
-    </table>
-    
-    <button type="submit" class="btn btn-primary">Entrar</button>
-  </form>
-  <p class="mt-3">¿No tenés cuenta? <a href="{% url 'register_choose_your_role' %}" class="btn btn-info">Registrate aquí</a></p>
-</div>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <button type="submit">Entrar</button>
+</form>
+
+<p>¿No tenés cuenta? <a href="{% url 'register_choose_your_role' %}">Registrate aquí</a></p>
 {% endblock %}

@@ -1,40 +1,18 @@
-from django.views.generic.edit import CreateView
-from django.urls import reverse_lazy
-from django.contrib.auth.models import User
-from AppBlog.models import Teacher
-from AppBlog.forms import TeacherRegisterForm
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from AppBlog.forms import TeacherSelfEditForm
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView
-from django.views.generic.edit import DeleteView
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views.generic.detail import DetailView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
-from AppBlog.forms import TeacherSearchForm
-from django.shortcuts import render
 
-def teachers_home(request):
-    return render (request, 'AppBlog/teachers/teachers_home.html')
-
-# registrarse como profesor/docente
+from AppBlog.models import Teacher
+from AppBlog.forms import TeacherRegisterForm, TeacherSelfEditForm, TeacherSearchForm
 
 class TeacherRegisterView(CreateView):
     form_class = TeacherRegisterForm
     template_name = 'AppBlog/user/register_teacher.html'
     success_url = reverse_lazy('login')
-
-    def form_valid(self, form):
-        user = form.save()
-        Teacher.objects.create(
-            user=user,
-            course=form.cleaned_data['course'],
-            college=form.cleaned_data['college'],
-            age=form.cleaned_data['age']
-        )
-        return super().form_valid(form)
-
-# editar
+    # No necesitas form_valid, el form ya crea Teacher y Profile
 
 class TeacherSelfUpdateView(LoginRequiredMixin, UpdateView):
     model = Teacher
@@ -50,22 +28,15 @@ class TeacherSelfUpdateView(LoginRequiredMixin, UpdateView):
         kwargs['user_instance'] = self.request.user
         return kwargs
 
-# listar todos los profesores
-
 class TeacherListView(ListView):
     model = Teacher
     template_name = 'AppBlog/teachers/teachers_list.html'
     context_object_name = 'teachers'
 
-# detalles de un profesor en particular
-
 class TeacherDetailView(DetailView):
     model = Teacher
     template_name = 'AppBlog/teachers/teacher_detail.html'
     context_object_name = 'teacher'
-
-
-# Vista para que el SUPERUSUARIO pueda eliminar un docente en particular
 
 class TeacherDeleteView(UserPassesTestMixin, DeleteView):
     model = Teacher
@@ -75,7 +46,6 @@ class TeacherDeleteView(UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         return self.request.user.is_superuser
-
 
 class TeacherSearchView(ListView):
     model = Teacher
@@ -89,14 +59,17 @@ class TeacherSearchView(ListView):
         college = self.request.GET.get('college', '')
         course = self.request.GET.get('course', '')
 
-        if name or last_name or college or course:
-            queryset = queryset.filter(
-                Q(user__first_name__icontains=name) &
-                Q(user__last_name__icontains=last_name) &
-                Q(college__icontains=college) &
-                Q(course__icontains=course)
-            )
-        return queryset
+        filters = Q()
+        if name:
+            filters &= Q(user__first_name__icontains=name)
+        if last_name:
+            filters &= Q(user__last_name__icontains=last_name)
+        if college:
+            filters &= Q(college__icontains=college)
+        if course:
+            filters &= Q(course__icontains=course)
+
+        return queryset.filter(filters)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

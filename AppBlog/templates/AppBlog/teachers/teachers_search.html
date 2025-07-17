@@ -2,26 +2,44 @@
 
 {% block title %} Buscador {% endblock %}
 
-{% block content %} 
+{% block content %}
 <h2>Buscar docentes</h2>
-<form method="get">
-    {{ form.as_p }}
-    <button type="submit">Buscar</button>
-</form>
+<div class="container justify-content-center shadow-lg">
+  <div class="row">
+    <!-- Columna de búsqueda -->
+    <div class="col-md-5 mb-3">
+      <h2 class="text-center">Buscador</h2>
+      <form method="get" class="d-flex flex-column text-center">
+        {{ form.as_p }}
+        <div class="text-center">
+          <button type="submit" class="btn btn-info m-2">Buscar</button>
+        </div>
+      </form>
+    </div>
 
-<hr>
-
-<h3>Resultados:</h3>
-<ul>
-  {% for teacher in teachers %}
-    <li>
-      {{ teacher.user.first_name }} {{ teacher.user.last_name }} – {{ teacher.course }} ({{ teacher.college }})
-      <a href="{% url 'teacher_detail' teacher.pk %}">Ver detalle</a>
-    </li>
-  {% empty %}
-    <li>No se encontraron docentes.</li>
-  {% endfor %}
-</ul>
-
-
+    <!-- Columna de resultados -->
+    <div class="col-md-7">
+      <h3>Resultados:</h3>
+      {% for teacher in teachers %}
+      <div class="card mb-3">
+        <div class="row g-0 align-items-center">
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ teacher.user.first_name }} {{ teacher.user.last_name }}</h5>
+              <p class="card-text">{{ teacher.course }} ({{ teacher.college }})</p>
+            </div>
+          </div>
+          <div class="col-md-4 text-center pe-3">
+            <a href="{% url 'teacher_detail' teacher.pk %}" class="btn btn-outline-primary">Ver detalles</a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="alert alert-warning" role="alert">
+        No se encontraron docentes.
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
 {% endblock %}

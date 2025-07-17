@@ -2,16 +2,58 @@
 
 {% block title %} About {% endblock %}
 
-{% block main_extra_classes %} d-flex flex-column {% endblock %}
+{% block main_extra_classes %} container img-fluid{% endblock %}
 
 {% block content %}
+<main class="container py-5">
+  <div class="row mb-4">
+    <div class="col-12 text-center">
+      <h1 class="display-5">Sobre mí</h1>
+      <p class="lead">Me defino por la curiosidad constante</p>
+    </div>
+  </div>
 
-<h1>Acerca de mí</h1>
+  <div class="row gy-2">
+    <div class="col-md-6">
+      <h2 class="h4">Perfil profesional</h2>
+      <ul class="list-unstyled">
+        <li><strong>Nombre:</strong> Enzo Gariglio</li>
+        <li><strong>Ubicación:</strong> Río Negro, Argentina</li>
+        <li><strong>Idiomas:</strong> Español, Inglés (intermedio)</li>
+        <li><strong>Disponibilidad:</strong> Remota / Freelance / Full-time</li>
+      </ul>
+    </div>
 
-<p class="m-2">
-    CienciAR es un sitio web donde alumnos y profesores de distintas instituciones pueden publicar sus investigaciones científicas (papers) o artículos informativos (articles).
-</p>
+    <div class="col-md-6">
+      <h2 class="h4">Habilidades técnicas</h2>
+      <div class="d-flex flex-wrap gap-2">
+        <span class="badge bg-primary">Python</span>
+        <span class="badge bg-secondary">Django</span>
+        <span class="badge bg-success">JavaScript</span>
+        <span class="badge bg-danger">React</span>
+        <span class="badge bg-warning text-dark">Bootstrap</span>
+        <span class="badge bg-info text-dark">Git</span>
+        <span class="badge bg-primary">Node Js</span>
+        <span class="badge bg-secondary">Express Js</span>
+      </div>
+    </div>
 
-<h1>Acerca del sitio</h1>
+    <div class="col-md-6">
+      <h2 class="h4">Educación</h2>
+      <ul class="list-group">
+        <li class="list-group-item">Licenciatura en Relaciones Internacionales – Universidad Siglo 21 (2019)</li>
+        <li class="list-group-item">Desarrollador Full-Stack – Coderhouse (2024)</li>
+        <li class="list-group-item">Desarrollador de Aplicaciones – Coderhouse (2024)</li>
+      </ul>
+    </div>
+
+    <div class="col-2">
+      <h2 class="h4">Contacto</h2>
+      <p>💼 <a href="https://www.linkedin.com/in/enzo-gariglio/" target="_blank">LinkedIn</a></p>
+      <p>💻 <a href="https://github.com/enzogitcode" target="_blank">GitHub</a></p>
+    </div>
+  </div>
+</main>
+
 
 {% endblock %}

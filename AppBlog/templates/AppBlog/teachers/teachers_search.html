@@ -4,25 +4,26 @@
 {% block title %} Buscador {% endblock %}
 
 {% block content %}
-  <h2 class="mb-4">Buscar Estudiantes</h2>
+
+  <h2 class="mb-4">Buscar Docentes</h2>
 
   <!-- Buscador -->
   <form method="get" class="d-flex mb-4" role="search">
-    <input class="form-control me-2" type="search" name="q" placeholder="Nombre, apellido, carrera o colegio" value="{{ query }}">
+    <input class="form-control me-2" type="search" name="q" placeholder="Nombre, apellido, curso o colegio" value="{{ query }}">
     <button class="btn btn-primary" type="submit">Buscar</button>
   </form>
 
   <!-- Resultados -->
   {% if query %}
-    {% if students %}
+    {% if teachers %}
       <h5>Resultados para "{{ query }}":</h5>
       <ul class="list-group">
-        {% for student in students %}
+        {% for teacher in teachers %}
           <li class="list-group-item mb-2">
             <h6 class="mb-1">
-              {{ student.user.first_name }} {{ student.user.last_name }} – {{ student.career }} ({{ student.college }})
+              {{ teacher.user.first_name }} {{ teacher.user.last_name }} – {{ teacher.course }} ({{ teacher.college }})
             </h6>
-            <a href="{% url 'student_detail' student.pk %}" class="btn btn-outline-info btn-sm">Ver detalles</a>
+            <a href="{% url 'teacher_detail' teacher.pk %}" class="btn btn-outline-info btn-sm">Ver detalles</a>
           </li>
         {% endfor %}
       </ul>
@@ -32,7 +33,7 @@
       </div>
     {% endif %}
   {% else %}
-    <p class="text-muted">Ingresá una palabra clave en el buscador para explorar los estudiantes registrados.</p>
+    <p class="text-muted">Ingresá una palabra clave en el buscador para explorar los docentes registrados.</p>
   {% endif %}
 
 {% endblock %}

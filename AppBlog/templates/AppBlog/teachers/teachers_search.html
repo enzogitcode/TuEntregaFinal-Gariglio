@@ -1,45 +1,48 @@
 {% extends 'AppBlog/base.html' %}
+{% load static %}
 
 {% block title %} Buscador {% endblock %}
 
 {% block content %}
-<h2>Buscar docentes</h2>
-<div class="container justify-content-center shadow-lg">
-  <div class="row">
-    <!-- Columna de búsqueda -->
-    <div class="col-md-5 mb-3">
-      <h2 class="text-center">Buscador</h2>
-      <form method="get" class="d-flex flex-column text-center">
-        {{ form.as_p }}
-        <div class="text-center">
-          <button type="submit" class="btn btn-info m-2">Buscar</button>
-        </div>
-      </form>
-    </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Búsqueda de Docentes</title>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body class="container mt-4">
 
-    <!-- Columna de resultados -->
-    <div class="col-md-7">
-      <h3>Resultados:</h3>
-      {% for teacher in teachers %}
-      <div class="card mb-3">
-        <div class="row g-0 align-items-center">
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title">{{ teacher.user.first_name }} {{ teacher.user.last_name }}</h5>
-              <p class="card-text">{{ teacher.course }} ({{ teacher.college }})</p>
-            </div>
-          </div>
-          <div class="col-md-4 text-center pe-3">
-            <a href="{% url 'teacher_detail' teacher.pk %}" class="btn btn-outline-primary">Ver detalles</a>
-          </div>
-        </div>
+  <h2 class="mb-4">Buscar Docentes</h2>
+
+  <!-- Buscador -->
+  <form method="get" class="d-flex mb-4" role="search">
+    <input class="form-control me-2" type="search" name="q" placeholder="Nombre, apellido, curso o colegio" value="{{ query }}">
+    <button class="btn btn-primary" type="submit">Buscar</button>
+  </form>
+
+  <!-- Resultados -->
+  {% if query %}
+    {% if teachers %}
+      <h5>Resultados para "{{ query }}":</h5>
+      <ul class="list-group">
+        {% for teacher in teachers %}
+          <li class="list-group-item mb-2">
+            <h6 class="mb-1">{{ teacher.user.first_name }} {{ teacher.user.last_name }} – {{ teacher.course }} ({{ teacher.college }})</h6>
+            <a href="{% url 'teacher_detail' teacher.pk %}" class="btn btn-outline-info btn-sm">Ver detalles</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="alert alert-warning mt-4">
+        No se encontraron resultados para <strong>"{{ query }}"</strong>.
       </div>
-      {% empty %}
-      <div class="alert alert-warning" role="alert">
-        No se encontraron docentes.
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</div>
+    {% endif %}
+  {% else %}
+    <p class="text-muted">Ingresá una palabra clave en el buscador para explorar los docentes registrados.</p>
+  {% endif %}
+
+</body>
+</html>
+
 {% endblock %}

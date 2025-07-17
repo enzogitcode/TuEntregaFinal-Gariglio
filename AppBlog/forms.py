@@ -28,7 +28,7 @@ class BasicUserRegisterForm(UserCreationForm):
 # 🔸 Registro: Teacher
 class TeacherRegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    subject = forms.CharField(label='Materia', required=True)
+    course = forms.CharField(label='Materia', required=True)
     college = forms.CharField(label='Institución', required=True)
     age = forms.IntegerField(label='Edad', required=True)
 
@@ -49,7 +49,7 @@ class TeacherRegisterForm(UserCreationForm):
             user.save()
             Teacher.objects.create(
                 user=user,
-                subject=self.cleaned_data['subject'],
+                course=self.cleaned_data['course'],
                 college=self.cleaned_data['college'],
                 age=self.cleaned_data['age'],
             )
@@ -89,7 +89,7 @@ class StudentRegisterForm(UserCreationForm):
 class TeacherSelfEditForm(forms.ModelForm):
     class Meta:
         model = Teacher
-        fields = ['subject', 'college', 'age']
+        fields = ['course', 'college', 'age']
 
 # 🔸 Autoedición: Student
 class StudentSelfEditForm(forms.ModelForm):
@@ -120,7 +120,7 @@ class AvatarUploadForm(forms.ModelForm):
 class TeacherSearchForm(forms.Form):
     name = forms.CharField(label='Nombre', required=False)
     last_name = forms.CharField(label='Apellido', required=False)
-    subject = forms.CharField(label='Materia', required=False)
+    course = forms.CharField(label='Materia', required=False)
     college = forms.CharField(label='Institución', required=False)
 
 # 🔸 Búsqueda: Student

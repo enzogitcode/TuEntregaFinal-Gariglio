@@ -57,25 +57,19 @@ class TeacherSearchView(ListView):
     context_object_name = 'teachers'
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        name = self.request.GET.get('name', '')
-        last_name = self.request.GET.get('last_name', '')
-        college = self.request.GET.get('college', '')
-        course = self.request.GET.get('course', '')
+        query = self.request.GET.get('q', '').strip()  
 
-        filters = Q()
-        if name:
-            filters &= Q(user__first_name__icontains=name)
-        if last_name:
-            filters &= Q(user__last_name__icontains=last_name)
-        if college:
-            filters &= Q(college__icontains=college)
-        if course:
-            filters &= Q(course__icontains=course)
+        if query:
+            return Teacher.objects.filter(
+                Q(user__first_name__icontains=query) |  
+                Q(user__last_name__icontains=query) |   
+                Q(college__icontains=query) |           
+                Q(course__icontains=query)              
+            ).distinct()  
 
-        return queryset.filter(filters)
+        return Teacher.objects.all()  
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = TeacherSearchForm(self.request.GET)
+        context['query'] = self.request.GET.get('q', '')  
         return context

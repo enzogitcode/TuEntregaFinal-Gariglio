@@ -1,37 +1,48 @@
 {% extends 'AppBlog/base.html' %}
+{% load static %}
 
 {% block title %} Buscador {% endblock %}
 
 {% block content %}
-<h1>Buscar un Estudiante</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Búsqueda de Estudiantes</title>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body class="container mt-4">
 
-<div class="container">
-  <div class="row">
-    <!-- Columna del formulario -->
-    <div class="col-md-5 mb-4">
-      <h2>Buscar estudiantes</h2>
-      <form method="get">
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-info mt-2">Buscar</button>
-      </form>
-    </div>
+  <h2 class="mb-4">Buscar Estudiantes</h2>
 
-    <!-- Columna de los resultados -->
-    <div class="col-md-7">
-      <h3>Resultados:</h3>
+  <!-- Buscador -->
+  <form method="get" class="d-flex mb-4" role="search">
+    <input class="form-control me-2" type="search" name="q" placeholder="Nombre, apellido, carrera o colegio" value="{{ query }}">
+    <button class="btn btn-primary" type="submit">Buscar</button>
+  </form>
+
+  <!-- Resultados -->
+  {% if query %}
+    {% if students %}
+      <h5>Resultados para "{{ query }}":</h5>
       <ul class="list-group">
         {% for student in students %}
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span>
-              {{ student.user.first_name }} {{ student.user.last_name }} – {{ student.career }} ({{ student.college }})
-            </span>
-            <a href="{% url 'student_detail' student.pk %}" class="btn btn-sm btn-outline-primary">Ver detalle</a>
+          <li class="list-group-item mb-2">
+            <h6 class="mb-1">{{ student.user.first_name }} {{ student.user.last_name }} – {{ student.career }} ({{ student.college }})</h6>
+            <a href="{% url 'student_detail' student.pk %}" class="btn btn-outline-info btn-sm">Ver detalles</a>
           </li>
-        {% empty %}
-          <li class="list-group-item text-danger">No se encontraron estudiantes.</li>
         {% endfor %}
       </ul>
-    </div>
-  </div>
-</div>
+    {% else %}
+      <div class="alert alert-warning mt-4">
+        No se encontraron resultados para <strong>"{{ query }}"</strong>.
+      </div>
+    {% endif %}
+  {% else %}
+    <p class="text-muted">Ingresá una palabra clave en el buscador para explorar los estudiantes registrados.</p>
+  {% endif %}
+
+</body>
+</html>
+
 {% endblock %}

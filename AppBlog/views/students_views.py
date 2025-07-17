@@ -6,7 +6,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.db.models import Q
-
 from AppBlog.models import Student
 from AppBlog.forms import StudentRegisterForm, StudentSearchForm, StudentSelfEditForm
 
@@ -59,24 +58,20 @@ class StudentSearchView(ListView):
     context_object_name = 'students'
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        name = self.request.GET.get('name', '')
-        last_name = self.request.GET.get('last_name', '')
-        college = self.request.GET.get('college', '')
-        career = self.request.GET.get('career', '')
+        query = self.request.GET.get('q', '').strip()  # Asegurarse de que el query no esté vacío
 
-        filters = Q()
-        if name:
-            filters &= Q(user__first_name__icontains=name)
-        if last_name:
-            filters &= Q(user__last_name__icontains=last_name)
-        if college:
-            filters &= Q(college__icontains=college)
-        if career:
-            filters &= Q(career__icontains=career)
+        if query:
+            # Filtramos usando Q para que busque en los campos específicos
+            return Student.objects.filter(
+                Q(user__first_name__icontains=query) |
+                Q(user__last_name__icontains=query) |
+                Q(career__icontains=query) |
+                Q(college__icontains=query)
+            ).distinct()
 
-        return queryset.filter(filters)
+        return Student.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = StudentSearchForm(self.request.GET)
+        context['query'] = self.request.GET.get('q', '')
+        return context

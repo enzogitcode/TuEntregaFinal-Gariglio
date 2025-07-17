@@ -37,9 +37,10 @@
   {% endif %}
 
   <hr>
+  {% if user.role == 'teacher' or user.role == 'student' or user.is_superuser %}
   <h4 class="mt-4">Artículos publicados</h4>
   {% if articles %}
-    <ul class="list-group mb-4">
+  <ul class="list-group mb-4">
       {% for article in articles %}
         <li class="list-group-item">
           <strong>{{ article.title }}</strong><br>
@@ -47,16 +48,16 @@
           <small class="text-muted">{{ article.date_of_publication }}</small><br>
           <a href="{% url 'article_detail' article.id %}" class="btn btn-outline-primary btn-sm mt-2">Ver artículo</a>
         </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p class="text-muted">No hay artículos publicados.</p>
-  {% endif %}
-
-  <h4 class="mt-4">Papers publicados</h4>
-  {% if papers %}
-    <ul class="list-group">
-      {% for paper in papers %}
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-muted">No hay artículos publicados.</p>
+      {% endif %}
+      
+      <h4 class="mt-4">Papers publicados</h4>
+      {% if papers %}
+      <ul class="list-group">
+        {% for paper in papers %}
         <li class="list-group-item">
           <strong>{{ paper.title }}</strong><br>
           {{ paper.abstract|truncatewords:20 }}<br>
@@ -65,8 +66,9 @@
         </li>
       {% endfor %}
     </ul>
-  {% else %}
+    {% else %}
     <p class="text-muted">No hay papers publicados.</p>
-  {% endif %}
+    {% endif %}
+    {% endif %}
 </div>
 {% endblock %}

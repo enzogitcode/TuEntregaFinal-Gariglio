@@ -45,3 +45,95 @@ class AvatarUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         return self.request.user
+
+from django.views.generic.detail import DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
+from AppBlog.models import CustomUser, Teacher, Student
+
+class ProfileView(LoginRequiredMixin, DetailView):
+    model = CustomUser
+    template_name = 'AppBlog/user/profile.html'
+    context_object_name = 'user'
+
+    def get_object(self):
+        return get_object_or_404(CustomUser, pk=self.request.user.pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        role = self.request.user.role
+
+        if role == 'teacher':
+            context['teacher'] = Teacher.objects.filter(user=self.request.user).first()
+        elif role == 'student':
+            context['student'] = Student.objects.filter(user=self.request.user).first()
+
+        return context
+
+
+@login_required
+def profile(request):
+    return render(request, 'AppBlog/user/profile.html', {'user': request.user})
+
+from django.views.generic.edit import UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy
+from AppBlog.models import CustomUser, Teacher, Student
+from ..forms import (
+    BasicUserSelfEditForm, TeacherSelfEditForm, StudentSelfEditForm, AvatarUploadForm
+)
+
+class ProfileEditView(LoginRequiredMixin, UpdateView):
+    model = CustomUser
+    template_name = 'AppBlog/user/profile_edit.html'
+    success_url = reverse_lazy('profile')
+    form_class = BasicUserSelfEditForm  # default
+
+    def get_object(self):
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Extra formularios según rol
+        role = self.request.user.role
+
+        if role == 'teacher':
+            teacher = Teacher.objects.filter(user=self.request.user).first()
+            context['extra_form'] = TeacherSelfEditForm(instance=teacher)
+        elif role == 'student':
+            student = Student.objects.filter(user=self.request.user).first()
+            context['extra_form'] = StudentSelfEditForm(instance=student)
+        context['avatar_form'] = AvatarUploadForm(instance=self.request.user)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        basic_form = BasicUserSelfEditForm(request.POST, instance=self.object)
+        avatar_form = AvatarUploadForm(request.POST, request.FILES, instance=self.object)
+
+        role = request.user.role
+        extra_form = None
+
+        if role == 'teacher':
+            teacher = Teacher.objects.filter(user=request.user).first()
+            extra_form = TeacherSelfEditForm(request.POST, instance=teacher)
+        elif role == 'student':
+            student = Student.objects.filter(user=request.user).first()
+            extra_form = StudentSelfEditForm(request.POST, instance=student)
+
+        if basic_form.is_valid() and avatar_form.is_valid() and (extra_form is None or extra_form.is_valid()):
+            basic_form.save()
+            avatar_form.save()
+            if extra_form:
+                extra_form.save()
+            return redirect(self.success_url)
+
+        context = self.get_context_data()
+        context['form'] = basic_form
+        context['avatar_form'] = avatar_form
+        context['extra_form'] = extra_form
+        return self.render_to_response(context)

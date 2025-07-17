@@ -19,11 +19,13 @@
             Buscar Artículo
         </a>
     </div>
+    {% if user_create %}
     <div class="option3">
         <a href="{% url 'create_article_form' %}" class="btn btn-secondary">
             Formulario para agregar un nuevo artículo
         </a>
     </div>
+    {% endif %}
 </div>
 
 {% endblock %}

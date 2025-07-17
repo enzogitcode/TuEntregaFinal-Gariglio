@@ -1,0 +1,31 @@
+{% extends 'AppBlog/base.html' %}
+{% block title %}Mi perfil{% endblock %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>Perfil de {{ user.username }}</h2>
+
+    <p><strong>Nombre completo:</strong> {{ user.get_full_name }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Rol:</strong> {{ user.role|title }}</p>
+
+    {% if user.avatar %}
+      <img src="{{ user.avatar.url }}" alt="Avatar" class="img-thumbnail mt-3" style="max-width:200px;">
+    {% else %}
+      <p class="text-muted mt-3">No has subido avatar.</p>
+    {% endif %}
+
+    {% if teacher %}
+      <hr>
+      <p><strong>Materia:</strong> {{ teacher.subject }}</p>
+      <p><strong>Institución:</strong> {{ teacher.college }}</p>
+      <p><strong>Edad:</strong> {{ teacher.age }}</p>
+    {% elif student %}
+      <hr>
+      <p><strong>Carrera:</strong> {{ student.career }}</p>
+      <p><strong>Institución:</strong> {{ student.college }}</p>
+      <p><strong>Edad:</strong> {{ student.age }}</p>
+    {% endif %}
+    <a href="{% url 'profile_edit' %}">Editar mi Perfil</a>
+  </div>
+{% endblock %}

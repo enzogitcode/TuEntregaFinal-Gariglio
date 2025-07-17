@@ -6,7 +6,9 @@ from AppBlog.models import Article
 from django.db.models import Q
 
 def articles_home(request):
-    return render(request, 'AppBlog/articles/articles_home.html')
+    context ={}
+    context["user_create"] = request.user.is_authenticated and (request.user.role in ["teacher", "student"] or request.user.is_superuser)
+    return render(request, 'AppBlog/articles/articles_home.html', context)
 
 class ArticleListView(ListView):
     model = Article

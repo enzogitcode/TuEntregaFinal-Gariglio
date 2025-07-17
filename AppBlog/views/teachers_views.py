@@ -4,6 +4,10 @@ from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
+from django.shortcuts import render
+
+def teachers_home(request):
+    return render(request, 'AppBlog/teachers/teachers_home.html')
 
 from AppBlog.models import Teacher
 from AppBlog.forms import TeacherRegisterForm, TeacherSelfEditForm, TeacherSearchForm

@@ -17,7 +17,7 @@ class Profile(models.Model):
 # Modelo Teacher con campos extra
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    subject = models.CharField(max_length=100)
+    course = models.CharField(max_length=100)
     college = models.CharField(max_length=100)
     age = models.IntegerField(null=True, blank=True)
 

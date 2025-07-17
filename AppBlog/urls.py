@@ -30,7 +30,7 @@ from .views.user_views import (
     home_user,
     register_choose_your_role,
     AvatarUpdateView,
-    ProfileView,
+    profile,
     ProfileEditView
     )
 
@@ -39,7 +39,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
     path('home_user', home_user, name='home_user'),
-    path('profile/', ProfileView.as_view(), name='profile'),
+    path('profile/', profile, name='profile'),
     path('profile_edit/', ProfileEditView.as_view(), name='profile_edit'),
     
     # User

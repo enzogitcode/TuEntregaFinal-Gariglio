@@ -10,6 +10,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from ..models import CustomUser, Teacher, Student, Avatar
 from django.views.generic import ListView, UpdateView, CreateView, DetailView
+from ..models import Paper, Article
 
 def register_choose_your_role(request):
     return render(request, 'AppBlog/user/register_choose_your_role.html')
@@ -45,30 +46,18 @@ class AvatarUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self):
         return self.request.user
 
-
-class ProfileView(LoginRequiredMixin, DetailView):
-    model = CustomUser
-    template_name = 'AppBlog/user/profile.html'
-    context_object_name = 'user'
-
-    def get_object(self):
-        return get_object_or_404(CustomUser, pk=self.request.user.pk)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        role = self.request.user.role
-
-        if role == 'teacher':
-            context['teacher'] = Teacher.objects.filter(user=self.request.user).first()
-        elif role == 'student':
-            context['student'] = Student.objects.filter(user=self.request.user).first()
-
-        return context
-
-
 @login_required
 def profile(request):
-    return render(request, 'AppBlog/user/profile.html', {'user': request.user})
+    user = request.user
+    articles = Article.objects.filter(author=user)
+    papers = Paper.objects.filter(author=user)
+
+    context = {
+        'user': user,
+        'articles': articles,
+        'papers': papers
+    }
+    return render(request, 'AppBlog/user/profile.html', context)
 
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):

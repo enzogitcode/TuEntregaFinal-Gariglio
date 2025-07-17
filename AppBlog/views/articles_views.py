@@ -21,7 +21,7 @@ class ArticleDetailView(DetailView):
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     fields = ['subject', 'title', 'resume', 'text_article']
-    template_name = 'AppBlog/articles/article_create.html'
+    template_name = 'AppBlog/articles/create_article_form.html'
     success_url = reverse_lazy('articles_list')
 
     def dispatch(self, request, *args, **kwargs):

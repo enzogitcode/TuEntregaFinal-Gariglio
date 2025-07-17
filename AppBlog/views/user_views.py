@@ -1,11 +1,15 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from ..forms import (
+    BasicUserSelfEditForm, TeacherSelfEditForm, StudentSelfEditForm, AvatarUploadForm, BasicUserRegisterForm
+)
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
-from ..forms import BasicUserRegisterForm
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from AppBlog.models import Avatar
+from ..models import CustomUser, Teacher, Student, Avatar
+from django.views.generic import ListView, UpdateView, CreateView, DetailView
 
 def register_choose_your_role(request):
     return render(request, 'AppBlog/user/register_choose_your_role.html')
@@ -31,11 +35,6 @@ def home_user(request):
     avatares = Avatar.objects.filter(user=request.user.id)
     return render(request, 'AppBlog/home.html', {"url": avatares[0].imagen.url})
 
-from django.views.generic.edit import UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
-from ..models import CustomUser
-from ..forms import AvatarUploadForm
 
 class AvatarUpdateView(LoginRequiredMixin, UpdateView):
     model = CustomUser
@@ -46,10 +45,6 @@ class AvatarUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self):
         return self.request.user
 
-from django.views.generic.detail import DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
-from AppBlog.models import CustomUser, Teacher, Student
 
 class ProfileView(LoginRequiredMixin, DetailView):
     model = CustomUser
@@ -75,14 +70,6 @@ class ProfileView(LoginRequiredMixin, DetailView):
 def profile(request):
     return render(request, 'AppBlog/user/profile.html', {'user': request.user})
 
-from django.views.generic.edit import UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse_lazy
-from AppBlog.models import CustomUser, Teacher, Student
-from ..forms import (
-    BasicUserSelfEditForm, TeacherSelfEditForm, StudentSelfEditForm, AvatarUploadForm
-)
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):
     model = CustomUser
@@ -137,3 +124,8 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
         context['avatar_form'] = avatar_form
         context['extra_form'] = extra_form
         return self.render_to_response(context)
+    
+class UsersListView(ListView):
+    model = CustomUser
+    template_name= 'AppBlog/user/users_list.html'
+    context_object_name= 'users'

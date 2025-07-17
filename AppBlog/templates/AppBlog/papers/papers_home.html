@@ -19,13 +19,11 @@
             Buscar Paper
         </a>
     </div>
-    {% if user.is_authenticated and user.role in ["teacher", "student"] or user.is_superuser %}
     
     <div class="option3 flex-grow-1 text-wrap">
         <a href="{% url 'create_paper_form' %}" class="btn btn-secondary text-wrap text-center">
         Formulario para agregar un nuevo paper
         </a>
     </div>
-    {% endif %}
 </div>
 {% endblock %}

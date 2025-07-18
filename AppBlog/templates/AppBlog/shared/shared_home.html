@@ -1,0 +1,32 @@
+{% extends 'AppBlog/base.html' %}
+{% load static %}
+{% block title %}Home de {{ title }}{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm p-4 w-100 mx-auto" style="max-width: 800px;">
+  <h2 class="fw-bold text-center mb-4">📚 {{ title }}</h2>
+
+  <div class="d-flex justify-content-center flex-wrap gap-2 mb-4">
+    <a href="{% url list_url %}" class="btn btn-outline-primary">🔗 Ver lista completa</a>
+    <a href="{% url search_url %}" class="btn btn-outline-secondary">🔍 Buscar {{ title|lower }}</a>
+    {% if can_create %}
+      <a href="{% url create_url %}" class="btn btn-success">➕ Crear nuevo {{ title|slice:":-1"|lower }}</a>
+    {% endif %}
+  </div>
+
+  {% if content_list %}
+    <div class="list-group">
+      {% for item in content_list %}
+        <div class="list-group-item">
+          <h5 class="fw-bold">{{ item.title }}</h5>
+          <p class="mb-1">{{ item.resume|default:item.abstract|truncatewords:20 }}</p>
+          <small class="text-muted">{{ item.date_of_publication }}</small><br>
+          <a href="{% url title|lower|add:':detail' item.id %}" class="btn btn-sm btn-outline-info mt-2">Ver más</a>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="text-muted text-center">No tenés {{ title|lower }} publicados.</p>
+  {% endif %}
+</div>
+{% endblock %}

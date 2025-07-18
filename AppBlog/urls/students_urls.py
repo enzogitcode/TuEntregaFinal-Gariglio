@@ -12,6 +12,7 @@ from ..views.students_views import (
     StudentSelfUpdateView,
     )
 
+
 urlpatterns = [
     path('home/', students_home, name='home'),
     path('student/', StudentRegisterView.as_view(), name='register'),

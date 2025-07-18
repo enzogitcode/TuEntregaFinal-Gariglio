@@ -5,10 +5,10 @@ from django.db.models import Q
 from django.shortcuts import render
 from AppBlog.models import Paper
 
-def papers_home(request):
-    context ={}
-    context["user_create"] = request.user.is_authenticated and (request.user.role in ["teacher", "student"] or request.user.is_superuser)
-    return render(request, 'AppBlog/papers/papers_home.html', context)
+# def papers_home(request):
+#     context ={}
+#     context["user_create"] = request.user.is_authenticated and (request.user.role in ["teacher", "student"] or request.user.is_superuser)
+#     return render(request, 'AppBlog/papers/papers_home.html', context)
 
 class PaperSearchView(ListView):
     model = Paper

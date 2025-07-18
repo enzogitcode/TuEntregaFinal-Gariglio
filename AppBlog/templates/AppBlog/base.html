@@ -63,16 +63,16 @@
       <div class="collapse navbar-collapse justify-content-lg-end w-100" id="menuNav">
         <ul class="navbar-nav text-center text-lg-end">
           <li class="nav-item">
-            <a class="nav-link fw-semibold underlineLink" href="" >Profesores</a>
+            <a class="nav-link fw-semibold underlineLink" href="{% url 'shared_home' section='teachers' %}" >Profesores</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-semibold underlineLink" href="" >Estudiantes</a>
+            <a class="nav-link fw-semibold underlineLink" href="{% url 'shared_home' section='students' %}" >Estudiantes</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-semibold underlineLink" href="{% url 'papers:list' %}" >Papers</a>
+            <a class="nav-link fw-semibold underlineLink" href="{% url 'shared_home' section='papers' %}" >Papers</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link fw-semibold underlineLink" href="{% url 'articles:list' %}" >Artículos</a>
+            <a class="nav-link fw-semibold underlineLink" href="{% url 'shared_home' section='articles' %}" >Artículos</a>
           </li>
           {% if user.is_authenticated %}
           <li class="nav-item d-flex align-items-center">

@@ -5,11 +5,12 @@ app_name= 'articles'
 from ..views.articles_views import (
      ArticleListView, ArticleCreateView, ArticleUpdateView,
     ArticleDeleteView, ArticleDetailView, ArticleSearchView,
-    articles_home,  
+    
 )
+from ..views.views import shared_home
 
 urlpatterns = [
-    path('home/', articles_home, name='home'),
+path('home/<str:content_type>/', shared_home, name='shared_home'),
     path('search/', ArticleSearchView.as_view(), name='search'),
     path('', ArticleListView.as_view(), name='list'),
     path('create/', ArticleCreateView.as_view(), name='create'),

@@ -1,0 +1,49 @@
+{% extends 'AppBlog/base.html' %}
+{% block title %}Listado de {{ tipo }}s{% endblock %}
+{% block main_extra_class %}main_lista_{{ tipo|lower }}{% endblock %}
+
+{% block content %}
+<h2 class="mb-4 text-center">📄 Lista de {{ tipo }}</h2>
+
+{% if items %}
+  <ul class="list-group">
+    {% for obj in items %}
+      <li class="list-group-item">
+        {% if obj.title %}
+          <h5>{{ obj.title }}</h5>
+        {% elif obj.user %}
+          <h5>{{ obj.user.get_full_name|default:obj.user.username }}</h5>
+        {% endif %}
+
+        {% if obj.subject %}
+          <p><strong>Materia:</strong> {{ obj.subject }}</p>
+        {% endif %}
+        {% if obj.date_of_publication %}
+          <p><strong>Fecha:</strong> {{ obj.date_of_publication|date:"d/m/Y" }}</p>
+        {% endif %}
+        {% if obj.resume %}
+          <p><strong>Resumen:</strong> {{ obj.resume|truncatewords:20 }}</p>
+        {% endif %}
+        {% if obj.abstract %}
+          <p><strong>Abstract:</strong> {{ obj.abstract|truncatewords:20 }}</p>
+        {% endif %}
+        {% if obj.course %}
+          <p><strong>Curso:</strong> {{ obj.course }}</p>
+        {% endif %}
+        {% if obj.career %}
+          <p><strong>Carrera:</strong> {{ obj.career }}</p>
+        {% endif %}
+        {% if obj.college %}
+          <p><strong>Institución:</strong> {{ obj.college }}</p>
+        {% endif %}
+
+        <a href="{% url detail_url obj.pk %}" class="btn btn-sm btn-outline-info mt-2">Ver detalles</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <div class="alert alert-warning text-center">
+    No hay {{ tipo|lower }}s disponibles.
+  </div>
+{% endif %}
+{% endblock %}

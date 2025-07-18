@@ -40,7 +40,7 @@ class PaperSearchView(ListView):
 
 class PaperListView(ListView):
     model = Paper
-    template_name = 'AppBlog/shared/list_publications.html'
+    template_name = 'AppBlog/shared/list.html'
     context_object_name = 'items'
     extra_context = {
         'tipo': 'Papers',

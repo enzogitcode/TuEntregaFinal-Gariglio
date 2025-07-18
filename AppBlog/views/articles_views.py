@@ -13,7 +13,7 @@ from django.http import HttpResponseForbidden
 
 class ArticleListView(ListView):
     model = Article
-    template_name = 'AppBlog/shared/list_publications.html'
+    template_name = 'AppBlog/shared/list.html'
     context_object_name = 'items'
     extra_context = {
         'tipo': 'Artículos',

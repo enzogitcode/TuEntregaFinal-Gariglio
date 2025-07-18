@@ -105,8 +105,7 @@
   </nav>
 </header>
 
-<main data-aos="fade-in"
-      class="container-fluid px-4 py-3 d-flex flex-column align-items-center gap-4">
+<main data-aos="fade-in" class="container-fluid px-4 py-3 d-flex flex-column align-items-center gap-4">
   <div class="row w-100">
     <div class="col-12 col-md-10 col-lg-8 mx-auto">
       {% block content %}
@@ -120,8 +119,48 @@
   
 </main>
 
+<footer  class="pt-4 {% block footer_extra_class %}{% endblock %}">
+  <div class="container">
+    <div class="row text-center text-md-start align-items-center">
 
+      <!-- Área 1: Logo -->
+      <div class="col-md-4 mb-4 mb-md-0 d-flex align-items-center justify-content-center justify-content-md-start">
+        <img src="{% static 'AppBlog/imgs/logo_base.png' %}" alt="Logo" style="height: 40px;">
+        <span class="ms-2 fw-bold">CienciAR</span>
+      </div>
 
+      <!-- Área 2: Contáctenos -->
+      <div class="col-md-4 mb-4 mb-md-0 text-center">
+        <h5 class="mb-3">Contáctenos</h5>
+        <div class="d-flex justify-content-center gap-3">
+          <a href="https://facebook.com" class="text-white fs-2" target="_blank">
+            <i class="bi bi-facebook"></i>
+          </a>
+          <a href="https://instagram.com" class="text-white fs-2" target="_blank">
+            <i class="bi bi-instagram"></i>
+          </a>
+          <a href="https://wa.me/tu-numero" class="text-white fs-2" target="_blank">
+            <i class="bi bi-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Área 3: Solo “Acerca” -->
+      <div class="col-md-4 text-md-end text-center">
+        <h5 class="mb-3">Información</h5>
+        <h6>
+          <a href="{% url 'about' %}" class="nav-link fw-semibold text-white">Acerca de mí</a>
+        </h6>
+        
+      </div>
+    </div>
+
+    <!-- Sección inferior -->
+    <div class="d-flex flex-column align-items-center justify-content-center text-center p-3 bg-light text-dark mt-4 rounded">
+      <p class="mb-0">&copy; 2025 - Mi Sitio Web</p>
+    </div>
+  </div>
+</footer>
 
 <!-- AOS SCRIPT -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

@@ -28,29 +28,5 @@
     {% endif %}
   </div>
 
-  {% if content_list %}
-    <div class="list-group">
-      {% for item in content_list %}
-        <div class="list-group-item">
-          <h5 class="fw-bold">{{ item.title }}</h5>
-          <p class="mb-1">{{ item.resume|default:item.abstract|truncatewords:20 }}</p>
-          <small class="text-muted">{{ item.date_of_publication }}</small><br>
-
-          {% if section == 'articles' %}
-            <a href="{% url 'articles:detail' item.id %}" class="btn btn-sm btn-outline-info mt-2">Ver más</a>
-          {% elif section == 'papers' %}
-            <a href="{% url 'papers:detail' item.id %}" class="btn btn-sm btn-outline-info mt-2">Ver más</a>
-          {% elif section == 'teachers' %}
-            <a href="{% url 'teachers:detail' item.id %}" class="btn btn-sm btn-outline-info mt-2">Ver más</a>
-          {% elif section == 'students' %}
-            <a href="{% url 'students:detail' item.id %}" class="btn btn-sm btn-outline-info mt-2">Ver más</a>
-          {% endif %}
-
-        </div>
-      {% endfor %}
-    </div>
-  {% else %}
-    <p class="text-muted text-center">La lista de {{ title|lower }} está vacía.</p>
-  {% endif %}
 </div>
 {% endblock %}

@@ -1,26 +1,36 @@
 {% extends 'AppBlog/base.html' %}
 {% load static %}
-
-{% block title %} Login de Usuarios {% endblock %}
+{% load widget_tweaks %}
+{% block title %}Login de Usuarios{% endblock %}
 
 {% block content %}
-<h2>Iniciar sesión</h2>
+<h2 class="text-center fw-bold mb-4">Iniciar sesión</h2>
 
-{% if form.errors and form.non_field_erros %}
-  <div>
-    <strong>Hay errores en el formulario.</strong>
-  </div>
-  <div>
+{% if form.errors or form.non_field_errors %}
+  <div class="alert alert-danger text-center">
+    <strong>Ups, hay errores en el formulario.</strong><br>
     {{ form.non_field_errors }}
   </div>
 {% endif %}
 
-<form method="post">
+<form method="post" class="card shadow-sm p-4 w-100">
   {% csrf_token %}
-  {{ form.as_p }}
+  {% for field in form %}
+  <div class="mb-3">
+    <label class="form-label fw-semibold" for="{{ field.id_for_label }}">{{ field.label }}</label>
+{{ field|add_class:"form-control w-100" }}
+    {% if field.errors %}
+      <div class="text-danger small">{{ field.errors|striptags }}</div>
+    {% endif %}
+  </div>
+{% endfor %}
 
-  <button type="submit">Entrar</button>
+
+  <div class="d-grid gap-2 mt-4">
+    <button type="submit" class="btn btn-primary">🔑 Entrar</button>
+    <a href="{% url 'users:register_choose_your_role' %}" class="btn btn-outline-secondary">
+      ¿No tenés cuenta? Registrate aquí
+    </a>
+  </div>
 </form>
-
-<p>¿No tenés cuenta? <a href="{% url 'register_choose_your_role' %}">Registrate aquí</a></p>
 {% endblock %}

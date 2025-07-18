@@ -25,7 +25,7 @@ def register_choose_your_role(request):
 class UserRegisterView(CreateView):
     form_class = BasicUserRegisterForm
     template_name = 'AppBlog/user/register_user.html'
-    success_url = reverse_lazy('users:user_home')
+    success_url = reverse_lazy('users:login')
     extra_context = { 'tipo': 'Usuario Común' }
 
     def form_valid(self, form):
@@ -37,13 +37,12 @@ class CustomLoginView(LoginView):
     template_name = 'AppBlog/user/login.html'
 
 class Logout(LogoutView):
-    next_page = 'login'
+    next_page = 'users:login'
 
 @login_required
 def home_user(request):
     avatares = Avatar.objects.filter(user=request.user.id)
-    return render(request, 'AppBlog/home.html', {"url": avatares[0].imagen.url})
-
+    return render(request, 'AppBlog/users/user_home.html', {"url": avatares[0].imagen.url})
 
 class AvatarUpdateView(LoginRequiredMixin, UpdateView):
     model = CustomUser
@@ -71,7 +70,7 @@ def profile(request):
 class ProfileEditView(LoginRequiredMixin, UpdateView):
     model = CustomUser
     template_name = 'AppBlog/user/profile_edit.html'
-    success_url = reverse_lazy('profile')
+    success_url = reverse_lazy('users:profile')
     form_class = BasicUserSelfEditForm  # default
 
     def get_object(self):
@@ -122,14 +121,15 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
         context['extra_form'] = extra_form
         return self.render_to_response(context)
     
-class UsersListView(ListView):
-    model = CustomUser
-    template_name= 'AppBlog/user/users_list.html'
-    context_object_name= 'users'
+from django.http import HttpResponseForbidden
 
-def user_list_view(request):
-    context = CustomUser.objects.all().order_by('username')
-    return (request, 'AppBlog/user/users')
+@login_required
+def users_list(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("Acceso restringido.")
+    users = CustomUser.objects.all().order_by('username')
+    return render(request, 'AppBlog/user/users_list.html', {'users': users})
+
 
 @login_required
 def user_dashboard(request):
@@ -142,3 +142,11 @@ def user_dashboard(request):
     }
     return render(request, 'AppBlog/user/user_home.html', context)
 
+class AvatarUpdateView(LoginRequiredMixin, UpdateView):
+    model = CustomUser
+    form_class = AvatarUploadForm
+    template_name = 'AppBlog/user/update_avatar.html'
+    success_url = reverse_lazy('users:profile') 
+
+    def get_object(self):
+        return self.request.user

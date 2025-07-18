@@ -76,7 +76,7 @@
           </li>
           {% if user.is_authenticated %}
           <li class="nav-item d-flex align-items-center">
-            <form action="{% url 'logout' %}" method="post" class="mb-0 me-2">
+            <form action="{% url 'users:logout' %}" method="post" class="mb-0 me-2">
                 {% csrf_token %}
                 <button class="btn btn-danger" type="submit">Logout</button>
             </form>

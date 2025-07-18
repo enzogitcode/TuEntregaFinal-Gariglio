@@ -14,9 +14,9 @@
     <span class="badge bg-secondary mb-3">{{ user.role|title }}</span>
 
     <div class="d-flex flex-column gap-3 mt-4">
-      <a href="{% url 'profile' %}" class="btn btn-outline-primary w-100">👤 Ver perfil</a>
-      <a href="{% url 'users:avatar_edit' %}" class="btn btn-outline-success w-100">🖼️ Cambiar avatar</a>
-      <a href="{% url 'users:edit' %}" class="btn btn-outline-warning w-100">✏️ Editar cuenta</a>
+      <a href="{% url 'users:profile' %}" class="btn btn-outline-primary w-100">👤 Ver perfil</a>
+      <a href="{% url 'users:update_avatar' %}" class="btn btn-outline-success w-100">🖼️ Cambiar avatar</a>
+      <a href="{% url 'users:profile_edit' %}" class="btn btn-outline-warning w-100">✏️ Editar cuenta</a>
     </div>
   </div>
 </div>

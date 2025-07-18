@@ -1,0 +1,27 @@
+{% extends 'AppBlog/base.html' %}
+{% load widget_tweaks %}
+{% block title %}Editar Avatar{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm mx-auto p-4 w-100" style="max-width: 500px;">
+  <h2 class="fw-bold text-center mb-4">🖼️ Editar tu avatar</h2>
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="mb-3">
+        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+        {{ field|add_class:"form-control" }}
+        {% if field.errors %}
+          <div class="text-danger small mt-1">{{ field.errors|striptags }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <div class="d-grid gap-2 mt-4">
+      <button type="submit" class="btn btn-success">💾 Guardar avatar</button>
+      <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary">⬅️ Volver al perfil</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

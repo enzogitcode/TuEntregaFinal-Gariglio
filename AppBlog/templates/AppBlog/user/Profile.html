@@ -1,75 +1,77 @@
 {% extends 'AppBlog/base.html' %}
 {% load static %}
-
 {% block title %}Mi perfil{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-  <h2 class="mb-4">Perfil de {{ user.username }}</h2>
+<div class="card shadow-sm p-4 w-100 mx-auto" style="max-width: 720px;">
+  <h2 class="text-center fw-bold mb-4">Perfil de {{ user.get_full_name|default:user.username }}</h2>
 
-  <div class="card mb-4 mx-auto" style="max-width: 540px;">
-    <div class="row g-0">
-      <div class="col-md-4 p-2 d-flex align-items-center justify-content-center">
-        {% if user.avatar and user.avatar.name %}
-          <img src="{{ user.avatar.url }}" class="img-fluid rounded-start" alt="Avatar de {{ user.username }}">
-        {% else %}
-          <img src="{% static 'AppBlog/imgs/default_avatar.png' %}" class="img-fluid rounded-start" alt="Avatar por defecto">
-        {% endif %}
-      </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <p><strong>Nombre completo:</strong> {{ user.get_full_name }}</p>
-          <p><strong>Email:</strong> {{ user.email }}</p>
-          <p><strong>Rol:</strong> {{ user.role|title }}</p>
-          <a href="{% url 'profile_edit' %}" class="btn btn-info">Editar mi Perfil</a>
-        </div>
-      </div>
+  <div class="d-flex flex-column flex-md-row align-items-center gap-3 mb-4">
+    <div class="text-center">
+      {% if user.avatar and user.avatar.name %}
+        <img src="{{ user.avatar.url }}" class="rounded-circle border" alt="Avatar de {{ user.username }}" width="120" height="120">
+      {% else %}
+        <img src="{% static 'AppBlog/imgs/default_avatar.png' %}" class="rounded-circle border" alt="Avatar por defecto" width="120" height="120">
+      {% endif %}
+    </div>
+    <div class="flex-grow-1">
+      <p><strong>Nombre completo:</strong> {{ user.get_full_name }}</p>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Rol:</strong> {{ user.role|title }}</p>
+      <a href="{% url 'users:profile_edit' %}" class="btn btn-outline-info btn-sm mt-2">Editar mi perfil</a>
     </div>
   </div>
 
   {% if teacher %}
+  <div class="mb-4">
+    <h5 class="fw-semibold text-decoration-underline">Datos de Docente</h5>
     <p><strong>Curso:</strong> {{ teacher.course }}</p>
     <p><strong>Institución:</strong> {{ teacher.college }}</p>
     <p><strong>Edad:</strong> {{ teacher.age }}</p>
+  </div>
   {% elif student %}
+  <div class="mb-4">
+    <h5 class="fw-semibold text-decoration-underline">Datos de Estudiante</h5>
     <p><strong>Carrera:</strong> {{ student.career }}</p>
     <p><strong>Institución:</strong> {{ student.college }}</p>
     <p><strong>Edad:</strong> {{ student.age }}</p>
+  </div>
   {% endif %}
 
-  <hr>
   {% if user.role == 'teacher' or user.role == 'student' or user.is_superuser %}
-  <h4 class="mt-4">Artículos publicados</h4>
-  {% if articles %}
-  <ul class="list-group mb-4">
+  <div class="mt-4">
+    <h5 class="fw-bold mb-3">📄 Artículos publicados</h5>
+    {% if articles %}
+    <div class="list-group mb-4">
       {% for article in articles %}
-        <li class="list-group-item">
-          <strong>{{ article.title }}</strong><br>
-          {{ article.resume|truncatewords:20 }}<br>
-          <small class="text-muted">{{ article.date_of_publication }}</small><br>
-          <a href="{% url 'article_detail' article.id %}" class="btn btn-outline-primary btn-sm mt-2">Ver artículo</a>
-        </li>
-        {% endfor %}
-      </ul>
-      {% else %}
-      <p class="text-muted">No hay artículos publicados.</p>
-      {% endif %}
-      
-      <h4 class="mt-4">Papers publicados</h4>
-      {% if papers %}
-      <ul class="list-group">
-        {% for paper in papers %}
-        <li class="list-group-item">
-          <strong>{{ paper.title }}</strong><br>
-          {{ paper.abstract|truncatewords:20 }}<br>
-          <small class="text-muted">{{ paper.date_of_publication }}</small><br>
-          <a href="{% url 'paper_detail' paper.id %}" class="btn btn-outline-info btn-sm mt-2">Ver paper</a>
-        </li>
+      <div class="list-group-item">
+        <h6 class="fw-semibold">{{ article.title }}</h6>
+        <p class="mb-1">{{ article.resume|truncatewords:20 }}</p>
+        <small class="text-muted">{{ article.date_of_publication }}</small><br>
+        <a href="{% url 'articles:detail' article.id %}" class="btn btn-sm btn-outline-primary mt-2">Ver artículo</a>
+      </div>
       {% endfor %}
-    </ul>
+    </div>
+    {% else %}
+    <p class="text-muted">No hay artículos publicados.</p>
+    {% endif %}
+
+    <h5 class="fw-bold mb-3">📚 Papers publicados</h5>
+    {% if papers %}
+    <div class="list-group mb-4">
+      {% for paper in papers %}
+      <div class="list-group-item">
+        <h6 class="fw-semibold">{{ paper.title }}</h6>
+        <p class="mb-1">{{ paper.abstract|truncatewords:20 }}</p>
+        <small class="text-muted">{{ paper.date_of_publication }}</small><br>
+        <a href="{% url 'papers:detail' paper.id %}" class="btn btn-sm btn-outline-info mt-2">Ver paper</a>
+      </div>
+      {% endfor %}
+    </div>
     {% else %}
     <p class="text-muted">No hay papers publicados.</p>
     {% endif %}
-    {% endif %}
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

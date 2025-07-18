@@ -1,0 +1,31 @@
+{% extends 'AppBlog/base.html' %}
+
+{% block title %}Eliminar {{ tipo }}{% endblock %}
+{% block main_extra_class %}main_eliminar_{{ tipo|lower }}{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm mx-auto w-100" style="max-width: 600px;">
+  <div class="card-body p-4 text-center">
+    <h2 class="fw-bold mb-4">🗑️ Eliminar {{ tipo }}</h2>
+
+    <p>
+      ¿Estás seguro de que querés eliminar 
+      <strong>
+        {% if obj.title %}
+          {{ obj.title }}
+        {% else %}
+          este {{ tipo|lower }}
+        {% endif %}
+      </strong>?
+    </p>
+
+    <form method="POST">
+      {% csrf_token %}
+      <div class="d-flex justify-content-center gap-3 mt-4">
+        <a href="{% url cancel_url %}" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

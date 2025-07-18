@@ -1,4 +1,5 @@
 {% extends 'AppBlog/base.html' %}
+
 {% block title %}Detalle de {{ tipo }}{% endblock %}
 {% block main_extra_class %}main_detalle_{{ tipo|lower }}{% endblock %}
 
@@ -63,6 +64,23 @@
   {% endif %}
   {% if obj.user %}
     <p><strong>Email:</strong> {{ obj.user.email }}</p>
+  {% endif %}
+</div>
+
+{% comment %} Botones de acción para autor o superuser {% endcomment %}
+<div class="mt-4 d-flex gap-3">
+  {% if obj.author == user and user.role == 'teacher' %}
+    <a href="{% url 'articles:update' obj.id %}" class="btn btn-sm btn-warning">✏️ Editar</a>
+    <a href="{% url 'articles:delete' obj.id %}" class="btn btn-sm btn-danger">🗑️ Eliminar</a>
+  {% endif %}
+
+  {% if obj.author == user and user.role == 'student' %}
+    <a href="{% url 'students:update' obj.id %}" class="btn btn-sm btn-warning">✏️ Editar</a>
+    <a href="{% url 'students:delete' obj.id %}" class="btn btn-sm btn-danger">🗑️ Eliminar</a>
+  {% endif %}
+
+  {% if user.is_superuser %}
+    <a href="{% url 'superuser:delete' obj.id %}" class="btn btn-sm btn-danger">🗑️ Eliminar</a>
   {% endif %}
 </div>
 {% endblock %}

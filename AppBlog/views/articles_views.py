@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from AppBlog.models import Article
 from django.db.models import Q
+from django.http import HttpResponseForbidden
 
 # def articles_home(request):
 #     context ={}
@@ -46,11 +47,23 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class ArticleUpdateView(UpdateView):
     model = Article
-    fields = ['subject', 'title', 'resume', 'text_article']
-    template_name = 'AppBlog/articles/article_update_form.html'
-    success_url = reverse_lazy('articles_list')
+    fields = ['title', 'subject', 'resume', 'text_article']
+    template_name = 'AppBlog/shared/update.html'
+    context_object_name = 'obj'
+    success_url= reverse_lazy('articles:list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tipo'] = 'Artículo'
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.author != request.user or request.user.role not in ['teacher', 'student']:
+            return HttpResponseForbidden("No tenés permiso para editar este artículo.")
+        return super().dispatch(request, *args, **kwargs)
 
     def test_func(self):
         article = self.get_object()
@@ -58,8 +71,15 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 class ArticleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Article
-    template_name = 'AppBlog/articles/article_delete_form.html'
-    success_url = reverse_lazy('articles_list')
+    context_object_name = 'obj'  
+    template_name = 'AppBlog/shared/delete.html'
+    success_url = reverse_lazy('articles:list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tipo'] = 'Artículo'  
+        context['cancel_url'] = reverse_lazy('articles:list')  
+        return context
 
     def test_func(self):
         article = self.get_object()
@@ -67,11 +87,11 @@ class ArticleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class ArticleSearchView(ListView):
     model = Article
-    template_name = 'AppBlog/articles/articles_search.html'
-    context_object_name = 'articles'
+    template_name = 'AppBlog/shared/search.html'
+    context_object_name = 'items'
 
     def get_queryset(self):
-        query = self.request.GET.get('q')
+        query = self.request.GET.get('q', '').strip()
         if query:
             return Article.objects.filter(
                 Q(title__icontains=query) |
@@ -79,12 +99,14 @@ class ArticleSearchView(ListView):
                 Q(subject__icontains=query) |
                 Q(author__first_name__icontains=query) |
                 Q(author__last_name__icontains=query) |
-                Q(author__email__icontains=query) |
-                Q(date_of_publication__icontains=query)
+                Q(author__email__icontains=query)
             ).distinct()
         return Article.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['query'] = self.request.GET.get('q', '')
+        context['tipo'] = 'Artículo'
+        context['detail_url'] = 'articles:detail'
         return context
+

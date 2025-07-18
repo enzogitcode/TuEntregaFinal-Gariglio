@@ -44,15 +44,6 @@ def home_user(request):
     avatares = Avatar.objects.filter(user=request.user.id)
     return render(request, 'AppBlog/users/user_home.html', {"url": avatares[0].imagen.url})
 
-class AvatarUpdateView(LoginRequiredMixin, UpdateView):
-    model = CustomUser
-    form_class = AvatarUploadForm
-    template_name = 'AppBlog/user/avatar_edit.html'
-    success_url = reverse_lazy('home_user')
-
-    def get_object(self):
-        return self.request.user
-
 @login_required
 def profile(request):
     user = request.user
@@ -71,7 +62,7 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
     model = CustomUser
     template_name = 'AppBlog/user/profile_edit.html'
     success_url = reverse_lazy('users:profile')
-    form_class = BasicUserSelfEditForm  # default
+    form_class = BasicUserSelfEditForm
 
     def get_object(self):
         return self.request.user

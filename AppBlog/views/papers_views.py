@@ -1,9 +1,11 @@
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
+from django.http import HttpResponseForbidden
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.shortcuts import render
 from AppBlog.models import Paper
+
 
 # def papers_home(request):
 #     context ={}
@@ -12,7 +14,7 @@ from AppBlog.models import Paper
 
 class PaperSearchView(ListView):
     model = Paper
-    template_name = 'AppBlog/papers/papers_search.html'
+    template_name = 'AppBlog/shared/search.html'
     context_object_name = 'papers'
 
     def get_queryset(self):
@@ -32,6 +34,8 @@ class PaperSearchView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['query'] = self.request.GET.get('q', '')
+        context['tipo'] = 'Artículo'
+        context['detail_url'] = 'articles:detail'
         return context
 
 class PaperListView(ListView):
@@ -69,12 +73,24 @@ class PaperCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-class PaperUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class PaperUpdateView(UpdateView):
     model = Paper
-    fields = ['subject', 'title', 'abstract', 'text_paper']
-    template_name = 'AppBlog/papers/paper_update_form.html'
-    success_url = reverse_lazy('papers_list')
-    context_object_name = 'paper'
+    fields = ['title', 'subject', 'abstract', 'text_paper']
+    template_name = 'AppBlog/shared/update.html'
+    context_object_name = 'obj'
+    success_url= reverse_lazy('papers:list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tipo'] = 'Paper'
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.author != request.user or request.user.role not in ['teacher', 'student']:
+            return HttpResponseForbidden("No tenés permiso para editar este paper.")
+        return super().dispatch(request, *args, **kwargs)
+
 
     def test_func(self):
         paper = self.get_object()
@@ -85,6 +101,11 @@ class PaperDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = 'AppBlog/papers/papers_delete_form.html'
     success_url = reverse_lazy('papers_list')
     context_object_name = 'paper'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tipo'] = 'Paper'  
+        context['cancel_url'] = reverse_lazy('papers:list')  
+        return context
 
     def test_func(self):
         paper = self.get_object()

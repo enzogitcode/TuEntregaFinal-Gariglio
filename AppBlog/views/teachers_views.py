@@ -17,13 +17,12 @@ class TeacherRegisterView(CreateView):
     template_name = 'AppBlog/user/register_form.html'
     success_url = reverse_lazy('users:login')
     extra_context = { 'tipo': 'Docente' }
-    # No necesitas form_valid, el form ya crea Teacher y Profile
 
 class TeacherSelfUpdateView(LoginRequiredMixin, UpdateView):
     model = Teacher
     form_class = TeacherSelfEditForm
     template_name = 'AppBlog/teachers/teacher_update_form.html'
-    success_url = reverse_lazy('teachers_list')
+    success_url = reverse_lazy('teachers:list')
 
     def get_object(self):
         return Teacher.objects.get(user=self.request.user)
@@ -64,23 +63,23 @@ class TeacherDeleteView(UserPassesTestMixin, DeleteView):
 
 class TeacherSearchView(ListView):
     model = Teacher
-    template_name = 'AppBlog/teachers/teachers_search.html'
-    context_object_name = 'teachers'
+    template_name = 'AppBlog/shared/search.html'
+    context_object_name = 'items'
 
     def get_queryset(self):
-        query = self.request.GET.get('q', '').strip()  
-
+        query = self.request.GET.get('q', '').strip()
         if query:
             return Teacher.objects.filter(
-                Q(user__first_name__icontains=query) |  
-                Q(user__last_name__icontains=query) |   
-                Q(college__icontains=query) |           
-                Q(course__icontains=query)              
-            ).distinct()  
-
-        return Teacher.objects.all()  
+                Q(user__first_name__icontains=query) |
+                Q(user__last_name__icontains=query) |
+                Q(course__icontains=query) |
+                Q(college__icontains=query)
+            ).distinct()
+        return Teacher.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['query'] = self.request.GET.get('q', '')  
+        context['query'] = self.request.GET.get('q', '')
+        context['tipo'] = 'Docente'
+        context['detail_url'] = 'teachers:detail'
         return context

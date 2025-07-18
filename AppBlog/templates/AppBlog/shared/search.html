@@ -1,0 +1,54 @@
+{% extends 'AppBlog/base.html' %}
+{% load static %}
+
+{% block title %}Buscador de {{ tipo }}s{% endblock %}
+{% block main_extra_class %}main_busqueda_{{ tipo|lower }}{% endblock %}
+
+{% block content %}
+<h2 class="mb-4 text-center">🔍 Buscar {{ tipo }}s</h2>
+
+<!-- Buscador -->
+<form method="get" class="d-flex mb-4 justify-content-center" role="search">
+  <input class="form-control me-2 w-50" type="search" name="q" placeholder="Título, resumen, materia, autor..." value="{{ query }}">
+  <button class="btn btn-primary" type="submit">Buscar</button>
+</form>
+
+<!-- Resultados -->
+{% if query %}
+  {% if items %}
+    <h5>Resultados para "{{ query }}":</h5>
+    <ul class="list-group mb-4">
+      {% for obj in items %}
+        <li class="list-group-item">
+          {% if obj.title %}
+            <h6 class="mb-1">{{ obj.title }}</h6>
+          {% endif %}
+          <p class="mb-1">
+            {% if obj.author %}
+              <strong>Autor:</strong> {{ obj.author.get_full_name|default:obj.author.username }} ({{ obj.author.email }})<br>
+            {% endif %}
+            {% if obj.subject %}
+              <strong>Materia:</strong> {{ obj.subject }}<br>
+            {% endif %}
+            {% if obj.date_of_publication %}
+              <strong>Fecha:</strong> {{ obj.date_of_publication|date:"d/m/Y" }}<br>
+            {% endif %}
+            {% if obj.resume %}
+              <strong>Resumen:</strong> {{ obj.resume|truncatewords:20 }}
+            {% elif obj.abstract %}
+              <strong>Resumen:</strong> {{ obj.abstract|truncatewords:20 }}
+            {% endif %}
+          </p>
+          <a href="{% url detail_url obj.pk %}" class="btn btn-outline-info btn-sm">Ver detalles</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="alert alert-warning text-center">
+      No se encontraron resultados para <strong>"{{ query }}"</strong>.
+    </div>
+  {% endif %}
+{% else %}
+  <p class="text-muted text-center">Ingresá una palabra clave para explorar los {{ tipo|lower }}s publicados.</p>
+{% endif %}
+{% endblock %}

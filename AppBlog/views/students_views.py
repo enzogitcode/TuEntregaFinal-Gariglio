@@ -36,8 +36,15 @@ class StudentSelfUpdateView(LoginRequiredMixin, UpdateView):
 
 class StudentListView(ListView):
     model = Student
-    template_name = 'AppBlog/students/students_list.html'
-    context_object_name = 'students'
+    template_name = 'AppBlog/shared/list.html'
+    context_object_name = 'items'
+    extra_context = {
+        'tipo': 'Estudiantes',
+        'detail_url': 'students:detail',
+        'create_url': None,
+        'show_create_button': False
+    }
+
 
 class StudentDetailView(DetailView):
     model = Student

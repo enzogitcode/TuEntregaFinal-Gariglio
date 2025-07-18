@@ -38,13 +38,13 @@ class PaperListView(ListView):
     model = Paper
     template_name = 'AppBlog/shared/list.html'
     context_object_name = 'items'
-    ordering = ['-date_of_publication']
     extra_context = {
         'tipo': 'Papers',
         'detail_url': 'papers:detail',
         'create_url': 'papers:create',
         'show_create_button': True
     }
+
 
 class PaperDetailView(DetailView):
     model = Paper
@@ -54,7 +54,7 @@ class PaperDetailView(DetailView):
 class PaperCreateView(LoginRequiredMixin, CreateView):
     model = Paper
     fields = ['subject', 'title', 'abstract', 'text_paper']
-    template_name = 'AppBlog/papers/create_paper_form.html'
+    template_name = 'AppBlog/shared/create.html'
     success_url = reverse_lazy('papers:list')
     extra_context = { 'tipo': 'Paper' }
 

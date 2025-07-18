@@ -30,7 +30,7 @@ class ArticleDetailView(DetailView):
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     fields = ['subject', 'title', 'resume', 'text_article']
-    template_name = 'AppBlog/articles/create_article_form.html'
+    template_name = 'AppBlog/shared/create.html'
     success_url = reverse_lazy('articles:list')
     extra_context = { 'tipo': 'Artículo' }
 

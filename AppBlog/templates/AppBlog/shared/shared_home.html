@@ -7,10 +7,24 @@
   <h2 class="fw-bold text-center mb-4">📚 {{ title }}</h2>
 
   <div class="d-flex justify-content-center flex-wrap gap-2 mb-4">
-    <a href="{% url list_url %}" class="btn btn-outline-primary">🔗 Ver lista completa</a>
-    <a href="{% url search_url %}" class="btn btn-outline-secondary">🔍 Buscar {{ title|lower }}</a>
-    {% if can_create %}
-      <a href="{% url create_url %}" class="btn btn-success">➕ Crear nuevo {{ title|slice:":-1"|lower }}</a>
+    {% if section == 'articles' %}
+      <a href="{% url 'articles:list' %}" class="btn btn-outline-primary">🔗 Ver lista completa</a>
+      <a href="{% url 'articles:search' %}" class="btn btn-outline-secondary">🔍 Buscar artículo</a>
+      {% if can_create %}
+        <a href="{% url 'articles:create' %}" class="btn btn-success">➕ Crear nuevo artículo</a>
+      {% endif %}
+    {% elif section == 'papers' %}
+      <a href="{% url 'papers:list' %}" class="btn btn-outline-primary">🔗 Ver lista completa</a>
+      <a href="{% url 'papers:search' %}" class="btn btn-outline-secondary">🔍 Buscar paper</a>
+      {% if can_create %}
+        <a href="{% url 'papers:create' %}" class="btn btn-success">➕ Crear nuevo paper</a>
+      {% endif %}
+    {% elif section == 'teachers' %}
+      <a href="{% url 'teachers:list' %}" class="btn btn-outline-primary">🔗 Ver lista de docentes</a>
+      <a href="{% url 'teachers:search' %}" class="btn btn-outline-secondary">🔍 Buscar docente</a>
+    {% elif section == 'students' %}
+      <a href="{% url 'students:list' %}" class="btn btn-outline-primary">🔗 Ver lista de estudiantes</a>
+      <a href="{% url 'students:search' %}" class="btn btn-outline-secondary">🔍 Buscar estudiante</a>
     {% endif %}
   </div>
 
@@ -21,12 +35,22 @@
           <h5 class="fw-bold">{{ item.title }}</h5>
           <p class="mb-1">{{ item.resume|default:item.abstract|truncatewords:20 }}</p>
           <small class="text-muted">{{ item.date_of_publication }}</small><br>
-          <a href="{% url title|lower|add:':detail' item.id %}" class="btn btn-sm btn-outline-info mt-2">Ver más</a>
+
+          {% if section == 'articles' %}
+            <a href="{% url 'articles:detail' item.id %}" class="btn btn-sm btn-outline-info mt-2">Ver más</a>
+          {% elif section == 'papers' %}
+            <a href="{% url 'papers:detail' item.id %}" class="btn btn-sm btn-outline-info mt-2">Ver más</a>
+          {% elif section == 'teachers' %}
+            <a href="{% url 'teachers:detail' item.id %}" class="btn btn-sm btn-outline-info mt-2">Ver más</a>
+          {% elif section == 'students' %}
+            <a href="{% url 'students:detail' item.id %}" class="btn btn-sm btn-outline-info mt-2">Ver más</a>
+          {% endif %}
+
         </div>
       {% endfor %}
     </div>
   {% else %}
-    <p class="text-muted text-center">No tenés {{ title|lower }} publicados.</p>
+    <p class="text-muted text-center">La lista de {{ title|lower }} está vacía.</p>
   {% endif %}
 </div>
 {% endblock %}

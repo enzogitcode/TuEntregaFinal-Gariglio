@@ -1,0 +1,26 @@
+{% extends 'AppBlog/base.html' %}
+{% load static %}
+
+{% block title %} Login de Usuarios {% endblock %}
+
+{% block content %}
+<h2>Iniciar sesión</h2>
+
+{% if form.errors and form.non_field_erros %}
+  <div>
+    <strong>Hay errores en el formulario.</strong>
+  </div>
+  <div>
+    {{ form.non_field_errors }}
+  </div>
+{% endif %}
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <button type="submit">Entrar</button>
+</form>
+
+<p>¿No tenés cuenta? <a href="{% url 'register_choose_your_role' %}">Registrate aquí</a></p>
+{% endblock %}

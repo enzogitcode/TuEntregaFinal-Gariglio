@@ -1,0 +1,75 @@
+{% extends 'AppBlog/base.html' %}
+{% load static %}
+
+{% block title %}Mi perfil{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">Perfil de {{ user.username }}</h2>
+
+  <div class="card mb-4 mx-auto" style="max-width: 540px;">
+    <div class="row g-0">
+      <div class="col-md-4 p-2 d-flex align-items-center justify-content-center">
+        {% if user.avatar and user.avatar.name %}
+          <img src="{{ user.avatar.url }}" class="img-fluid rounded-start" alt="Avatar de {{ user.username }}">
+        {% else %}
+          <img src="{% static 'AppBlog/imgs/default_avatar.png' %}" class="img-fluid rounded-start" alt="Avatar por defecto">
+        {% endif %}
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <p><strong>Nombre completo:</strong> {{ user.get_full_name }}</p>
+          <p><strong>Email:</strong> {{ user.email }}</p>
+          <p><strong>Rol:</strong> {{ user.role|title }}</p>
+          <a href="{% url 'profile_edit' %}" class="btn btn-info">Editar mi Perfil</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if teacher %}
+    <p><strong>Curso:</strong> {{ teacher.course }}</p>
+    <p><strong>Institución:</strong> {{ teacher.college }}</p>
+    <p><strong>Edad:</strong> {{ teacher.age }}</p>
+  {% elif student %}
+    <p><strong>Carrera:</strong> {{ student.career }}</p>
+    <p><strong>Institución:</strong> {{ student.college }}</p>
+    <p><strong>Edad:</strong> {{ student.age }}</p>
+  {% endif %}
+
+  <hr>
+  {% if user.role == 'teacher' or user.role == 'student' or user.is_superuser %}
+  <h4 class="mt-4">Artículos publicados</h4>
+  {% if articles %}
+  <ul class="list-group mb-4">
+      {% for article in articles %}
+        <li class="list-group-item">
+          <strong>{{ article.title }}</strong><br>
+          {{ article.resume|truncatewords:20 }}<br>
+          <small class="text-muted">{{ article.date_of_publication }}</small><br>
+          <a href="{% url 'article_detail' article.id %}" class="btn btn-outline-primary btn-sm mt-2">Ver artículo</a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-muted">No hay artículos publicados.</p>
+      {% endif %}
+      
+      <h4 class="mt-4">Papers publicados</h4>
+      {% if papers %}
+      <ul class="list-group">
+        {% for paper in papers %}
+        <li class="list-group-item">
+          <strong>{{ paper.title }}</strong><br>
+          {{ paper.abstract|truncatewords:20 }}<br>
+          <small class="text-muted">{{ paper.date_of_publication }}</small><br>
+          <a href="{% url 'paper_detail' paper.id %}" class="btn btn-outline-info btn-sm mt-2">Ver paper</a>
+        </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-muted">No hay papers publicados.</p>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

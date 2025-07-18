@@ -74,6 +74,29 @@
           <li class="nav-item">
             <a class="nav-link fw-semibold underlineLink" href="{% url 'articles:list' %}" >Artículos</a>
           </li>
+          {% if user.is_authenticated %}
+          <li class="nav-item d-flex align-items-center">
+            <form action="{% url 'logout' %}" method="post" class="mb-0 me-2">
+                {% csrf_token %}
+                <button class="btn btn-danger" type="submit">Logout</button>
+            </form>
+          {% if user.avatar %}
+              <img src="{{ user.avatar.url }}" alt="avatar" class="rounded-circle" width="40" height="40">
+            {% else %}
+              <img src="{% static 'AppBlog/imgs/default_avatar.png' %}" alt="avatar" class="rounded-circle" width="40" height="40">
+            {% endif %}
+            <span class="ms-2">Hola {{ user.username }}</span>
+            <a href="{% url 'users:profile' %}">Ver mi Perfil</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a href="{% url 'users:register_choose_your_role' %}" class="btn btn-primary">Registrarse</a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'users:login' %}" class="btn btn-primary">Iniciar sesión</a>
+          </li>
+          {% endif %}
+        </ul>
           
         </ul>
       </div>

@@ -15,8 +15,9 @@ def students_home(request):
 #1. Registro de estudiante
 class StudentRegisterView(CreateView):
     form_class = StudentRegisterForm
-    template_name = 'AppBlog/user/register_student.html'
-    success_url = reverse_lazy('login')
+    template_name = 'AppBlog/user/register_form.html'
+    success_url = reverse_lazy('students:list')
+    extra_context = { 'tipo': 'Estudiante' }
     
 #2. Edición de perfil propio
 class StudentSelfUpdateView(LoginRequiredMixin, UpdateView):

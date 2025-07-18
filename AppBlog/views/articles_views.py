@@ -31,7 +31,8 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     fields = ['subject', 'title', 'resume', 'text_article']
     template_name = 'AppBlog/articles/create_article_form.html'
-    success_url = reverse_lazy('articles_list')
+    success_url = reverse_lazy('articles:list')
+    extra_context = { 'tipo': 'Artículo' }
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated or request.user.role not in ['teacher', 'student']:

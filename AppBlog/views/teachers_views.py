@@ -14,8 +14,9 @@ from AppBlog.forms.TeachersForms import TeacherRegisterForm, TeacherSelfEditForm
 
 class TeacherRegisterView(CreateView):
     form_class = TeacherRegisterForm
-    template_name = 'AppBlog/user/register_teacher.html'
-    success_url = reverse_lazy('login')
+    template_name = 'AppBlog/user/register_form.html'
+    success_url = reverse_lazy('teachers:list')
+    extra_context = { 'tipo': 'Docente' }
     # No necesitas form_valid, el form ya crea Teacher y Profile
 
 class TeacherSelfUpdateView(LoginRequiredMixin, UpdateView):

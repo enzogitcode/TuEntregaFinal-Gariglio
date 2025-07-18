@@ -55,7 +55,8 @@ class PaperCreateView(LoginRequiredMixin, CreateView):
     model = Paper
     fields = ['subject', 'title', 'abstract', 'text_paper']
     template_name = 'AppBlog/papers/create_paper_form.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('papers:list')
+    extra_context = { 'tipo': 'Paper' }
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated or request.user.role not in ['teacher', 'student']:

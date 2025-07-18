@@ -6,9 +6,11 @@ from ..views.user_views import (
     UserRegisterView, 
     LoginView, LogoutView,
     register_choose_your_role,
-    AvatarUpdateView
+    AvatarUpdateView,
+    user_dashboard
     )
 urlpatterns = [
+    path('home/', user_dashboard, name='home'),
     path('profile/avatar/', AvatarUpdateView.as_view(), name='avatar_edit'),
     path('register/choose_your_role', register_choose_your_role,  name= 'register_choose_your_role'),
     path('register/user/', UserRegisterView.as_view(), name='register_user'),

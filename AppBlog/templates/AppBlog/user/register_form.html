@@ -1,0 +1,29 @@
+{% extends 'AppBlog/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Registro como {{ tipo|default:"usuario" }}{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-4">Registro como {{ tipo|default:"usuario" }}</h2>
+
+<form method="post" class="needs-validation w-100" novalidate>
+  {% csrf_token %}
+  {% for field in form %}
+    <div class="mb-3 d-flex flex-column text-center gap-2 px-2">
+      <label for="{{ field.id_for_label }}" class="fw-semibold">{{ field.label }}</label>
+      {{ field|add_class:"form-control" }}
+      {% if field.errors %}
+        <div class="text-danger small mt-1">
+          {{ field.errors|striptags }}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+    <button type="reset" class="btn btn-outline-danger">Restablecer</button>
+    <button type="submit" class="btn btn-secondary">Registrarse</button>
+  </div>
+</form>
+{% endblock %}

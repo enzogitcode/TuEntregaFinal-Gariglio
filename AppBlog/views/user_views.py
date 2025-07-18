@@ -25,7 +25,8 @@ def register_choose_your_role(request):
 class UserRegisterView(CreateView):
     form_class = BasicUserRegisterForm
     template_name = 'AppBlog/user/register_user.html'
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('users:user_home')
+    extra_context = { 'tipo': 'Usuario Común' }
 
     def form_valid(self, form):
         form.save()
@@ -129,3 +130,15 @@ class UsersListView(ListView):
 def user_list_view(request):
     context = CustomUser.objects.all().order_by('username')
     return (request, 'AppBlog/user/users')
+
+@login_required
+def user_dashboard(request):
+    user = request.user
+    avatar_obj = Avatar.objects.filter(user=user).first()
+
+    context = {
+        'user': user,
+        'avatar_url': avatar_obj.imagen.url if avatar_obj and avatar_obj.imagen else None
+    }
+    return render(request, 'AppBlog/user/user_home.html', context)
+

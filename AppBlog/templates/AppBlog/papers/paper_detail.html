@@ -12,7 +12,8 @@
 
 {% block content %}
 <h2>{{ paper.title }}</h2>
-<p><strong>Autor:</strong> {{ paper.author.get_full_name }} ({{ paper.author.email }})</p>
+<p><strong>Autor:</strong> {{ paper.author.get_full_name }}</p>
+<p><strong>Email:</strong> {{ paper.author.email }}</p>
 <p><strong>Materia:</strong> {{ paper.subject }}</p>
 <p><strong>Fecha de publicación:</strong> {{ paper.date_of_publication }}</p>
 <p><strong>Resumen:</strong> {{ paper.abstract }}</p>

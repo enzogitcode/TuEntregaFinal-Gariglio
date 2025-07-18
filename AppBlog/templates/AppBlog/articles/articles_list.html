@@ -12,8 +12,8 @@
       {% for article in object_list %}
       <li class="list-group-item">
         <p><strong>Título:</strong> {{ article.title }}</p>
-        <p><strong>Autor:</strong> {{ article.author_name }} {{ article.author_last_name }}</p>
-        <p><strong>E-mail:</strong> {{ article.author_email }}</p>
+        <p><strong>Autor:</strong> {{ article.author.get_full_name }} </p>
+        <p><strong>E-mail:</strong> {{ article.author.email }}</p>
         <p><strong>Palabras clave:</strong> {{ article.subject }}</p>
         <p><strong>Resumen:</strong> {{ article.resume }}</p>
         <p><strong>Fecha de publicación:</strong> {{ article.date_of_publication }}</p>

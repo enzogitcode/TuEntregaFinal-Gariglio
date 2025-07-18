@@ -12,8 +12,8 @@
       {% for paper in object_list %}
       <li class="list-group-item">
         <p><strong>Título:</strong> {{ paper.title }}</p>
-        <p><strong>Autor:</strong> {{ paper.author_name }} {{ paper.author_last_name }}</p>
-        <p><strong>E-mail:</strong> {{ paper.author_email }}</p>
+        <p><strong>Autor:</strong> {{ paper.author.get_full_name }}</p>
+        <p><strong>E-mail:</strong> {{ paper.author.email }}</p>
         <p><strong>Palabras clave:</strong> {{ paper.subject }}</p>
         <p><strong>Resumen:</strong> {{ paper.abstract }}</p>
         <p><strong>Fecha de publicación:</strong> {{ paper.date_of_publication }}</p>

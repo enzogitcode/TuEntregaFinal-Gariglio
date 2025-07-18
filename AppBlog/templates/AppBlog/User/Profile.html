@@ -21,6 +21,7 @@
           <p><strong>Nombre completo:</strong> {{ user.get_full_name }}</p>
           <p><strong>Email:</strong> {{ user.email }}</p>
           <p><strong>Rol:</strong> {{ user.role|title }}</p>
+          <a href="{% url 'profile_edit' %}" class="btn btn-info">Editar mi Perfil</a>
         </div>
       </div>
     </div>

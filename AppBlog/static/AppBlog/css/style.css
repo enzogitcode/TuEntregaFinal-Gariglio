@@ -14,13 +14,12 @@ header {
 background-color: #f0f8ff;    
 }
 main {
-    background-image: url(../imgs/composicion-isometrica-e-learning_1284-21094.avif);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size:cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size:cover;
 }
 .divHome {
-  background-color: gainsboro;
+  background-image: url(../imgs/composicion-isometrica-e-learning_1284-21094.avif);
   padding: 1em;
   border-radius: .4em;
 }

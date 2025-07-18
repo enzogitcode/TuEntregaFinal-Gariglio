@@ -1,9 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from ..forms import (
-    BasicUserSelfEditForm, TeacherSelfEditForm, StudentSelfEditForm, AvatarUploadForm, BasicUserRegisterForm
-)
+from ..forms.UsersForms import 
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
 from django.shortcuts import render

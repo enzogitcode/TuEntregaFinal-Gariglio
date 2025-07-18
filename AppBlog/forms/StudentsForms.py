@@ -1,13 +1,12 @@
 from django import forms
-from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
-from ..models import CustomUser, Teacher
+from ..models import CustomUser, Student
+from django.core.exceptions import ValidationError
 
-# 🔸 Registro: Teacher
-
-class TeacherRegisterForm(UserCreationForm):
+# 🔸 Registro: Student
+class StudentRegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    course = forms.CharField(label='Materia', required=True)
+    career = forms.CharField(label='Carrera', required=True)
     college = forms.CharField(label='Institución', required=True)
     age = forms.IntegerField(label='Edad', required=True)
 
@@ -23,25 +22,27 @@ class TeacherRegisterForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.role = 'teacher'
+        user.role = 'student'
         if commit:
             user.save()
-            Teacher.objects.create(
+            Student.objects.create(
                 user=user,
-                course=self.cleaned_data['course'],
+                career=self.cleaned_data['career'],
                 college=self.cleaned_data['college'],
                 age=self.cleaned_data['age'],
             )
         return user
 
-# 🔸 Autoedición: Teacher
-class TeacherSelfEditForm(forms.ModelForm):
-    class Meta:
-        model = Teacher
-        fields = ['course', 'college', 'age']
+# edición
 
-class TeacherSearchForm(forms.Form):
+class StudentSelfEditForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = ['career', 'college', 'age']
+
+# 🔸 Búsqueda: Teacher
+class StudentSearchForm(forms.Form):
     name = forms.CharField(label='Nombre', required=False)
     last_name = forms.CharField(label='Apellido', required=False)
-    course = forms.CharField(label='Materia', required=False)
+    career = forms.CharField(label='Carrera', required=False)
     college = forms.CharField(label='Institución', required=False)

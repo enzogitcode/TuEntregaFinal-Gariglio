@@ -130,7 +130,3 @@ class StudentSearchForm(forms.Form):
     career = forms.CharField(label='Carrera', required=False)
     college = forms.CharField(label='Institución', required=False)
 
-class AvatarUploadForm(forms.ModelForm):
-    class Meta:
-        model = CustomUser
-        fields = ['avatar']

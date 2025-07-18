@@ -10,7 +10,7 @@ def teachers_home(request):
     return render(request, 'AppBlog/teachers/teachers_home.html')
 
 from AppBlog.models import Teacher
-from AppBlog.forms import TeacherRegisterForm, TeacherSelfEditForm, TeacherSearchForm
+from AppBlog.forms.TeachersForms import TeacherRegisterForm, TeacherSelfEditForm
 
 class TeacherRegisterView(CreateView):
     form_class = TeacherRegisterForm

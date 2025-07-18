@@ -5,11 +5,8 @@ app_name= 'users'
 from ..views.user_views import (
     UserRegisterView, 
     LoginView, LogoutView,
-    home_user,
     register_choose_your_role,
-    AvatarUpdateView,
-    profile,
-    ProfileEditView
+    AvatarUpdateView
     )
 urlpatterns = [
     path('profile/avatar/', AvatarUpdateView.as_view(), name='avatar_edit'),

@@ -1,4 +1,5 @@
 from django.urls import path
+
 app_name = 'papers'
 
 from ..views.papers_views import (

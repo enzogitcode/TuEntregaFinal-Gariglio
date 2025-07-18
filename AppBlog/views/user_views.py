@@ -1,14 +1,23 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404, redirect
+# 📦 Django base
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from ..forms.UsersForms import 
-from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.models import User
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from ..models import CustomUser, Teacher, Student, Avatar
-from django.views.generic import ListView, UpdateView, CreateView, DetailView
-from ..models import Paper, Article
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import CreateView, UpdateView, ListView, DetailView
+
+# 👤 Modelos propios
+from ..models import CustomUser, Teacher, Student, Avatar, Paper, Article
+
+# 📝 Formularios
+from ..forms.UsersForms import (
+    BasicUserRegisterForm,
+    BasicUserSelfEditForm,
+    AvatarUploadForm,
+    TeacherSelfEditForm,
+    StudentSelfEditForm
+)
+
 
 def register_choose_your_role(request):
     return render(request, 'AppBlog/user/register_choose_your_role.html')

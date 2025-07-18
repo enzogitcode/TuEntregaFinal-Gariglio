@@ -40,8 +40,3 @@ class TeacherSelfEditForm(forms.ModelForm):
         model = Teacher
         fields = ['course', 'college', 'age']
 
-class TeacherSearchForm(forms.Form):
-    name = forms.CharField(label='Nombre', required=False)
-    last_name = forms.CharField(label='Apellido', required=False)
-    course = forms.CharField(label='Materia', required=False)
-    college = forms.CharField(label='Institución', required=False)

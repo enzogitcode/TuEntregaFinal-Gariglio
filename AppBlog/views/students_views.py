@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.db.models import Q
 from AppBlog.models import Student
-from AppBlog.forms import StudentRegisterForm, StudentSearchForm, StudentSelfEditForm
+from AppBlog.forms.StudentsForms import StudentRegisterForm, StudentSelfEditForm
 
 def students_home(request):
     return render (request, 'AppBlog/students/students_home.html')

@@ -36,7 +36,7 @@ class StudentSelfUpdateView(LoginRequiredMixin, UpdateView):
 
 class StudentListView(ListView):
     model = Student
-    template_name = 'AppBlog/shared/list.html'
+    template_name = 'AppBlog/shared/list_profiles.html'
     context_object_name = 'items'
     extra_context = {
         'tipo': 'Estudiantes',
@@ -46,10 +46,14 @@ class StudentListView(ListView):
     }
 
 
+
 class StudentDetailView(DetailView):
     model = Student
-    template_name = 'AppBlog/students/student_detail.html'
-    context_object_name = 'student'
+    template_name = 'AppBlog/shared/detail.html'
+    context_object_name = 'obj'
+    extra_context = {
+        'tipo': 'Estudiante'
+    }
 
 class StudentDeleteView(UserPassesTestMixin, DeleteView):
     model = Student

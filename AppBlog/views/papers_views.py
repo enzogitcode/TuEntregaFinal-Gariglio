@@ -36,7 +36,7 @@ class PaperSearchView(ListView):
 
 class PaperListView(ListView):
     model = Paper
-    template_name = 'AppBlog/shared/list.html'
+    template_name = 'AppBlog/shared/list_publications.html'
     context_object_name = 'items'
     extra_context = {
         'tipo': 'Papers',
@@ -45,11 +45,13 @@ class PaperListView(ListView):
         'show_create_button': True
     }
 
-
 class PaperDetailView(DetailView):
     model = Paper
-    template_name = 'AppBlog/papers/paper_detail.html'
-    context_object_name = 'paper'
+    template_name = 'AppBlog/shared/detail.html'
+    context_object_name = 'obj'
+    extra_context = {
+        'tipo': 'Paper'
+    }
 
 class PaperCreateView(LoginRequiredMixin, CreateView):
     model = Paper

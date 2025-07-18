@@ -35,7 +35,7 @@ class TeacherSelfUpdateView(LoginRequiredMixin, UpdateView):
 
 class TeacherListView(ListView):
     model = Teacher
-    template_name = 'AppBlog/shared/list.html'
+    template_name = 'AppBlog/shared/list_profiles.html'
     context_object_name = 'items'
     extra_context = {
         'tipo': 'Docentes',
@@ -47,8 +47,11 @@ class TeacherListView(ListView):
 
 class TeacherDetailView(DetailView):
     model = Teacher
-    template_name = 'AppBlog/teachers/teacher_detail.html'
-    context_object_name = 'teacher'
+    template_name = 'AppBlog/shared/detail.html'
+    context_object_name = 'obj'
+    extra_context = {
+        'tipo': 'Docente'
+    }
 
 class TeacherDeleteView(UserPassesTestMixin, DeleteView):
     model = Teacher

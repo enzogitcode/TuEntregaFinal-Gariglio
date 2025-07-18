@@ -12,7 +12,7 @@ from django.db.models import Q
 
 class ArticleListView(ListView):
     model = Article
-    template_name = 'AppBlog/shared/list.html'
+    template_name = 'AppBlog/shared/list_publications.html'
     context_object_name = 'items'
     extra_context = {
         'tipo': 'Artículos',
@@ -24,8 +24,11 @@ class ArticleListView(ListView):
 
 class ArticleDetailView(DetailView):
     model = Article
-    template_name = 'AppBlog/articles/article_detail.html'
-    context_object_name = 'article'
+    template_name = 'AppBlog/shared/detail.html'
+    context_object_name = 'obj'
+    extra_context = {
+        'tipo': 'Artículo'
+    }
 
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article

@@ -1,0 +1,68 @@
+{% extends 'AppBlog/base.html' %}
+{% block title %}Detalle de {{ tipo }}{% endblock %}
+{% block main_extra_class %}main_detalle_{{ tipo|lower }}{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm p-4 w-100 mx-auto" style="max-width: 800px;">
+  <h2 class="fw-bold text-center mb-4">🧾 Detalle de {{ tipo }}</h2>
+
+  {% comment %} Mostrar avatar si existe {% endcomment %}
+  {% if obj.user.avatar %}
+    <div class="text-center mb-3">
+      <img src="{{ obj.user.avatar.url }}" alt="Avatar" class="rounded-circle" style="width: 120px; height: 120px;">
+    </div>
+  {% endif %}
+
+  {% comment %} Título o nombre completo {% endcomment %}
+  {% if obj.title %}
+    <h3 class="text-center">{{ obj.title }}</h3>
+  {% elif obj.user %}
+    <h3 class="text-center">{{ obj.user.get_full_name|default:obj.user.username }}</h3>
+  {% endif %}
+
+  <hr>
+
+  {% comment %} Artículo o paper {% endcomment %}
+  {% if obj.resume %}
+    <p><strong>Resumen:</strong> {{ obj.resume }}</p>
+  {% endif %}
+  {% if obj.abstract %}
+    <p><strong>Resumen:</strong> {{ obj.abstract }}</p>
+  {% endif %}
+  {% if obj.text_article %}
+    <p><strong>Contenido:</strong> {{ obj.text_article }}</p>
+  {% endif %}
+  {% if obj.text_paper %}
+    <p><strong>Contenido:</strong> {{ obj.text_paper }}</p>
+  {% endif %}
+  {% if obj.subject %}
+    <p><strong>Materia:</strong> {{ obj.subject }}</p>
+  {% endif %}
+  {% if obj.date_of_publication %}
+    <p><strong>Fecha de publicación:</strong> {{ obj.date_of_publication|date:"d/m/Y" }}</p>
+  {% endif %}
+
+  {% comment %} Datos del autor {% endcomment %}
+  {% if obj.author %}
+    <p><strong>Autor:</strong> {{ obj.author.get_full_name|default:obj.author.username }}</p>
+    <p><strong>Email:</strong> {{ obj.author.email }}</p>
+  {% endif %}
+
+  {% comment %} Datos de docentes y estudiantes {% endcomment %}
+  {% if obj.course %}
+    <p><strong>Curso:</strong> {{ obj.course }}</p>
+  {% endif %}
+  {% if obj.career %}
+    <p><strong>Carrera:</strong> {{ obj.career }}</p>
+  {% endif %}
+  {% if obj.college %}
+    <p><strong>Institución:</strong> {{ obj.college }}</p>
+  {% endif %}
+  {% if obj.age %}
+    <p><strong>Edad:</strong> {{ obj.age }}</p>
+  {% endif %}
+  {% if obj.user %}
+    <p><strong>Email:</strong> {{ obj.user.email }}</p>
+  {% endif %}
+</div>
+{% endblock %}

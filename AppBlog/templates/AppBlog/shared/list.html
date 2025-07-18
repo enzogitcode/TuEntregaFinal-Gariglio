@@ -1,0 +1,44 @@
+{% extends 'AppBlog/base.html' %}
+{% block title %} List {% endblock %}
+{% block list_content %}
+<h1 class="text-center">Listado de {{tipo}}</h1>
+<div class="row w-100 mb-4">
+  <!-- 🧠 Título arriba en todas las resoluciones -->
+  <div class="col-12 col-md-6 order-0">
+    <h2 class="fw-bold">
+      Aquí se listan los {{tipo}}
+    </h2>
+  </div>
+
+  <!-- 📲 Botón abajo en mobile, al lado en escritorio -->
+  {% if show_create_button and create_url %}
+  <div class="col-12 col-md-6 text-md-end order-1 mt-2 mt-md-0">
+    <a href="{% url create_url %}" class="btn btn-primary">
+      ➕ Nuevo {{ tipo|default:"registro" }}
+    </a>
+  </div>
+  {% endif %}
+</div>
+
+
+<div class="list-group w-100">
+  {% for obj in items %}
+    <a href="{% url detail_url obj.pk %}" class="list-group-item list-group-item-action flex-column">
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">{{ obj.title }}</h5>
+        {% if obj.date_of_publication %}
+          <small class="text-muted">{{ obj.date_of_publication|date:"d/m/Y" }}</small>
+        {% endif %}
+      </div>
+      {% if obj.abstract %}
+        <p class="mb-1">{{ obj.abstract|truncatechars:100 }}</p>
+      {% endif %}
+      {% if obj.author %}
+        <small class="text-muted">Autor: {{ obj.author.get_full_name|default:obj.author.username }}</small>
+      {% endif %}
+    </a>
+  {% empty %}
+    <p class="text-muted">No se encontraron resultados.</p>
+  {% endfor %}
+</div>
+{% endblock %}

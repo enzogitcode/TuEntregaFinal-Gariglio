@@ -12,8 +12,15 @@ def articles_home(request):
 
 class ArticleListView(ListView):
     model = Article
-    template_name = 'AppBlog/articles/articles_list.html'
-    context_object_name = 'articles'
+    template_name = 'AppBlog/shared/list.html'
+    context_object_name = 'items'
+    extra_context = {
+        'tipo': 'Artículos',
+        'detail_url': 'articles:detail',
+        'create_url': 'articles:create',
+        'show_create_button': True
+    }
+
 
 class ArticleDetailView(DetailView):
     model = Article

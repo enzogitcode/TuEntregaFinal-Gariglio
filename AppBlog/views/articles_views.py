@@ -66,8 +66,9 @@ class ArticleUpdateView(UpdateView):
         return super().dispatch(request, *args, **kwargs)
 
     def test_func(self):
-        article = self.get_object()
-        return self.request.user == article.author or self.request.user.is_superuser
+        obj = self.get_object()
+        return self.request.user.id == obj.author.id
+
 
 class ArticleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Article
@@ -82,8 +83,9 @@ class ArticleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return context
 
     def test_func(self):
-        article = self.get_object()
-        return self.request.user == article.author or self.request.user.is_superuser
+        obj = self.get_object()
+        return self.request.user.id == obj.author.id or self.request.user.is_superuser
+
 
 class ArticleSearchView(ListView):
     model = Article

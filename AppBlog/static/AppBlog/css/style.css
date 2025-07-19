@@ -26,8 +26,20 @@ main {
 .divHome p {
   font-size: 1.5em;
 }
+.div_main_gray {
+  background-color: #424141;
+}
 footer {
     background-color: #ab5314;
+}
+footer h5 {
+  background-color: #f0f8ff;
+  border-radius: .5em;
+}
+footer h6 {
+  border-radius: .5em;
+  border: solid .1em #f5f5f5;
+  color: #fff;
 }
 
 #menuNav ul {

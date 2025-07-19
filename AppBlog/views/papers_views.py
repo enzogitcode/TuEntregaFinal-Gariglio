@@ -91,15 +91,15 @@ class PaperUpdateView(UpdateView):
             return HttpResponseForbidden("No tenés permiso para editar este paper.")
         return super().dispatch(request, *args, **kwargs)
 
-
     def test_func(self):
-        paper = self.get_object()
-        return self.request.user == paper.author or self.request.user.is_superuser
+        obj = self.get_object()
+        return self.request.user.id == obj.author.id
+
 
 class PaperDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Paper
     template_name = 'AppBlog/papers/papers_delete_form.html'
-    success_url = reverse_lazy('papers_list')
+    success_url = reverse_lazy('papers:list')
     context_object_name = 'paper'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -1,20 +1,18 @@
 {% extends 'AppBlog/base.html' %}
 
 {% block title %}Detalle de {{ tipo }}{% endblock %}
-{% block main_extra_class %}main_detalle_{{ tipo|lower }}{% endblock %}
+{% block main_extra_class %}main_detalle_{{ tipo|lower }} div_main_gray{% endblock %}
 
 {% block content %}
-<div class="card shadow-sm p-4 w-100 mx-auto" style="max-width: 800px;">
+<div class="card shadow-sm p-4 w-100 mx-auto text-center" style="max-width: 800px;">
   <h2 class="fw-bold text-center mb-4">🧾 Detalle de {{ tipo }}</h2>
 
-  {% comment %} Mostrar avatar si existe {% endcomment %}
   {% if obj.user.avatar %}
     <div class="text-center mb-3">
       <img src="{{ obj.user.avatar.url }}" alt="Avatar" class="rounded-circle" style="width: 120px; height: 120px;">
     </div>
   {% endif %}
 
-  {% comment %} Título o nombre completo {% endcomment %}
   {% if obj.title %}
     <h3 class="text-center">{{ obj.title }}</h3>
   {% elif obj.user %}
@@ -23,64 +21,44 @@
 
   <hr>
 
-  {% comment %} Artículo o paper {% endcomment %}
-  {% if obj.resume %}
-    <p><strong>Resumen:</strong> {{ obj.resume }}</p>
-  {% endif %}
-  {% if obj.abstract %}
-    <p><strong>Resumen:</strong> {{ obj.abstract }}</p>
-  {% endif %}
-  {% if obj.text_article %}
-    <p><strong>Contenido:</strong> {{ obj.text_article }}</p>
-  {% endif %}
-  {% if obj.text_paper %}
-    <p><strong>Contenido:</strong> {{ obj.text_paper }}</p>
-  {% endif %}
-  {% if obj.subject %}
-    <p><strong>Materia:</strong> {{ obj.subject }}</p>
-  {% endif %}
-  {% if obj.date_of_publication %}
-    <p><strong>Fecha de publicación:</strong> {{ obj.date_of_publication|date:"d/m/Y" }}</p>
-  {% endif %}
+  {% if obj.resume %}<p><strong>Resumen:</strong> {{ obj.resume }}</p>{% endif %}
+  {% if obj.abstract %}<p><strong>Resumen:</strong> {{ obj.abstract }}</p>{% endif %}
+  {% if obj.text_article %}<p><strong>Contenido:</strong> {{ obj.text_article }}</p>{% endif %}
+  {% if obj.text_paper %}<p><strong>Contenido:</strong> {{ obj.text_paper }}</p>{% endif %}
+  {% if obj.subject %}<p><strong>Materia:</strong> {{ obj.subject }}</p>{% endif %}
+  {% if obj.date_of_publication %}<p><strong>Fecha de publicación:</strong> {{ obj.date_of_publication|date:"d/m/Y" }}</p>{% endif %}
 
-  {% comment %} Datos del autor {% endcomment %}
   {% if obj.author %}
     <p><strong>Autor:</strong> {{ obj.author.get_full_name|default:obj.author.username }}</p>
     <p><strong>Email:</strong> {{ obj.author.email }}</p>
   {% endif %}
 
-  {% comment %} Datos de docentes y estudiantes {% endcomment %}
-  {% if obj.course %}
-    <p><strong>Curso:</strong> {{ obj.course }}</p>
+  {% if obj.course %}<p><strong>Curso:</strong> {{ obj.course }}</p>{% endif %}
+  {% if obj.career %}<p><strong>Carrera:</strong> {{ obj.career }}</p>{% endif %}
+  {% if obj.college %}<p><strong>Institución:</strong> {{ obj.college }}</p>{% endif %}
+  {% if obj.age %}<p><strong>Edad:</strong> {{ obj.age }}</p>{% endif %}
+  {% if obj.user %}<p><strong>Email:</strong> {{ obj.user.email }}</p>{% endif %}
+</div>
+
+<div class="mt-4 d-flex gap-3 justify-content-center">
+  {% if obj.author.id == user.id %}
+    {% if tipo == "Artículo" %}
+      <a href="{% url 'articles:update' obj.pk %}" class="btn btn-sm btn-warning">✏️ Editar</a>
+      <a href="{% url 'articles:delete' obj.pk %}" class="btn btn-sm btn-danger">🗑️ Eliminar</a>
+    {% elif tipo == "Paper" %}
+      <a href="{% url 'papers:update' obj.pk %}" class="btn btn-sm btn-warning">✏️ Editar</a>
+      <a href="{% url 'papers:delete' obj.pk %}" class="btn btn-sm btn-danger">🗑️ Eliminar</a>
+    {% endif %}
   {% endif %}
-  {% if obj.career %}
-    <p><strong>Carrera:</strong> {{ obj.career }}</p>
-  {% endif %}
-  {% if obj.college %}
-    <p><strong>Institución:</strong> {{ obj.college }}</p>
-  {% endif %}
-  {% if obj.age %}
-    <p><strong>Edad:</strong> {{ obj.age }}</p>
-  {% endif %}
-  {% if obj.user %}
-    <p><strong>Email:</strong> {{ obj.user.email }}</p>
+
+  {% if user.is_superuser and obj.author.id != user.id %}
+    {% if tipo == "Artículo" %}
+      <a href="{% url 'articles:delete' obj.pk %}" class="btn btn-sm btn-danger">🗑️ Eliminar como admin</a>
+    {% elif tipo == "Paper" %}
+      <a href="{% url 'papers:delete' obj.pk %}" class="btn btn-sm btn-danger">🗑️ Eliminar como admin</a>
+    {% endif %}
   {% endif %}
 </div>
 
-{% comment %} Botones de acción para autor o superuser {% endcomment %}
-<div class="mt-4 d-flex gap-3">
-  {% if obj.author == user and user.role == 'teacher' %}
-    <a href="{% url 'articles:update' obj.id %}" class="btn btn-sm btn-warning">✏️ Editar</a>
-    <a href="{% url 'articles:delete' obj.id %}" class="btn btn-sm btn-danger">🗑️ Eliminar</a>
-  {% endif %}
-
-  {% if obj.author == user and user.role == 'student' %}
-    <a href="{% url 'students:update' obj.id %}" class="btn btn-sm btn-warning">✏️ Editar</a>
-    <a href="{% url 'students:delete' obj.id %}" class="btn btn-sm btn-danger">🗑️ Eliminar</a>
-  {% endif %}
-
-  {% if user.is_superuser %}
-    <a href="{% url 'superuser:delete' obj.id %}" class="btn btn-sm btn-danger">🗑️ Eliminar</a>
-  {% endif %}
 </div>
 {% endblock %}

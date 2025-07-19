@@ -74,6 +74,11 @@
           <li class="nav-item">
             <a class="nav-link fw-semibold underlineLink" href="{% url 'shared_home' section='articles' %}" >Artículos</a>
           </li>
+          {% if user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link fw-semibold underlineLink" href="{% url 'users:list' %}" >Usuarios</a>
+          </li>
+          {% endif %}
           {% if user.is_authenticated %}
           <li class="nav-item d-flex align-items-center">
             <form action="{% url 'users:logout' %}" method="post" class="mb-0 me-2">

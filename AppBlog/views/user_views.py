@@ -1,10 +1,12 @@
+from django.http import HttpResponseForbidden
 # 📦 Django base
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, UpdateView, ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
+from django.contrib import messages
 
 # 👤 Modelos propios
 from ..models import CustomUser, Teacher, Student, Avatar, Paper, Article
@@ -112,15 +114,6 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
         context['extra_form'] = extra_form
         return self.render_to_response(context)
     
-from django.http import HttpResponseForbidden
-
-@login_required
-def users_list(request):
-    if not request.user.is_superuser:
-        return HttpResponseForbidden("Acceso restringido.")
-    users = CustomUser.objects.all().order_by('username')
-    return render(request, 'AppBlog/user/users_list.html', {'users': users})
-
 
 @login_required
 def user_dashboard(request):
@@ -141,3 +134,65 @@ class AvatarUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         return self.request.user
+
+@login_required
+def delete_user(request, user_id):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("No tenés permiso para hacer esto.")
+
+    user_to_delete = get_object_or_404(CustomUser, pk=user_id)
+
+    # Prevención opcional: evitar que se borre a sí mismo
+    if user_to_delete == request.user:
+        return HttpResponseForbidden("No podés eliminarte a vos mismo.")
+
+    user_to_delete.delete()
+    return redirect('users:list')
+
+@login_required
+def users_list(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("Acceso restringido.")
+
+    # Usuarios comunes
+    basic_users = CustomUser.objects.filter(role='user').order_by('username')
+    # Docentes (vinculados a CustomUser)
+    teachers = Teacher.objects.select_related('user').order_by('user__username')
+    # Estudiantes (vinculados a CustomUser)
+    students = Student.objects.select_related('user').order_by('user__username')
+
+    return render(request, 'AppBlog/user/users_list.html', {
+        'basic_users': basic_users,
+        'teachers': teachers,
+        'students': students,
+    })
+
+class BasicUserDetailView(LoginRequiredMixin, DetailView):
+    model = CustomUser
+    template_name = 'AppBlog/shared/detail.html'
+    context_object_name = 'obj'
+
+    def dispatch(self, request, *args, **kwargs):
+        # Solo el superusuario puede acceder
+        if not request.user.is_superuser:
+            return HttpResponseForbidden("Acceso restringido.")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tipo'] = 'Usuario'  # Esto activa el bloque correcto en el template
+        return context
+
+class GenericUserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    template_name = 'AppBlog/shared/confirm_delete.html'
+    context_object_name = 'obj'
+    success_url = reverse_lazy('users:list')  # redirige al listado completo
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def delete(self, request, *args, **kwargs):
+        obj = self.get_object()
+        tipo = obj.__class__.__name__
+        messages.success(request, f"{tipo} eliminado correctamente.")
+        return super().delete(request, *args, **kwargs)

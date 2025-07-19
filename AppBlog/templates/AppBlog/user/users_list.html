@@ -1,24 +1,76 @@
 {% extends 'AppBlog/base.html' %}
-{% block title %}Lista de Usuarios{% endblock %}
+{% block title %}Todos los Usuarios{% endblock %}
+{% block main_extra_class %}main_lista_completa{% endblock %}
 
 {% block content %}
-<h2 class="mb-4 fw-bold">Lista de Usuarios</h2>
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>Usuario</th>
-      <th>Email</th>
-      <th>Rol</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for user in users %}
-    <tr>
-      <td>{{ user.username }}</td>
-      <td>{{ user.email }}</td>
-      <td>{{ user.role|title }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<h2 class="mb-4 text-center">🧑‍💻 Listado completo de usuarios</h2>
+
+<!-- Usuarios comunes -->
+<h3 class="mt-4">👤 Usuarios Comunes</h3>
+<ul class="list-group mb-4">
+  {% for user in basic_users %}
+    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+      <span>{{ user.get_full_name|default:user.username }} ({{ user.email }})</span>
+      <div class="d-flex gap-2 mt-2 mt-md-0">
+        <a href="{% url 'users:basic_user_detail' user.pk %}" class="btn btn-sm btn-outline-info">
+          👁️ Ver
+        </a>
+        {% if request.user.is_superuser and user != request.user %}
+          <a href="{% url 'users:delete_basic_user' user.pk %}" class="btn btn-sm btn-danger"
+             onclick="return confirm('¿Eliminar a {{ user.username }}?');">
+            🗑️ Eliminar
+          </a>
+        {% endif %}
+      </div>
+    </li>
+  {% empty %}
+    <li class="list-group-item text-center text-muted">Sin usuarios comunes.</li>
+  {% endfor %}
+</ul>
+
+<!-- Docentes -->
+<h3 class="mt-4">👨‍🏫 Docentes</h3>
+<ul class="list-group mb-4">
+  {% for teacher in teachers %}
+    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+      <span>{{ teacher.user.get_full_name|default:teacher.user.username }} ({{ teacher.user.email }})</span>
+      <div class="d-flex gap-2 mt-2 mt-md-0">
+        <a href="{% url 'teachers:detail' teacher.pk %}" class="btn btn-sm btn-outline-info">
+          👁️ Ver
+        </a>
+        {% if request.user.is_superuser and teacher.user != request.user %}
+          <a href="{% url 'users:delete_teacher' teacher.pk %}" class="btn btn-sm btn-danger"
+             onclick="return confirm('¿Eliminar al docente {{ teacher.user.username }}?');">
+            🗑️ Eliminar
+          </a>
+        {% endif %}
+      </div>
+    </li>
+  {% empty %}
+    <li class="list-group-item text-center text-muted">Sin docentes registrados.</li>
+  {% endfor %}
+</ul>
+
+<!-- Estudiantes -->
+<h3 class="mt-4">🧑‍🎓 Estudiantes</h3>
+<ul class="list-group mb-4">
+  {% for student in students %}
+    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+      <span>{{ student.user.get_full_name|default:student.user.username }} ({{ student.user.email }})</span>
+      <div class="d-flex gap-2 mt-2 mt-md-0">
+        <a href="{% url 'students:detail' student.pk %}" class="btn btn-sm btn-outline-info">
+          👁️ Ver
+        </a>
+        {% if request.user.is_superuser and student.user != request.user %}
+          <a href="{% url 'users:delete_student' student.pk %}" class="btn btn-sm btn-danger"
+             onclick="return confirm('¿Eliminar al estudiante {{ student.user.username }}?');">
+            🗑️ Eliminar
+          </a>
+        {% endif %}
+      </div>
+    </li>
+  {% empty %}
+    <li class="list-group-item text-center text-muted">Sin estudiantes registrados.</li>
+  {% endfor %}
+</ul>
 {% endblock %}

@@ -52,15 +52,6 @@ class TeacherDetailView(DetailView):
         'tipo': 'Docente'
     }
 
-class TeacherDeleteView(UserPassesTestMixin, DeleteView):
-    model = Teacher
-    template_name = 'AppBlog/teachers/confirm_delete.html'
-    success_url = reverse_lazy('teachers:list')
-    context_object_name = 'teacher'
-
-    def test_func(self):
-        return self.request.user.is_superuser
-
 class TeacherSearchView(ListView):
     model = Teacher
     template_name = 'AppBlog/shared/search.html'

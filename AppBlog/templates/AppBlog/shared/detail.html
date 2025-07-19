@@ -11,12 +11,18 @@
     <div class="text-center mb-3">
       <img src="{{ obj.user.avatar.url }}" alt="Avatar" class="rounded-circle" style="width: 120px; height: 120px;">
     </div>
+  {% elif obj.avatar %}
+    <div class="text-center mb-3">
+      <img src="{{ obj.avatar.url }}" alt="Avatar" class="rounded-circle" style="width: 120px; height: 120px;">
+    </div>
   {% endif %}
 
   {% if obj.title %}
     <h3 class="text-center">{{ obj.title }}</h3>
   {% elif obj.user %}
     <h3 class="text-center">{{ obj.user.get_full_name|default:obj.user.username }}</h3>
+  {% else %}
+    <h3 class="text-center">{{ obj.get_full_name|default:obj.username }}</h3>
   {% endif %}
 
   <hr>
@@ -38,10 +44,13 @@
   {% if obj.college %}<p><strong>Institución:</strong> {{ obj.college }}</p>{% endif %}
   {% if obj.age %}<p><strong>Edad:</strong> {{ obj.age }}</p>{% endif %}
   {% if obj.user %}<p><strong>Email:</strong> {{ obj.user.email }}</p>{% endif %}
+  {% if obj.email and not obj.user %}
+    <p><strong>Email:</strong> {{ obj.email }}</p>
+  {% endif %}
 </div>
 
 <div class="mt-4 d-flex gap-3 justify-content-center">
-  {% if obj.author.id == user.id %}
+  {% if obj.author and obj.author.id == user.id %}
     {% if tipo == "Artículo" %}
       <a href="{% url 'articles:update' obj.pk %}" class="btn btn-sm btn-warning">✏️ Editar</a>
       <a href="{% url 'articles:delete' obj.pk %}" class="btn btn-sm btn-danger">🗑️ Eliminar</a>
@@ -51,14 +60,17 @@
     {% endif %}
   {% endif %}
 
-  {% if user.is_superuser and obj.author.id != user.id %}
-    {% if tipo == "Artículo" %}
+  {% if user.is_superuser %}
+    {% if tipo == "Artículo" and obj.author.id != user.id %}
       <a href="{% url 'articles:delete' obj.pk %}" class="btn btn-sm btn-danger">🗑️ Eliminar como admin</a>
-    {% elif tipo == "Paper" %}
+    {% elif tipo == "Paper" and obj.author.id != user.id %}
       <a href="{% url 'papers:delete' obj.pk %}" class="btn btn-sm btn-danger">🗑️ Eliminar como admin</a>
+    {% elif tipo == "Usuario" and obj.id != user.id %}
+      <a href="{% url 'users:delete_user' obj.pk %}" class="btn btn-sm btn-danger"
+         onclick="return confirm('¿Eliminar al usuario {{ obj.username }}?');">
+        🗑️ Eliminar usuario
+      </a>
     {% endif %}
   {% endif %}
-</div>
-
 </div>
 {% endblock %}

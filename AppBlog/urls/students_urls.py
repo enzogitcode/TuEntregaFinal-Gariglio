@@ -8,7 +8,6 @@ from ..views.students_views import (
     StudentListView,
     StudentDetailView,
     StudentSearchView,
-    StudentDeleteView,
     StudentSelfUpdateView,
     )
 
@@ -20,5 +19,4 @@ urlpatterns = [
     path('', StudentListView.as_view(), name='list'),
     path('<int:pk>/', StudentDetailView.as_view(), name='detail'),
     path('search/', StudentSearchView.as_view(), name='search'),
-    path('delete/<int:pk>/', StudentDeleteView.as_view(), name='delete'),
 ]

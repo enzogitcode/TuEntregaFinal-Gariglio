@@ -55,15 +55,6 @@ class StudentDetailView(DetailView):
         'tipo': 'Estudiante'
     }
 
-class StudentDeleteView(UserPassesTestMixin, DeleteView):
-    model = Student
-    template_name = 'AppBlog/students/confirm_delete.html'
-    context_object_name = 'obj'  
-    success_url = reverse_lazy('students_list')
-
-    def test_func(self):
-        return self.request.user.is_superuser
-
 class StudentSearchView(ListView):
     model = Student
     template_name = 'AppBlog/shared/search.html'

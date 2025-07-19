@@ -79,7 +79,7 @@ class ArticleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['tipo'] = 'Artículo'  
-        context['cancel_url'] = reverse_lazy('articles:list')  
+        context['cancel_url'] = 'articles:list'  
         return context
 
     def test_func(self):

@@ -98,13 +98,13 @@ class PaperUpdateView(UpdateView):
 
 class PaperDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Paper
-    template_name = 'AppBlog/papers/papers_delete_form.html'
+    template_name = 'AppBlog/shared/delete.html'
     success_url = reverse_lazy('papers:list')
     context_object_name = 'paper'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['tipo'] = 'Paper'  
-        context['cancel_url'] = reverse_lazy('papers:list')  
+        context['cancel_url'] = 'papers:list'  
         return context
 
     def test_func(self):
